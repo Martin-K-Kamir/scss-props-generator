@@ -1,0 +1,11 @@
+@mixin gap($gap) {
+  & > *:not(:last-child) {
+    margin-right: $gap;
+  }
+}
+
+@mixin support() {
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    @content;
+  }
+}

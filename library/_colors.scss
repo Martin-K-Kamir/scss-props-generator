@@ -1,0 +1,88 @@
+@use 'sass:color';
+@use 'sass:string';
+@use 'sass:meta';
+@use 'sass:math';
+@use '../utilities/px-to-em' as *;
+
+// Default colors, which an be changed
+$clr-primary: hsl(350, 100%, 50%) !default;
+$clr-secondary: hsl(206, 45%, 45%) !default;
+$clr-tertiary: hsl(235, 21%, 21%) !default;
+$clr-quaternary: hsl(108, 66%, 63%) !default;
+$clr-white: hsl(0, 0%, 100%) !default;
+$clr-black: hsl(0, 0%, 0%) !default;
+$clr-gray: hsl(210, 9%, 31%) !default;
+
+// Map of default colors
+$map-for-colors: (
+  'clr-primary': $clr-primary,
+  'clr-secondary': $clr-secondary,
+  'clr-tertiary': $clr-tertiary,
+  'clr-quaternary': $clr-quaternary,
+  'clr-white': $clr-white,
+  'clr-black': $clr-black,
+  'clr-gray': $clr-gray,
+) !default;
+
+/// Color modifier.
+///
+/// @param {string / color} $color-to-modify
+///   Color to be modified.
+/// @param {number} $number
+///   Necessary parameter if first parameter is not {string} but {color}. Modifies the color based on the number value.
+/// @return {color} `modified based on the {number} or {string}`.
+///   Function can be call like this `clr-modifier(clr-primary-505) or clr-modifier($clr-primary, 505).`
+///   First and second digit sets the $lightness of the color, last digit sets the opacity.
+/// @author Martin Kamír
+@function clr-modifier($color-to-modify, $number-modifier: null) {
+  // starting variables
+  $clr-value: 0;
+  $light-value: 0;
+
+  // check if $color-to-modify param is not string
+  @if (meta.type-of($color-to-modify) != 'string') {
+    // if $color-to-modify is color type, set to $clr-value given color
+    $clr-value: $color-to-modify;
+  } @else {
+    // if $color-to-modify is string type
+
+    // 1. slice string into color name and number (both values are string type)
+    $clr-string: string.slice($color-to-modify, 1, -5);
+    $number-modifier: string.slice($color-to-modify, -3);
+
+    // 2. check color name with global variables colors
+    @each $key, $value in $map-for-colors {
+      @if ($clr-string == $key) {
+        $clr-value: $value;
+      }
+    }
+  }
+
+  // slice first and second digit of the number
+  $first-light-value: string.slice(#{$number-modifier}, 1, 1);
+  $second-light-value: string.slice(#{$number-modifier}, 2, 2);
+
+  // check if second digit is not 0
+  @if ($second-light-value != 0) {
+    // 1. merge first digit with second digi and convert it into number type
+    $merge: to-number($first-light-value + $second-light-value);
+
+    // 2. devide integer so there is decimal point and set that value to $light-value
+    $light-value: math.div($merge, 10);
+  }
+
+  // slice last digit of the number and convert it into number type
+  $opacity-value: to-number(string.slice(#{$number-modifier}, 3, 3));
+
+  // check if $opacity-value is not 0
+  @if $opacity-value == 0 {
+    // if so set $opacity-value to 1 so there is no opacity
+    $opacity-value: 1;
+  } @else {
+    // else devide integer so there is decimal point and set that value to $opacity-value
+    $opacity-value: math.div($opacity-value, 10);
+  }
+
+  // return changed/modified color by $clr-value, $light-value and $opacity-value;
+  @return color.change($clr-value, $lightness: $light-value * 10%, $alpha: $opacity-value);
+}

@@ -1,0 +1,27 @@
+$size-max: 25rem;
+$size-xlg: 15rem;
+$size-lg: 10rem;
+$size-b: 7rem;
+$size-m: 5rem;
+$size-s: 4rem;
+$size-sm: 2rem;
+$size-xsm: 1rem;
+$size-min: 0.5rem;
+
+$size-fluid-max: clamp(15rem, 2rem + 7vw, 20rem);
+$size-fluid-xlg: clamp(10rem, 2rem + 7vw, 15rem);
+$size-fluid-lg: clamp(7rem, 1.5rem + 5vw, 12rem);
+$size-fluid-b: clamp(7rem, 1rem + 3.7vw, 8rem);
+$size-fluid-m: clamp(3rem, 1rem + 2.61vw, 5rem);
+$size-fluid-s: clamp(2.5rem, 1rem + 2.61vw, 5rem);
+$size-fluid-sm: clamp(1rem, 1rem + 1.61vw, 3rem);
+$size-fluid-xsm: clamp(1rem, 1rem + 1vw, 2rem);
+$size-fluid-min: clamp(0.8rem, 1vw, 1.5rem);
+
+$size-txt-max: 72ch;
+$size-txt-lg: 50ch;
+$size-txt-b: 44ch;
+$size-txt-m: 40ch;
+$size-txt-s: 35ch;
+$size-txt-sm: 30ch;
+$size-txt-min: 13ch;

@@ -1,0 +1,46 @@
+@mixin fix($t: null, $r: null, $b: null, $l: null) {
+  position: fixed;
+  top: $t;
+  right: $r;
+  bottom: $b;
+  left: $l;
+}
+
+@mixin fix-corner($corner, $value, $value2: null) {
+  position: fixed;
+
+  @if ($corner == 'top-left') {
+    top: $value;
+    left: $value2 or $value;
+  } @else if ($corner == 'top-right') {
+    top: $value;
+    right: $value2 or $value;
+  } @else if ($corner == 'bottom-left') {
+    bottom: $value;
+    left: $value2 or $value;
+  } @else if ($corner == 'bottom-right') {
+    bottom: $value;
+    right: $value2 or $value;
+  } @else {
+    @warn 'undefined parameter: #{$corner}. First parameter can be only one of these values "top-left", "top-right", "bottom-left", "bottom-right",';
+  }
+}
+
+@mixin fix-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+@mixin fix-center-Y {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin fix-center-X {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+}

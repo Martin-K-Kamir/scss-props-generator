@@ -1,0 +1,34 @@
+@mixin flex($justify: null, $align: null, $direction: null, $gap: null) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+  gap: $gap;
+}
+
+@mixin flex-center($gap: null) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $gap;
+}
+
+@mixin flex-align-center($gap: null) {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+@mixin flex-justify-center($gap: null) {
+  display: flex;
+  justify-content: center;
+  gap: $gap;
+}
+
+@mixin flex-col-center($justify: center, $align: center, $gap: null) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: $justify;
+  gap: $gap;
+}
