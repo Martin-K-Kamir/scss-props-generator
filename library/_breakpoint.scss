@@ -62,9 +62,3 @@
     }
   }
 }
-
-@mixin breakpoint-landscape {
-  @media (orientation: landscape) and (min-resolution: 2x) {
-    @content;
-  }
-}

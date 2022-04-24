@@ -1,4 +1,5 @@
-$z-indexes: ('modal', 'navbar', 'default');
+@charset "UTF-8";
+@use '../lists/list-of-layers';
 
 @function layer($name) {
   @if index($z-indexes, $name) {

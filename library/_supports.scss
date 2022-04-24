@@ -1,11 +1,13 @@
-@mixin gap($gap) {
-  & > *:not(:last-child) {
-    margin-right: $gap;
-  }
-}
+@charset "UTF-8";
 
-@mixin support() {
-  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-    @content;
+@mixin supports($what-to-support: null) {
+  @if $what-to-support {
+    @supports (#{$what-to-support}) {
+      @content;
+    }
+  } @else {
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      @content;
+    }
   }
 }

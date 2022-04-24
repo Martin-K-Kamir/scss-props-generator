@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+@mixin reduce() {
+  @if $value == 'opacity-ok' {
+    @media (prefers-reduced-transparency: no-preference) {
+      @content;
+    }
+  } @else if $value == 'opacity-not-ok' {
+    @media (prefers-reduced-transparency: reduce) {
+      @content;
+    }
+  } @else if $value == 'data-ok' {
+    @media (prefers-reduced-data: no-preference) {
+      @content;
+    }
+  } @else if $value == 'data-not-ok' {
+    @media (prefers-reduced-data: reduce) {
+      @content;
+    }
+  }
+}

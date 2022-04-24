@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@use '../maps/map-for-directions';
 
 @mixin background-img($image-url: null, $filter-color: null, $filter-direction: null) {
   @if $image-url {

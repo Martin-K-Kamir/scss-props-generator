@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin size($width: null, $height: null) {
   width: $width;
   height: $height or $width;

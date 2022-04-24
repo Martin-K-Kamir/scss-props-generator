@@ -1,28 +1,9 @@
+@charset "UTF-8";
 @use 'sass:color';
 @use 'sass:string';
 @use 'sass:meta';
 @use 'sass:math';
-@use '../utilities/px-to-em' as *;
-
-// Default colors, which an be changed
-$clr-primary: hsl(350, 100%, 50%) !default;
-$clr-secondary: hsl(206, 45%, 45%) !default;
-$clr-tertiary: hsl(235, 21%, 21%) !default;
-$clr-quaternary: hsl(108, 66%, 63%) !default;
-$clr-white: hsl(0, 0%, 100%) !default;
-$clr-black: hsl(0, 0%, 0%) !default;
-$clr-gray: hsl(210, 9%, 31%) !default;
-
-// Map of default colors
-$map-for-colors: (
-  'clr-primary': $clr-primary,
-  'clr-secondary': $clr-secondary,
-  'clr-tertiary': $clr-tertiary,
-  'clr-quaternary': $clr-quaternary,
-  'clr-white': $clr-white,
-  'clr-black': $clr-black,
-  'clr-gray': $clr-gray,
-) !default;
+@import '../maps/map-for-colors';
 
 /// Color modifier.
 ///
@@ -65,14 +46,14 @@ $map-for-colors: (
   // check if second digit is not 0
   @if ($second-light-value != 0) {
     // 1. merge first digit with second digi and convert it into number type
-    $merge: to-number($first-light-value + $second-light-value);
+    $merge: __to-number($first-light-value + $second-light-value);
 
     // 2. devide integer so there is decimal point and set that value to $light-value
     $light-value: math.div($merge, 10);
   }
 
   // slice last digit of the number and convert it into number type
-  $opacity-value: to-number(string.slice(#{$number-modifier}, 3, 3));
+  $opacity-value: __to-number(string.slice(#{$number-modifier}, 3, 3));
 
   // check if $opacity-value is not 0
   @if $opacity-value == 0 {

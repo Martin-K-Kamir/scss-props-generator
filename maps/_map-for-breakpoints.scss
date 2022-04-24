@@ -1,9 +1,30 @@
 @charset "UTF-8";
+@use '../properties/breakpoints' as *;
 
 $map-for-breakpoints: (
-  'xsmall': 0,
-  'small': 576px,
-  'medium': 768px,
-  'large': 992px,
-  'xlarge': 1200px,
+  'ultrawide-max ': $ultrawide-max,
+  'ultrawide-md': $ultrawide-max,
+  'ultrawide-min ': $ultrawide-min,
+
+  'pc-max': $pc-max,
+  'pc-xl ': $pc-xl,
+  'pc-lg': $pc-lg,
+  'pc-md ': $pc-md,
+  'pc-sm': $pc-sm,
+  'pc-xs ': $pc-xs,
+  'pc-min': $pc-min,
+
+  'tablet-max ': $tablet-max,
+  'tablet-lg': $tablet-lg,
+  'tablet-md ': $tablet-md,
+  'tablet-sm': $tablet-sm,
+  'tablet-min ': $tablet-min,
+
+  'phone-max': $phone-max,
+  'phone-xl ': $phone-xl,
+  'phone-lg': $phone-lg,
+  'phone-md ': $phone-md,
+  'phone-sm': $phone-sm,
+  'phone-xs ': $phone-xs,
+  'phone-min': $phone-min,
 ) !default;

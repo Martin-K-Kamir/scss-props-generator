@@ -37,6 +37,14 @@ $map-for-smartphones: (
     width: 414px,
     height: 736px,
   ),
+  'iPhoneX': (
+    width: 375px,
+    height: 812px,
+  ),
+  'iPhoneXS-Max': (
+    width: 414px,
+    height: 812px,
+  ),
   'iPhone11': (
     width: 414px,
     height: 896px,
@@ -49,9 +57,21 @@ $map-for-smartphones: (
     width: 414px,
     height: 896px,
   ),
-  'iPhoneX': (
-    width: 375px,
-    height: 812px,
+  'iPhone12': (
+    width: 390px,
+    height: 844px,
+  ),
+  'iPhone12-Mini': (
+    width: 360px,
+    height: 780px,
+  ),
+  'iPhone12-Pro': (
+    width: 390px,
+    height: 844px,
+  ),
+  'iPhone12-Pro-Max': (
+    width: 428px,
+    height: 926px,
   ),
   'Galaxy-S7': (
     width: 360px,
@@ -68,5 +88,53 @@ $map-for-smartphones: (
   'Galaxy-S10': (
     width: 360px,
     height: 760px,
+  ),
+  'Galaxy-S20': (
+    width: 412px,
+    height: 914px,
+  ),
+  'Galaxy-S21': (
+    width: 384px,
+    height: 854px,
+  ),
+  'Galaxy-A12': (
+    width: 360px,
+    height: 800px,
+  ),
+  'Galaxy-A32': (
+    width: 412px,
+    height: 915px,
+  ),
+  'Galaxy-Note-20-Ultra': (
+    width: 412px,
+    height: 883px,
+  ),
+  'Galaxy-Z-Flip': (
+    width: 412px,
+    height: 1004px,
+  ),
+  'Galaxy-Fold': (
+    width: 768px,
+    height: 1076px,
+  ),
+  'Galaxy-Fold-2': (
+    width: 884px,
+    height: 1104px,
+  ),
+  'Oneplus-8T': (
+    width: 412px,
+    height: 914px,
+  ),
+  'Oneplus-9': (
+    width: 412px,
+    height: 915px,
+  ),
+  'Oneplus-9-Pro': (
+    width: 412px,
+    height: 919px,
+  ),
+  'Oneplus-10-Pro': (
+    width: 412px,
+    height: 919px,
   ),
 ) !default;

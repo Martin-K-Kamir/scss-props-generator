@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@mixin every($every-elements: false) {
+  @if $every-elements {
+    & * {
+      @content;
+    }
+  } @else {
+    & > * {
+      @content;
+    }
+  }
+}

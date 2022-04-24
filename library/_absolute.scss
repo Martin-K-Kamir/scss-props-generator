@@ -1,12 +1,14 @@
+@charset "UTF-8";
+
 @mixin abs($t: null, $r: null, $b: null, $l: null) {
   position: absolute;
   top: $t;
   right: $r;
   bottom: $b;
-  left: $l;
+  left: $l or $t;
 }
 
-@mixin abs-corner($corner, $value, $value2: null) {
+@mixin abs-corner($corner: 'top-left', $value, $value2: null) {
   position: absolute;
 
   @if ($corner == 'top-left') {

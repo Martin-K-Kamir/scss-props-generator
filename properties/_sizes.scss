@@ -1,0 +1,36 @@
+$size-base: 1rem !default;
+
+$size-max: $size-base * 30;
+$size-xxxxl: $size-base * 20;
+$size-xxxl: $size-base * 15;
+$size-xxl: $size-base * 10;
+$size-xl: $size-base * 7.5;
+$size-lg: $size-base * 5;
+$size-md: $size-base * 4;
+$size-sm: $size-base * 3;
+$size-xs: $size-base * 2.5;
+$size-xxs: $size-base * 2;
+$size-xxxs: $size-base * 1.5;
+$size-xxxxs: $size-base * 1;
+$size-min: $size-base * 0.5;
+
+$size-fluid-max: clamp(20rem, 40vw, $size-max);
+$size-fluid-xxxl: clamp(15rem, 30vw, $size-xxxxl);
+$size-fluid-xxl: clamp(10rem, 20vw, $size-xxxl);
+$size-fluid-xl: clamp(7.5rem, 10vw, $size-xxl);
+$size-fluid-lg: clamp(5rem, 7vw, $size-xl);
+$size-fluid-md: clamp(4rem, 5vw, $size-lg);
+$size-fluid-sm: clamp(2rem, 4vw, $size-sm);
+$size-fluid-xs: clamp(1.5rem, 3vw, $size-xxs);
+$size-fluid-xxs: clamp(1rem, 2vw, $size-xxxs);
+$size-fluid-min: clamp(0.5rem, 1vw, $size-xxxxs);
+
+$size-content-max: 72ch;
+$size-content-lg: 60ch;
+$size-content-md: 45ch;
+$size-content-sm: 30ch;
+$size-content-max: 25ch;
+
+$size-title-max: 35ch;
+$size-title-md: 25ch;
+$size-title-max: 20ch;

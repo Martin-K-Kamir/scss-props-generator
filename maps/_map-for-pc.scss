@@ -1,0 +1,45 @@
+@charset "UTF-8";
+@use '../properties/breakpoints' as *;
+
+$map-for-pc: (
+  'ultrawide-max': (
+    width: $ultrawide-max,
+    height: 2160px,
+  ),
+  'ultrawide-md': (
+    width: $ultrawide-md,
+    height: 1080px,
+  ),
+  'ultrawide-min': (
+    width: $ultrawide-min,
+    height: 1080px,
+  ),
+  'pc-max': (
+    width: $pc-max,
+    height: 1080px,
+  ),
+  'pc-xl': (
+    width: $pc-xl,
+    height: 992px,
+  ),
+  'pc-lg': (
+    width: $pc-lg,
+    height: 1050px,
+  ),
+  'pc-md': (
+    width: $pc-md,
+    height: 864px,
+  ),
+  'pc-sm': (
+    width: $pc-sm,
+    height: 900px,
+  ),
+  'pc-xs': (
+    width: $pc-xs,
+    height: 768px,
+  ),
+  'pc-min': (
+    width: $pc-min,
+    height: 800px,
+  ),
+) !default;

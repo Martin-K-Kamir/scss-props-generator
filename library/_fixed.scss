@@ -1,12 +1,14 @@
+@charset "UTF-8";
+
 @mixin fix($t: null, $r: null, $b: null, $l: null) {
   position: fixed;
   top: $t;
   right: $r;
   bottom: $b;
-  left: $l;
+  left: $l or $t;
 }
 
-@mixin fix-corner($corner, $value, $value2: null) {
+@mixin fix-corner($corner: 'top-left', $value, $value2: null) {
   position: fixed;
 
   @if ($corner == 'top-left') {

@@ -1,32 +1,52 @@
 @charset "UTF-8";
 
 $map-for-tablets: (
-  'iPadMini': (
+  'iPad-Mini-3': (
     width: 768px,
     height: 1024px,
   ),
-  'iPad': (
-    width: 810px,
-    height: 1080px,
+  'iPad-Mini-4': (
+    width: 768px,
+    height: 1024px,
   ),
-  'iPadAir': (
+  'iPad-Air': (
+    width: 768px,
+    height: 1024px,
+  ),
+  'iPad-Air-10-5': (
     width: 834px,
     height: 1112px,
   ),
-  'iPadPro': (
+  'iPad-Pro': (
     width: 1024px,
     height: 1366px,
   ),
-  'Nexus7': (
+  'iPad-Pro-10-5': (
+    width: 834px,
+    height: 1112px,
+  ),
+  'iPad-Pro-11': (
+    width: 834px,
+    height: 1194px,
+  ),
+  'iPad-Pro-12-9': (
+    width: 1024px,
+    height: 1366px,
+  ),
+  'Nexus-7': (
     width: 600px,
     height: 960px,
   ),
-  'Nexus9': (
+  'Nexus-9': (
     width: 768px,
     height: 1024px,
   ),
-  'Nexus10': (
+  'Nexus-10': (
     width: 800px,
     height: 1280px,
+  ),
+  'Pixel-C': (
+    width: 1280px,
+    height: 900px,
   ),
 ) !default;

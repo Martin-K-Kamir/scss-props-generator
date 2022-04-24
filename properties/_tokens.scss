@@ -1,0 +1,115 @@
+@import './typography';
+@import './borders';
+@import './color-palette';
+
+// Colors
+$clr-white: white;
+$clr-black: black;
+
+$clr-primary: $red-7;
+$clr-primary-light: $red-4;
+$clr-primary-dark: $red-9;
+$clr-secondary: $gray-8;
+$clr-secondary-light: $gray-7;
+$clr-secondary-dark: $gray-9;
+$clr-tertiary: $cyan-4;
+$clr-tertiary-light: $cyan-2;
+$clr-tertiary-dark: $cyan-6;
+
+$clr-txt-primary: $clr-secondary;
+$clr-txt-secondary: $clr-secondary-light;
+$clr-txt-tertiary: $clr-primary;
+
+$clr-title-primary: $clr-secondary-dark;
+$clr-title-secondary: $clr-primary-dark;
+$clr-title-tertiary: $clr-tertiary-light;
+
+$clr-background-primary: $clr-white;
+$clr-background-secondary: $gray-1;
+$clr-background-tertiary: $gray-4;
+
+$clr-cta-primary: $clr-secondary;
+$clr-cta-hover-primary: $clr-secondary-dark;
+$clr-cta-secondary: $clr-tertiary;
+$clr-cta-hover-secondary: $clr-tertiary-light;
+$clr-cta-tertiary: $clr-secondary-light;
+$clr-cta-hover-tertiary: $gray-6;
+
+$clr-info: $blue-7;
+$clr-error: $red-8;
+$clr-notification: $orange-9;
+$clr-warning: $yellow-7;
+$clr-success: $green-8;
+
+$clr-facebook: hsl(220, 46%, 48%);
+$clr-twitter: hsl(203, 89%, 53%);
+$clr-instagram: hsl(326, 57%, 48%);
+$clr-youtube: hsl(0, 100%, 50%);
+$clr-github: hsl(0, 0%, 20%);
+$clr-google: hsl(217, 89%, 61%);
+$clr-linkedin: hsl(201, 100%, 35%);
+
+// Typography
+$f-family-primary: 'Barlo-weight', sans-serif;
+$f-family-secondary: 'Fraunces', serif;
+
+$f-title-max: $f-size-title-min;
+$f-title-def: $f-size-xl;
+$f-title-min: $f-size-lg;
+
+$f-txt-max: $f-size-sm;
+$f-txt-def: $f-size-xs;
+$f-txt-min: $f-size-xxs;
+
+$f-title-fluid-max: $f-size-title-fluid-sm;
+$f-title-fluid-def: $f-size-title-fluid-min;
+$f-title-fluid-min: $f-size-fluid-lg;
+
+$f-txt-fluid-max: $f-size-sm;
+$f-txt-fluid-def: $f-size-xs;
+$f-txt-fluid-min: $f-size-xxs;
+
+$f-btn-max: $f-size-fluid-md;
+$f-btn-def: $f-size-fluid-sm;
+$f-btn-min: $f-size-fluid-min;
+
+$f-weight-title-bold: $f-weight-9;
+$f-weight-title-def: $f-weight-8;
+$f-weight-title-thin: $f-weight-6;
+
+$f-weight-txt-bold: $f-weight-7;
+$f-weight-txt-def: $f-weight-5;
+$f-weight-txt-thin: $f-weight-3;
+
+$f-letterspacing-max: $f-letterspacing-5;
+$f-letterspacing-def: $f-letterspacing-1;
+$f-letterspacing-min: $f-letterspacing-0;
+
+$f-lineheight-max: $f-lineheight-5;
+$f-lineheight-def: $f-lineheight-3;
+$f-lineheight-min: $f-lineheight-00;
+
+// Sizes
+$body-space-max: 0;
+$body-space-def: 0;
+$body-space-min: 0;
+
+$modal-space-max: 0;
+$modal-space-def: 0;
+$modal-space-min: 0;
+
+$card-space-max: 0;
+$card-space-def: 0;
+$card-space-min: 0;
+
+$btn-padding-max: 0;
+$btn-padding-def: 0;
+$btn-padding-min: 0;
+
+// Borders
+$border-max: $border-size-md;
+$border-def: $border-size-sm;
+$border-min: $border-size-min;
+
+$radius-def: $radius-md;
+$radius-btn: $radius-sm;
