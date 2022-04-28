@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@mixin margin-gap($gap, $direction: 'x') {
+  @if ($direction == 'y') {
+    & > * + * {
+      margin-top: $gap;
+    }
+  } @else if ($direction == 'x') {
+    & > * + * {
+      margin-left: $gap;
+    }
+  }
+}

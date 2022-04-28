@@ -1,34 +1,152 @@
-@mixin flex($justify: null, $align: null, $direction: null, $gap: null) {
-  display: flex;
-  justify-content: $justify;
-  align-items: $align;
-  flex-direction: $direction;
-  gap: $gap;
-}
+@charset "UTF-8";
 
-@mixin flex-center($gap: null) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: $gap;
-}
+/// Ultimate flexbox mixin
+/// @author Martin Kamír
+///
+/// @param {string / number}
+/// Mixin accepts multiple parameters.
+///
+/// `justify-center`, `justify-start`, `justify-end`, `justify-between`,
+/// `justify-around`, `justify-evenly`, `justify-unset`, `justify-inital`,
+/// `justify-revert` - Sets justify-content property.
+///
+/// `align-center`, `align-start`, `align-end`, `align-unset`, `align-inital`,
+/// `align-revert` - Sets align-content property.
+///
+/// Parameters accepts all valus for flex-direction, flex-wrap property.
+///
+/// Number as parameter sets gap.
+/// TIP: To make gaps possible in older browser. Mixin needs to know their flex-direction.
+///
+/// Parameter accepts custom layout styles as `even-column`, `navbar`, `aside-left`, `aside-right`.
+/// These layouts can be modified by calling other parameters aboce.
+///
+/// Parameter `fluid-grid` makes flexbox fluid grid.
+/// Which can be modified by calling `col-2`, `col-3`, `col-4`, `col-5`, `col-6`, `col-8`, `col-12`
+/// As default `fluid-grid` is set to be `col-3`. Layout can be modified by calling other parameters above.
+///
+@mixin xflex($params...) {
+  // Default variables
+  $justify: null;
+  $align: null;
+  $direction: null;
+  $wrap: null;
+  $gap: 0px;
+  $col-width-max: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-max');
+  $col-width-md: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-md');
+  $col-width-sm: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-sm');
+  $col-width-min: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-min');
 
-@mixin flex-align-center($gap: null) {
-  display: flex;
-  align-items: center;
-  gap: $gap;
-}
+  // Loop over the parameters to set col width variables for fluid grid based on the call. As default fluid grid is set to be cols-3.
+  @each $value in $params {
+    @if $value == 'cols-2' {
+      $col-width-max: 50%;
+      $col-width-md: 50%;
+      $col-width-sm: 100%;
+    } @else if $value == 'cols-3' {
+      $col-width-max: 33.33%;
+      $col-width-md: 50%;
+      $col-width-sm: 100%;
+    } @else if $value == 'cols-4' {
+      $col-width-max: 25%;
+      $col-width-md: 33.33%;
+      $col-width-sm: 50%;
+    } @else if $value == 'cols-5' {
+      $col-width-max: 20%;
+      $col-width-md: 25%;
+      $col-width-sm: 33.33%;
+    } @else if $value == 'cols-6' {
+      $col-width-max: 16.66%;
+      $col-width-md: 25%;
+      $col-width-sm: 33.33%;
+      $col-width-min: 50%;
+    } @else if $value == 'cols-8' {
+      $col-width-max: 12.5%;
+      $col-width-md: 20%;
+      $col-width-sm: 33.33%;
+      $col-width-min: 50%;
+    } @else if $value == 'cols-12' {
+      $col-width-max: 8.3%;
+      $col-width-md: 16.66%;
+      $col-width-sm: 25%;
+      $col-width-min: 50%;
+    }
+  }
 
-@mixin flex-justify-center($gap: null) {
-  display: flex;
-  justify-content: center;
-  gap: $gap;
-}
+  // Main loop. Which makes the mixin to work.
+  @each $value in $params {
+    // Check for string in the parameters. Based on params variables will do lookup in flexbox map to get their value.
+    @if type-of($value) == 'string' {
+      $justify: __mapDeepGet($map-for-flexbox, 'justify', $value);
+      $align: __mapDeepGet($map-for-flexbox, 'align', $value);
+      $direction: __mapDeepGet($map-for-flexbox, 'directions', $value);
+      $wrap: __mapDeepGet($map-for-flexbox, 'wrap', $value);
+    }
 
-@mixin flex-col-center($justify: center, $align: center, $gap: null) {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: $justify;
-  gap: $gap;
+    // Check for number in the parameters. If there is number set gap value and call for __supportGap so in older browsers there will be gap aswell.
+    @if type-of($value) == 'number' {
+      $gap: $value;
+      @include __supportGap($gap, $direction);
+    }
+
+    // Sets the values
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+    flex-wrap: $wrap;
+  }
+
+  // Loop If else chain for custom flex layouts
+  @each $value in $params {
+    // Center on main axis and cross axies
+    @if $value == 'center-all' {
+      justify-content: center;
+      align-items: center;
+
+      // Even columns
+    } @else if $value == 'even-columns' {
+      justify-content: center;
+      flex-direction: row;
+
+      & > * {
+        flex-basis: 100%;
+      }
+
+      // Fluid grid system which can be modified by second parameter (col-2, col-3, col-4, etc...)
+    } @else if $value == 'fluid-grid' {
+      flex-wrap: wrap;
+
+      & > * {
+        flex: 1;
+        min-width: calc($col-width-max - $gap);
+
+        @media (max-width: $tablet-b) {
+          min-width: calc($col-width-md - $gap);
+        }
+
+        @media (max-width: $tablet-min) {
+          min-width: calc($col-width-sm - $gap);
+        }
+
+        @media (max-width: $phone-s) {
+          min-width: calc($col-width-min - $gap);
+        }
+      }
+
+      // Navbar which apply styles to the ul. To order to work the mixin have to be called in container/parent div
+    } @else if $value == 'navbar' {
+      & > ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $gap;
+      }
+    } @else if $value == 'aside-left' {
+      // WIP
+    } @else if $value == 'aside-right' {
+      // WIP
+    }
+  }
+
+  display: flex; //! Never delete this. Don't ask why.
 }
