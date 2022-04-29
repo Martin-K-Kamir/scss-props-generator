@@ -1,48 +1,49 @@
 @charset "UTF-8";
-
-@mixin fix($t: null, $r: null, $b: null, $l: null) {
+@mixin fixed($mode, $value: null, $value2: null, $value3: null) {
   position: fixed;
-  top: $t;
-  right: $r;
-  bottom: $b;
-  left: $l or $t;
-}
-
-@mixin fix-corner($corner: 'top-left', $value, $value2: null) {
-  position: fixed;
-
-  @if ($corner == 'top-left') {
+  @if ($mode == 'top') {
+    top: $value;
+  } @else if ($mode == 'top-left') {
     top: $value;
     left: $value2 or $value;
-  } @else if ($corner == 'top-right') {
+  } @else if ($mode == 'top-right') {
     top: $value;
     right: $value2 or $value;
-  } @else if ($corner == 'bottom-left') {
+  } @else if ($mode == 'top-sides') {
+    top: $value;
+    right: $value2 or $value;
+    left: $value3 or $value2 or $value;
+  } @else if ($mode == 'top-bottom') {
+    top: $value;
+    bottom: $value2 or $value;
+  } @else if ($mode == 'bottom') {
+    bottom: $value;
+  } @else if ($mode == 'bottom-left') {
     bottom: $value;
     left: $value2 or $value;
-  } @else if ($corner == 'bottom-right') {
+  } @else if ($mode == 'bottom-right') {
     bottom: $value;
     right: $value2 or $value;
-  } @else {
-    @warn 'undefined parameter: #{$corner}. First parameter can be only one of these values "top-left", "top-right", "bottom-left", "bottom-right",';
+  } @else if ($mode == 'bottom-sides') {
+    bottom: $value;
+    right: $value2 or $value;
+    left: $value3 or $value2 or $value;
+  } @else if ($mode == 'left') {
+    left: $value;
+  } @else if ($mode == 'right') {
+    right: $value;
+  } @else if ($mode == 'sides') {
+    left: $value;
+    right: $value2 or $value;
+  } @else if ($mode == 'center') {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  } @else if ($mode == 'center-y') {
+    top: 50%;
+    transform: translateY(-50%);
+  } @else if ($mode == 'center-x') {
+    left: 50%;
+    transform: translateX(-50%);
   }
-}
-
-@mixin fix-center {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-}
-
-@mixin fix-center-Y {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-@mixin fix-center-X {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
 }
