@@ -25,7 +25,7 @@
 /// Which can be modified by calling `col-2`, `col-3`, `col-4`, `col-5`, `col-6`, `col-8`, `col-12`
 /// As default `fluid-grid` is set to be `col-3`. Layout can be modified by calling other parameters above.
 ///
-@mixin xflex($params...) {
+@mixin xflex($main-size, 60%, $aside-size: 20rem, $ideal-size: 40rem, $params...) {
   // Default variables
   $justify: null;
   $align: null;
@@ -118,33 +118,54 @@
 
       & > * {
         flex: 1;
-        min-width: calc($col-width-max - $gap);
+        min-width: $col-width-max - $gap;
 
         @media (max-width: $tablet-b) {
-          min-width: calc($col-width-md - $gap);
+          min-width: $col-width-md - $gap;
         }
 
         @media (max-width: $tablet-min) {
-          min-width: calc($col-width-sm - $gap);
+          min-width: $col-width-sm - $gap;
         }
 
         @media (max-width: $phone-s) {
-          min-width: calc($col-width-min - $gap);
+          min-width: $col-width-min - $gap;
         }
       }
 
       // Navbar which apply styles to the ul. To order to work the mixin have to be called in container/parent div
     } @else if $value == 'navbar' {
-      & > ul {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $gap;
-      }
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $gap;
     } @else if $value == 'aside-left' {
-      // WIP
+      @include only(last) {
+        flex-grow: 9999;
+        flex-basis:$main-size;
+      }
+
+      @include only(first) {
+        flex-basis: $aside-size;
+        flex-grow: 1;
+      }
     } @else if $value == 'aside-right' {
-      // WIP
+      @include only(first) {
+        flex-grow: 9999;
+        flex-basis: $main-size;
+      }
+
+      @include only(last) {
+        flex-basis: $aside-size;
+        flex-grow: 1;
+      }
+    } @else if $value == 'fluid-columns' {
+      flex-wrap: wrap;
+
+      & > * {
+        flex-grow: 1;
+        flexbox: calc(calc($ideal-size - 100%) * 999)
+      }
     }
   }
 
