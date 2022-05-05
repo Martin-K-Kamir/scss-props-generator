@@ -25,7 +25,7 @@
 /// Which can be modified by calling `col-2`, `col-3`, `col-4`, `col-5`, `col-6`, `col-8`, `col-12`
 /// As default `fluid-grid` is set to be `col-3`. Layout can be modified by calling other parameters above.
 ///
-@mixin xflex($main-size, 60%, $aside-size: 20rem, $ideal-size: 40rem, $params...) {
+@mixin xflex($main-size: 60%, $aside-size: 20rem, $ideal-size: 40rem, $params...) {
   // Default variables
   $justify: null;
   $align: null;
@@ -164,7 +164,7 @@
 
       & > * {
         flex-grow: 1;
-        flexbox: calc(calc($ideal-size - 100%) * 999)
+        flexbox: calc(calc(#{$ideal-size} - 100%) * 999)
       }
     }
   }
