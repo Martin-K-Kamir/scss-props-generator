@@ -23,3 +23,11 @@ $phone-md: 375px;
 $phone-sm: 360px;
 $phone-xs: 330px;
 $phone-min: 320px;
+
+$screen-max: $pc-max;
+$screen-xl: $pc-sm;
+$screen-lg: $tablet-max;
+$screen-md: $tablet-md;
+$screen-sm: $phone-max;
+$screen-xs: $phone-md;
+$screen-min: $phone-xs;
