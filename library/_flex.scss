@@ -7,37 +7,41 @@
 /// Mixin accepts multiple parameters.
 ///
 /// `justify-center`, `justify-start`, `justify-end`, `justify-between`,
-/// `justify-around`, `justify-evenly`, `justify-unset`, `justify-inital`,
+/// `justify-around`, `justify-evenly`, `justify-unset`, `justify-initial`,
 /// `justify-revert` - Sets justify-content property.
 ///
-/// `align-center`, `align-start`, `align-end`, `align-unset`, `align-inital`,
+/// `align-center`, `align-start`, `align-end`, `align-unset`, `align-initial`,
 /// `align-revert` - Sets align-content property.
 ///
-/// Parameters accepts all valus for flex-direction, flex-wrap property.
+/// Parameters accepts all values for flex-direction, flex-wrap property.
 ///
 /// Number as parameter sets gap.
 /// TIP: To make gaps possible in older browser. Mixin needs to know their flex-direction.
 ///
 /// Parameter accepts custom layout styles as `even-column`, `navbar`, `aside-left`, `aside-right`.
-/// These layouts can be modified by calling other parameters aboce.
+/// These layouts can be modified by calling other parameters above.
 ///
 /// Parameter `fluid-grid` makes flexbox fluid grid.
 /// Which can be modified by calling `col-2`, `col-3`, `col-4`, `col-5`, `col-6`, `col-8`, `col-12`
 /// As default `fluid-grid` is set to be `col-3`. Layout can be modified by calling other parameters above.
 ///
-@mixin xflex($main-size, 60%, $aside-size: 20rem, $ideal-size: 40rem, $params...) {
-  // Default variables
+@mixin flex($params...) {
+  // Default properties
+  $main-size: 60%;
+  $aside-size: 20rem;
+  $ideal-size: 40rem;
   $justify: null;
   $align: null;
   $direction: null;
   $wrap: null;
+  $content: null;
   $gap: 0px;
   $col-width-max: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-max');
   $col-width-md: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-md');
   $col-width-sm: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-sm');
   $col-width-min: __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-min');
 
-  // Loop over the parameters to set col width variables for fluid grid based on the call. As default fluid grid is set to be cols-3.
+  // Loop over the parameters to set col width properties for fluid grid based on the call. As default fluid grid is set to be cols-3.
   @each $value in $params {
     @if $value == 'cols-2' {
       $col-width-max: 50%;
@@ -75,12 +79,13 @@
 
   // Main loop. Which makes the mixin to work.
   @each $value in $params {
-    // Check for string in the parameters. Based on params variables will do lookup in flexbox map to get their value.
+    // Check for string in the parameters. Based on params properties will do lookup in flexbox map to get their value.
     @if type-of($value) == 'string' {
       $justify: __mapDeepGet($map-for-flexbox, 'justify', $value);
       $align: __mapDeepGet($map-for-flexbox, 'align', $value);
       $direction: __mapDeepGet($map-for-flexbox, 'directions', $value);
       $wrap: __mapDeepGet($map-for-flexbox, 'wrap', $value);
+      $content: __mapDeepGet($map-for-flexbox, 'content', $value);
     }
 
     // Check for number in the parameters. If there is number set gap value and call for __supportGap so in older browsers there will be gap aswell.
@@ -91,6 +96,7 @@
 
     // Sets the values
     justify-content: $justify;
+    align-content: $content;
     align-items: $align;
     flex-direction: $direction;
     flex-wrap: $wrap;
@@ -118,18 +124,18 @@
 
       & > * {
         flex: 1;
-        min-width: $col-width-max - $gap;
+        min-width: calc(#{$col-width-max} - #{$gap});
 
-        @media (max-width: $tablet-b) {
-          min-width: $col-width-md - $gap;
+        @media (max-width: $tablet-lg) {
+          min-width: calc(#{$col-width-md} - #{$gap});
         }
 
         @media (max-width: $tablet-min) {
-          min-width: $col-width-sm - $gap;
+          min-width: calc(#{$col-width-sm} - #{$gap});
         }
 
-        @media (max-width: $phone-s) {
-          min-width: $col-width-min - $gap;
+        @media (max-width: $phone-sm) {
+          min-width: calc(#{$col-width-min} - #{$gap});
         }
       }
 
@@ -140,22 +146,23 @@
       justify-content: space-between;
       gap: $gap;
     } @else if $value == 'aside-left' {
-      @include only(last) {
+      & > *:nth-child(2) {
         flex-grow: 9999;
         flex-basis:$main-size;
       }
 
-      @include only(first) {
+      & > *:nth-child(1) {
         flex-basis: $aside-size;
         flex-grow: 1;
       }
     } @else if $value == 'aside-right' {
-      @include only(first) {
+
+      & > *:nth-child(1) {
         flex-grow: 9999;
-        flex-basis: $main-size;
+        flex-basis:$main-size;
       }
 
-      @include only(last) {
+      & > *:nth-child(2) {
         flex-basis: $aside-size;
         flex-grow: 1;
       }
@@ -164,7 +171,7 @@
 
       & > * {
         flex-grow: 1;
-        flexbox: calc(calc($ideal-size - 100%) * 999)
+        flex: calc(calc(40rem - 10%) * 999)
       }
     }
   }
