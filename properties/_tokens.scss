@@ -21,9 +21,9 @@ $clr-title-primary: $clr-secondary-dark;
 $clr-title-secondary: $clr-primary-dark;
 $clr-title-tertiary: $clr-tertiary-light;
 
-$clr-background-primary: $clr-white;
-$clr-background-secondary: $clr-gray-1;
-$clr-background-tertiary: $clr-gray-4;
+$clr-bg-primary: $clr-white;
+$clr-bg-secondary: $clr-gray-1;
+$clr-bg-tertiary: $clr-gray-4;
 
 $clr-cta-primary: $clr-secondary;
 $clr-cta-hover-primary: $clr-secondary-dark;
@@ -38,13 +38,38 @@ $clr-notification: $clr-orange-9;
 $clr-warning: $clr-yellow-7;
 $clr-success: $clr-green-8;
 
-$clr-facebook: hsl(220, 46%, 48%);
-$clr-twitter: hsl(203, 89%, 53%);
-$clr-instagram: hsl(326, 57%, 48%);
-$clr-youtube: hsl(0, 100%, 50%);
-$clr-github: hsl(0, 0%, 20%);
-$clr-google: hsl(217, 89%, 61%);
-$clr-linkedin: hsl(201, 100%, 35%);
+$clr-facebook-blue: hsl(220, 46%, 48%);
+$clr-facebook-gray: hsl(221, 9%, 57%);
+$clr-facebook-black: black;
+
+$clr-twitter-blue: hsl(203, 89%, 53%);
+$clr-twitter-black: hsl(210, 13%, 9%);
+$clr-twitter-gray: hsl(207, 14%, 46%);
+$clr-twitter-silver: hsl(205, 16%, 71%);
+
+$clr-instagram-blue: hsl(230, 77%, 58%);
+$clr-instagram-purple: hsl(276, 51%, 47%);
+$clr-instagram-pink: hsl(326, 57%, 48%);
+$clr-instagram-red: hsl(0, 98%, 55%);
+$clr-instagram-orange: hsl(20, 92%, 59%);
+$clr-instagram-yellow: hsl(35, 97%, 63%);
+
+$clr-youtube-red: hsl(0, 100%, 50%);
+$clr-youtube-black: gray(40);
+
+$clr-github-gray: hsl(0, 0%, 20%);
+$clr-github-white: hsl(0, 0%, 98%);
+$clr-github-silver: hsl(0, 0%, 96%);
+$clr-github-blue: hsl(214, 50%, 50%);
+$clr-github-purple: hsl(264, 28%, 45%);
+
+$clr-google-blue: hsl(217, 89%, 61%);
+$clr-google-red: hsl(5, 69%, 54%);
+$clr-google-yellow: hsl(44, 100%, 48%);
+$clr-google-green: hsl(151, 83%, 34%);
+
+$clr-linkedin-blue: hsl(201, 100%, 35%);
+$clr-linkedin-white: white;
 
 // Typography
 $f-family-primary: 'Barlo-weight', sans-serif;
