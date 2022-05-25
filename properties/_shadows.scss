@@ -1,6 +1,6 @@
 @use 'sass:color';
 
-$shadow-color: $gray-9;
+$shadow-color: $clr-gray-9;
 $shadow-strength: 1%;
 
 $shadow-1: 0 3px 0 rgba($shadow-color, ($shadow-strength + 9%));

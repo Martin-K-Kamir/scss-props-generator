@@ -13,12 +13,12 @@ $f-size-8: $f-size-base * 4;
 $f-size-9: $f-size-base * 5;
 $f-size-10: $f-size-base * 7;
 
-$f-size-fluid-0: clamp($f-size-0, 1.5vw, $f-size-1);
-$f-size-fluid-1: clamp($f-size-1, 2vw, $f-size-3);
-$f-size-fluid-2: clamp($f-size-3, 3vw, $f-size-5);
-$f-size-fluid-3: clamp($f-size-4, 4vw, $f-size-7);
-$f-size-fluid-4: clamp($f-size-5, 5vw, $f-size-9);
-$f-size-fluid-5: clamp($f-size-6, 10vw, $f-size-10);
+$f-size-fluid-0: clamp($f-size-0, 1.5vw + 1rem, $f-size-1);
+$f-size-fluid-1: clamp($f-size-1, 2vw + 1rem, $f-size-3);
+$f-size-fluid-2: clamp($f-size-3, 3vw + 1rem, $f-size-5);
+$f-size-fluid-3: clamp($f-size-4, 4vw + 1rem, $f-size-7);
+$f-size-fluid-4: clamp($f-size-5, 5vw + 1rem, $f-size-9);
+$f-size-fluid-5: clamp($f-size-6, 10vw + 1rem, $f-size-10);
 
 $f-weight-1: 100;
 $f-weight-2: 200;

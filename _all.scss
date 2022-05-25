@@ -33,9 +33,10 @@
 @import './utilities/validate-length';
 @import './utilities/validate-scissors';
 
-@import './functions/clr-modifier';
-@import './functions/clr-opacity';
-@import './functions/z-indexes';
+@import 'functions/color-mixer';
+@import 'functions/alpha';
+@import 'functions/layer';
+@import 'functions/em';
 
 @import './library/absolute';
 @import './library/after';
@@ -54,7 +55,7 @@
 @import './library/every';
 @import './library/except';
 @import './library/fixed';
-@import './library/flex';
+//@import './library/flex';
 @import './library/hide';
 @import './library/hover';
 @import './library/laptop';

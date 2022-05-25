@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+@mixin el-colors($clr, $clr-bg) {
+  color: $clr;
+  background-color: $clr-bg;
+}
