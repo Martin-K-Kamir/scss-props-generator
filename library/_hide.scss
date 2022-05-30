@@ -19,7 +19,7 @@
     clip: auto;
     clip-path: none;
     white-space: inherit;
-  } @else if not index ('hide' 'unhide', $toggle) {
+  } @else if not index('hide' 'unhide', $toggle) {
     @error "#{$toggle} is not a valid value for the `$toggle` argument. The value must be either `hide` or `unhide`.";
   }
 }
