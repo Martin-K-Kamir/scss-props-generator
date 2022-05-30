@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+@mixin generate-variables($params...) {
+	@each $map in $params {
+		@each $key, $value in $map {
+			--#{$key} : #{$value};
+		}
+	}
+}
+

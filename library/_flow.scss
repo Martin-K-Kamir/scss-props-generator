@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@mixin flow($gap, $direction: 'block') {
+	@if ($direction == 'block') {
+		& > * + * {
+			margin-top : $gap;
+		}
+	} @else if ($direction == 'inline') {
+		& > * + * {
+			margin-left : $gap;
+		}
+	}
+}

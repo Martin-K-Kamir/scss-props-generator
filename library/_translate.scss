@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
 @mixin pos-Y($y) {
-  transform: translateY($y);
+	transform : translateY($y);
 }
 
 @mixin pos-X($x) {
-  transform: translateX($x);
+	transform : translateX($x);
 }
 
 @mixin pos($x, $y) {
-  transform: translate($x, $y);
+	transform : translate($x, $y);
 }

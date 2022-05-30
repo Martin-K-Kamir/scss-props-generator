@@ -1,16 +1,16 @@
 @charset "UTF-8";
 
 @mixin inline-animation($duration, $timing: null, $count: null, $mode: null, $direction: normal) {
-  $name: inline-#{unique-id()};
+	$name                     : inline-#{unique-id()};
 
-  @keyframes #{$name} {
-    @content;
-  }
+	@keyframes #{$name} {
+		@content;
+	}
 
-  animation-name: $name;
-  animation-duration: $duration;
-  animation-timing-function: $timing;
-  animation-iteration-count: $count;
-  animation-fill-mode: $mode;
-  animation-direction: $direction;
+	animation-name            : $name;
+	animation-duration        : $duration;
+	animation-timing-function : $timing;
+	animation-iteration-count : $count;
+	animation-fill-mode       : $mode;
+	animation-direction       : $direction;
 }

@@ -1,50 +1,58 @@
 @charset "UTF-8";
 
-@mixin absolute($mode, $value: null, $value2: null, $value3: null) {
-  position: absolute;
-  @if ($mode == 'top') {
-    top: $value;
-  } @else if ($mode == 'top-left') {
-    top: $value;
-    left: $value2 or $value;
-  } @else if ($mode == 'top-right') {
-    top: $value;
-    right: $value2 or $value;
-  } @else if ($mode == 'top-sides') {
-    top: $value;
-    right: $value2 or $value;
-    left: $value3 or $value2 or $value;
-  } @else if ($mode == 'top-bottom') {
-    top: $value;
-    bottom: $value2 or $value;
-  } @else if ($mode == 'bottom') {
-    bottom: $value;
-  } @else if ($mode == 'bottom-left') {
-    bottom: $value;
-    left: $value2 or $value;
-  } @else if ($mode == 'bottom-right') {
-    bottom: $value;
-    right: $value2 or $value;
-  } @else if ($mode == 'bottom-sides') {
-    bottom: $value;
-    right: $value2 or $value;
-    left: $value3 or $value2 or $value;
-  } @else if ($mode == 'left') {
-    left: $value;
-  } @else if ($mode == 'right') {
-    right: $value;
-  } @else if ($mode == 'sides') {
-    left: $value;
-    right: $value2 or $value;
-  } @else if ($mode == 'center') {
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-  } @else if ($mode == 'center-y') {
-    top: 50%;
-    transform: translateY(-50%);
-  } @else if ($mode == 'center-x') {
-    left: 50%;
-    transform: translateX(-50%);
-  }
+@mixin absolute($mode, $value: null, $value2: null, $value3: null, $value4: null) {
+	position : absolute;
+	@if ($mode == 'top') {
+		top       : $value;
+	} @else if ($mode == 'top-left') {
+		top       : $value;
+		left      : $value2 or $value;
+	} @else if ($mode == 'top-right') {
+		top       : $value;
+		right     : $value2 or $value;
+	} @else if ($mode == 'top-inline') {
+		top       : $value;
+		right     : $value2 or $value;
+		left      : $value3 or $value2 or $value;
+	} @else if ($mode == 'top-bottom') {
+		top       : $value;
+		bottom    : $value2 or $value;
+	} @else if ($mode == 'bottom') {
+		bottom    : $value;
+	} @else if ($mode == 'bottom-left') {
+		bottom    : $value;
+		left      : $value2 or $value;
+	} @else if ($mode == 'bottom-right') {
+		bottom    : $value;
+		right     : $value2 or $value;
+	} @else if ($mode == 'bottom-inline') {
+		bottom    : $value;
+		right     : $value2 or $value;
+		left      : $value3 or $value2 or $value;
+	} @else if ($mode == 'left') {
+		left      : $value;
+	} @else if ($mode == 'right') {
+		right     : $value;
+	} @else if ($mode == 'inline') {
+		left      : $value;
+		right     : $value2 or $value;
+	} @else if ($mode == 'block') {
+		top       : $value;
+		bottom    : $value2 or $value;
+	} @else if ($mode == 'all') {
+		top       : $value;
+		right     : $value2 or $value;
+		bottom    : $value3 or $value2 or $value;
+		left      : $value4 or $value3 or $value2 or $value;
+	} @else if ($mode == 'center') {
+		top       : 50%;
+		left      : 50%;
+		transform : translateX(-50%) translateY(-50%);
+	} @else if ($mode == 'center-y') {
+		top       : 50%;
+		transform : translateY(-50%);
+	} @else if ($mode == 'center-x') {
+		left      : 50%;
+		transform : translateX(-50%);
+	}
 }

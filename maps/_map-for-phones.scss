@@ -1,140 +1,140 @@
 @charset "UTF-8";
 
-$map-for-smartphones: (
-  'iPhone4': (
-    width: 320px,
-    height: 480px,
-  ),
-  'iPhone-SE': (
-    width: 320px,
-    height: 568px,
-  ),
-  'iPhone5-SE': (
-    width: 320px,
-    height: 568px,
-  ),
-  'iPhone6': (
-    width: 375px,
-    height: 667px,
-  ),
-  'iPhone6-Plus': (
-    width: 414px,
-    height: 736px,
-  ),
-  'iPhone7': (
-    width: 375px,
-    height: 667px,
-  ),
-  'iPhone7-Plus': (
-    width: 414px,
-    height: 736px,
-  ),
-  'iPhone8': (
-    width: 375px,
-    height: 667px,
-  ),
-  'iPhone8-Plus': (
-    width: 414px,
-    height: 736px,
-  ),
-  'iPhoneX': (
-    width: 375px,
-    height: 812px,
-  ),
-  'iPhoneXS-Max': (
-    width: 414px,
-    height: 812px,
-  ),
-  'iPhone11': (
-    width: 414px,
-    height: 896px,
-  ),
-  'iPhone11-Pro': (
-    width: 375px,
-    height: 812px,
-  ),
-  'iPhone11-Pro-Max': (
-    width: 414px,
-    height: 896px,
-  ),
-  'iPhone12': (
-    width: 390px,
-    height: 844px,
-  ),
-  'iPhone12-Mini': (
-    width: 360px,
-    height: 780px,
-  ),
-  'iPhone12-Pro': (
-    width: 390px,
-    height: 844px,
-  ),
-  'iPhone12-Pro-Max': (
-    width: 428px,
-    height: 926px,
-  ),
-  'Galaxy-S7': (
-    width: 360px,
-    height: 640px,
-  ),
-  'Galaxy-S8': (
-    width: 360px,
-    height: 740px,
-  ),
-  'Galaxy-S8-Plus': (
-    width: 360px,
-    height: 740px,
-  ),
-  'Galaxy-S10': (
-    width: 360px,
-    height: 760px,
-  ),
-  'Galaxy-S20': (
-    width: 412px,
-    height: 914px,
-  ),
-  'Galaxy-S21': (
-    width: 384px,
-    height: 854px,
-  ),
-  'Galaxy-A12': (
-    width: 360px,
-    height: 800px,
-  ),
-  'Galaxy-A32': (
-    width: 412px,
-    height: 915px,
-  ),
-  'Galaxy-Note-20-Ultra': (
-    width: 412px,
-    height: 883px,
-  ),
-  'Galaxy-Z-Flip': (
-    width: 412px,
-    height: 1004px,
-  ),
-  'Galaxy-Fold': (
-    width: 768px,
-    height: 1076px,
-  ),
-  'Galaxy-Fold-2': (
-    width: 884px,
-    height: 1104px,
-  ),
-  'Oneplus-8T': (
-    width: 412px,
-    height: 914px,
-  ),
-  'Oneplus-9': (
-    width: 412px,
-    height: 915px,
-  ),
-  'Oneplus-9-Pro': (
-    width: 412px,
-    height: 919px,
-  ),
-  'Oneplus-10-Pro': (
-    width: 412px,
-    height: 919px,
-  ),
+$map-for-smartphones : (
+		'iPhone4': (
+				width: 320px,
+				height: 480px,
+		),
+		'iPhone-SE': (
+				width: 320px,
+				height: 568px,
+		),
+		'iPhone5-SE': (
+				width: 320px,
+				height: 568px,
+		),
+		'iPhone6': (
+				width: 375px,
+				height: 667px,
+		),
+		'iPhone6-Plus': (
+				width: 414px,
+				height: 736px,
+		),
+		'iPhone7': (
+				width: 375px,
+				height: 667px,
+		),
+		'iPhone7-Plus': (
+				width: 414px,
+				height: 736px,
+		),
+		'iPhone8': (
+				width: 375px,
+				height: 667px,
+		),
+		'iPhone8-Plus': (
+				width: 414px,
+				height: 736px,
+		),
+		'iPhoneX': (
+				width: 375px,
+				height: 812px,
+		),
+		'iPhoneXS-Max': (
+				width: 414px,
+				height: 812px,
+		),
+		'iPhone11': (
+				width: 414px,
+				height: 896px,
+		),
+		'iPhone11-Pro': (
+				width: 375px,
+				height: 812px,
+		),
+		'iPhone11-Pro-Max': (
+				width: 414px,
+				height: 896px,
+		),
+		'iPhone12': (
+				width: 390px,
+				height: 844px,
+		),
+		'iPhone12-Mini': (
+				width: 360px,
+				height: 780px,
+		),
+		'iPhone12-Pro': (
+				width: 390px,
+				height: 844px,
+		),
+		'iPhone12-Pro-Max': (
+				width: 428px,
+				height: 926px,
+		),
+		'Galaxy-S7': (
+				width: 360px,
+				height: 640px,
+		),
+		'Galaxy-S8': (
+				width: 360px,
+				height: 740px,
+		),
+		'Galaxy-S8-Plus': (
+				width: 360px,
+				height: 740px,
+		),
+		'Galaxy-S10': (
+				width: 360px,
+				height: 760px,
+		),
+		'Galaxy-S20': (
+				width: 412px,
+				height: 914px,
+		),
+		'Galaxy-S21': (
+				width: 384px,
+				height: 854px,
+		),
+		'Galaxy-A12': (
+				width: 360px,
+				height: 800px,
+		),
+		'Galaxy-A32': (
+				width: 412px,
+				height: 915px,
+		),
+		'Galaxy-Note-20-Ultra': (
+				width: 412px,
+				height: 883px,
+		),
+		'Galaxy-Z-Flip': (
+				width: 412px,
+				height: 1004px,
+		),
+		'Galaxy-Fold': (
+				width: 768px,
+				height: 1076px,
+		),
+		'Galaxy-Fold-2': (
+				width: 884px,
+				height: 1104px,
+		),
+		'Oneplus-8T': (
+				width: 412px,
+				height: 914px,
+		),
+		'Oneplus-9': (
+				width: 412px,
+				height: 915px,
+		),
+		'Oneplus-9-Pro': (
+				width: 412px,
+				height: 919px,
+		),
+		'Oneplus-10-Pro': (
+				width: 412px,
+				height: 919px,
+		),
 ) !default;

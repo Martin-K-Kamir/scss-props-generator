@@ -1,19 +1,19 @@
 @charset "UTF-8";
 
 @mixin breakpoint-landscape($device) {
-  @if $device == 'tablet' {
-    @media (orientation: landscape) and (min-resolution: 2x) and (max-width: 1366px) and (max-width: 1024px) {
-      @content;
-    }
-  }
-  @if $device == 'phone' {
-    @media (orientation: landscape) and (min-resolution: 2x) and (max-width: 945px) and (max-height: 450px) {
-      @content;
-    }
-  }
-  @if $device == null {
-    @media (orientation: landscape) and (min-resolution: 2x) {
-      @content;
-    }
-  }
+	@if $device == 'tablet' {
+		@media (orientation : landscape) and (min-resolution : 2x) and (max-width : 1366px) and (max-width : 1024px) {
+			@content;
+		}
+	}
+	@if $device == 'phone' {
+		@media (orientation : landscape) and (min-resolution : 2x) and (max-width : 945px) and (max-height : 450px) {
+			@content;
+		}
+	}
+	@if $device == null {
+		@media (orientation : landscape) and (min-resolution : 2x) {
+			@content;
+		}
+	}
 }

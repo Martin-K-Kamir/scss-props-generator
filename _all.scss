@@ -4,10 +4,17 @@
 @import './lists/list-of-layers';
 
 @import './maps/map-for-breakpoints';
+@import './maps/map-for-flexbox';
+@import './maps/map-for-font-weights';
+@import './maps/map-for-font-sizes';
 @import './maps/map-for-colors';
 @import './maps/map-for-directions';
 @import './maps/map-for-laptops';
+@import './maps/map-for-letterspacing';
+@import './maps/map-for-lineheights';
 @import './maps/map-for-pc';
+@import './maps/map-for-shadows';
+@import './maps/map-for-sizes';
 @import './maps/map-for-phones';
 @import './maps/map-for-tablets';
 
@@ -34,36 +41,27 @@
 @import './utilities/validate-scissors';
 
 @import 'functions/color-mixer';
-@import 'functions/alpha';
 @import 'functions/layer';
 @import 'functions/em';
 
 @import './library/absolute';
-@import './library/after';
 @import './library/animation';
 @import './library/background-img';
-@import './library/before';
-@import './library/border-radius';
 @import './library/breakpoint-landscape';
 @import './library/breakpoint';
-@import './library/breakpointer';
-@import './library/circle';
 @import './library/contrast';
 @import './library/dark-scheme';
-@import './library/color-scheme';
 @import './library/ellipsis';
-@import './library/every';
 @import './library/except';
 @import './library/fixed';
-//@import './library/flex';
+@import './library/flex';
 @import './library/hide';
 @import './library/hover';
 @import './library/laptop';
 @import './library/light-scheme';
 @import './library/linear-gradient';
 @import './library/loadify';
-@import './library/margin-gap';
-@import './library/not-supported';
+@import './library/flow';
 @import './library/only';
 @import './library/pc';
 @import './library/phone';
@@ -72,7 +70,6 @@
 @import './library/remove';
 @import './library/screen-agent';
 @import './library/size';
-@import './library/supports';
 @import './library/tablet';
 @import './library/text-gradient';
 @import './library/text-image';
