@@ -7,32 +7,31 @@
 		@each $key, $value in $map {
 			@if map.has-key($map, 'f-lineheight-0') {
 				.#{string.slice(#{$key}, 3)} {
-					line-height : $value;
+					line-height : var(--#{$key});
 				}
 			} @else if map.has-key($map, 'clr-primary') {
 				.surface-#{string.slice(#{$key}, 5)} {
-					background-color : $value;
+					background-color : var(--#{$key});
 				}
 
 				.text-#{string.slice(#{$key}, 5)} {
-					color : $value;
+					color : var(--#{$key});
 				}
 			} @else if map.has-key($map, 'shadow-0') {
 				.#{$key} {
-					box-shadow : $value;
+					box-shadow : var(--#{$key});
 				}
 			} @else if map.has-key($map, 'f-letterspacing-0') {
 				.#{string.slice(#{$key}, 3)} {
-					letter-spacing : $value;
+					letter-spacing : var(--#{$key});
 				}
 			} @else if map.has-key($map, 'f-size-0') {
 				.#{$key} {
-					font-size : $value;
 					font-size : var(--#{$key});
 				}
 			} @else if map.has-key($map, 'f-weight-0') {
 				.#{$key} {
-					font-weight : $value;
+					font-weight : var(--#{$key});
 				}
 			}
 		}
