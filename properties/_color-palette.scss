@@ -1,14 +1,3 @@
-$clr-gray-0: hsl(210, 17%, 98%);
-$clr-gray-1: hsl(210, 17%, 95%);
-$clr-gray-2: hsl(210, 16%, 93%);
-$clr-gray-3: hsl(210, 14%, 89%);
-$clr-gray-4: hsl(210, 14%, 83%);
-$clr-gray-5: hsl(210, 11%, 71%);
-$clr-gray-6: hsl(210, 7%, 56%);
-$clr-gray-7: hsl(210, 9%, 31%);
-$clr-gray-8: hsl(210, 10%, 23%);
-$clr-gray-9: hsl(210, 11%, 15%);
-
 $clr-white-0 : hsla(0, 0%, 100%, 0.1);
 $clr-white-1 : hsla(0, 0%, 100%, 0.2);
 $clr-white-2 : hsla(0, 0%, 100%, 0.3);
@@ -21,18 +10,28 @@ $clr-white-8 : hsla(0, 0%, 100%, 0.9);
 $clr-white-9 : hsl(0, 0%, 100%, 0.95);
 $clr-white   : hsl(0, 0%, 100%);
 
-$clr-black-0 : #0000001a;
-$clr-black-1 : #00000033;
-$clr-black-2 : #0000004d;
-$clr-black-3 : #00000066;
-$clr-black-4 : #00000080;
-$clr-black-5 : #00000099;
-$clr-black-6 : #000000b3;
-$clr-black-7 : #000000cc;
-$clr-black-8 : #000000e6;
-$clr-black-9 : #0000001a;
-$clr-black   : #000000;
+$clr-black-0 : hsla(0, 0%, 0%, 0.1);
+$clr-black-1 : hsla(0, 0%, 0%, 0.2);
+$clr-black-2 : hsla(0, 0%, 0%, 0.3);
+$clr-black-3 : hsla(0, 0%, 0%, 0.4);
+$clr-black-4 : hsla(0, 0%, 0%, 0.5);
+$clr-black-5 : hsla(0, 0%, 0%, 0.6);
+$clr-black-6 : hsla(0, 0%, 0%, 0.7);
+$clr-black-7 : hsla(0, 0%, 0%, 0.8);
+$clr-black-8 : hsla(0, 0%, 0%, 0.9);
+$clr-black-9 : hsla(0, 0%, 0%, 0.95);
+$clr-black   : hsl(0, 0%, 0%);
 
+$clr-gray-0: hsl(210, 17%, 98%);
+$clr-gray-1: hsl(210, 17%, 95%);
+$clr-gray-2: hsl(210, 16%, 93%);
+$clr-gray-3: hsl(210, 14%, 89%);
+$clr-gray-4: hsl(210, 14%, 83%);
+$clr-gray-5: hsl(210, 11%, 71%);
+$clr-gray-6: hsl(210, 7%, 56%);
+$clr-gray-7: hsl(210, 9%, 31%);
+$clr-gray-8: hsl(210, 10%, 23%);
+$clr-gray-9: hsl(210, 11%, 15%);
 
 $clr-red-0: hsl(0, 100%, 98%);
 $clr-red-1: hsl(0, 100%, 95%);
@@ -165,6 +164,3 @@ $clr-orange-6: hsl(27, 98%, 54%);
 $clr-orange-7: hsl(24, 94%, 50%);
 $clr-orange-8: hsl(21, 90%, 48%);
 $clr-orange-9: hsl(17, 87%, 45%);
-
-$clr-white: white;
-$clr-black: black;
