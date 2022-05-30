@@ -3,18 +3,15 @@
 @import './color-palette';
 
 // Colors
-$clr-white: white;
-$clr-black: black;
-
-$clr-primary: $red-7;
-$clr-primary-light: $red-4;
-$clr-primary-dark: $red-9;
-$clr-secondary: $gray-8;
-$clr-secondary-light: $gray-7;
-$clr-secondary-dark: $gray-9;
-$clr-tertiary: $cyan-4;
-$clr-tertiary-light: $cyan-2;
-$clr-tertiary-dark: $cyan-6;
+$clr-primary: $clr-red-7;
+$clr-primary-light: $clr-red-4;
+$clr-primary-dark: $clr-red-9;
+$clr-secondary: $clr-gray-8;
+$clr-secondary-light: $clr-gray-7;
+$clr-secondary-dark: $clr-gray-9;
+$clr-tertiary: $clr-cyan-4;
+$clr-tertiary-light: $clr-cyan-2;
+$clr-tertiary-dark: $clr-cyan-6;
 
 $clr-txt-primary: $clr-secondary;
 $clr-txt-secondary: $clr-secondary-light;
@@ -24,9 +21,9 @@ $clr-title-primary: $clr-secondary-dark;
 $clr-title-secondary: $clr-primary-dark;
 $clr-title-tertiary: $clr-tertiary-light;
 
-$clr-background-primary: $clr-white;
-$clr-background-secondary: $gray-1;
-$clr-background-tertiary: $gray-4;
+$clr-bg-primary: $clr-white;
+$clr-bg-secondary: $clr-gray-1;
+$clr-bg-tertiary: $clr-gray-4;
 
 $clr-cta-primary: $clr-secondary;
 $clr-cta-hover-primary: $clr-secondary-dark;
@@ -35,19 +32,44 @@ $clr-cta-hover-secondary: $clr-tertiary-light;
 $clr-cta-tertiary: $clr-secondary-light;
 $clr-cta-hover-tertiary: $clr-secondary;
 
-$clr-info: $blue-7;
-$clr-error: $red-8;
-$clr-notification: $orange-9;
-$clr-warning: $yellow-7;
-$clr-success: $green-8;
+$clr-info: $clr-blue-7;
+$clr-error: $clr-red-8;
+$clr-notification: $clr-orange-9;
+$clr-warning: $clr-yellow-7;
+$clr-success: $clr-green-8;
 
-$clr-facebook: hsl(220, 46%, 48%);
-$clr-twitter: hsl(203, 89%, 53%);
-$clr-instagram: hsl(326, 57%, 48%);
-$clr-youtube: hsl(0, 100%, 50%);
-$clr-github: hsl(0, 0%, 20%);
-$clr-google: hsl(217, 89%, 61%);
-$clr-linkedin: hsl(201, 100%, 35%);
+$clr-facebook-blue: hsl(220, 46%, 48%);
+$clr-facebook-gray: hsl(221, 9%, 57%);
+$clr-facebook-black: black;
+
+$clr-twitter-blue: hsl(203, 89%, 53%);
+$clr-twitter-black: hsl(210, 13%, 9%);
+$clr-twitter-gray: hsl(207, 14%, 46%);
+$clr-twitter-silver: hsl(205, 16%, 71%);
+
+$clr-instagram-blue: hsl(230, 77%, 58%);
+$clr-instagram-purple: hsl(276, 51%, 47%);
+$clr-instagram-pink: hsl(326, 57%, 48%);
+$clr-instagram-red: hsl(0, 98%, 55%);
+$clr-instagram-orange: hsl(20, 92%, 59%);
+$clr-instagram-yellow: hsl(35, 97%, 63%);
+
+$clr-youtube-red: hsl(0, 100%, 50%);
+$clr-youtube-black: gray(40);
+
+$clr-github-gray: hsl(0, 0%, 20%);
+$clr-github-white: hsl(0, 0%, 98%);
+$clr-github-silver: hsl(0, 0%, 96%);
+$clr-github-blue: hsl(214, 50%, 50%);
+$clr-github-purple: hsl(264, 28%, 45%);
+
+$clr-google-blue: hsl(217, 89%, 61%);
+$clr-google-red: hsl(5, 69%, 54%);
+$clr-google-yellow: hsl(44, 100%, 48%);
+$clr-google-green: hsl(151, 83%, 34%);
+
+$clr-linkedin-blue: hsl(201, 100%, 35%);
+$clr-linkedin-white: white;
 
 // Typography
 $f-family-primary: 'Barlo-weight', sans-serif;
@@ -61,47 +83,6 @@ $f-txt-max: 0;
 $f-txt-def: 0;
 $f-txt-min: 0;
 
-$f-title-fluid-max: 0;
-$f-title-fluid-def: 0;
-$f-title-fluid-min: 0;
-
-$f-txt-fluid-max: 0;
-$f-txt-fluid-def: 0;
-$f-txt-fluid-min: 0;
-
 $f-btn-max: 0;
 $f-btn-def: 0;
 $f-btn-min: 0;
-
-$f-weight-title-bold: 0;
-$f-weight-title-def: 0;
-$f-weight-title-thin: 0;
-
-$f-weight-txt-bold: 0;
-$f-weight-txt-def: 0;
-$f-weight-txt-thin: 0;
-
-// Sizes
-$body-space-max: 0;
-$body-space-def: 0;
-$body-space-min: 0;
-
-$modal-space-max: 0;
-$modal-space-def: 0;
-$modal-space-min: 0;
-
-$card-space-max: 0;
-$card-space-def: 0;
-$card-space-min: 0;
-
-$btn-padding-max: 0;
-$btn-padding-def: 0;
-$btn-padding-min: 0;
-
-// Borders
-$border-max: 0;
-$border-def: 0;
-$border-min: 0;
-
-$radius-def: 0;
-$radius-btn: 0;
