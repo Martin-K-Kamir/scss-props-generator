@@ -1,7 +1,0 @@
-@charset "UTF-8";
-
-@mixin not-supported($not-supported) {
-  @supports not (#{$not-supported}) {
-    @content;
-  }
-}
