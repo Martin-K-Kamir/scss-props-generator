@@ -1,7 +1,12 @@
 @charset "UTF-8";
 
-@mixin absolute($mode, $value: null, $value2: null, $value3: null, $value4: null) {
+@mixin absolute($mode, $value: null, $value2: null, $value3: null, $value4: null, $top: null, $right: null, $bottom: null, $left: null) {
 	position : absolute;
+
+	top      : $top;
+	right    : $right;
+	bottom   : $bottom;
+	left     : $left;
 	@if ($mode == 'top') {
 		top       : $value;
 	} @else if ($mode == 'top-left') {
@@ -48,11 +53,12 @@
 		top       : 50%;
 		left      : 50%;
 		transform : translateX(-50%) translateY(-50%);
-	} @else if ($mode == 'center-y') {
+	} @else if ($mode == 'center-block') {
 		top       : 50%;
 		transform : translateY(-50%);
-	} @else if ($mode == 'center-x') {
+	} @else if ($mode == 'center-inline') {
 		left      : 50%;
 		transform : translateX(-50%);
 	}
+
 }
