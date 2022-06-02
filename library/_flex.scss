@@ -93,7 +93,7 @@
 		@if type-of($value) == 'number' {
 			$gap : $value;
 			gap  : $gap;
-			//@include __supportGap($gap, $direction); check if gap is supported, if gap is not supported use margins to make gaps. Good to use for older browsers.
+			//@include __supportGap($gap, $direction); check if gap is supported, if gap is not supported use flow mixin to make gaps. Good to use for older browsers.
 		}
 
 		// Sets the values
