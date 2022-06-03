@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@mixin every-child($mode: null) {
+	@if $mode == 'only-direct' {
+		& > * {
+			@content;
+		}
+	} @else {
+		& * {
+			@content;
+		}
+	}
+}
