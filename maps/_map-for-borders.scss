@@ -1,0 +1,19 @@
+@charset "UTF-8";
+@import '../properties/borders';
+
+$map-for-borders : (
+		'border-size-1' : $border-size-1,
+		'border-size-2 ' : $border-size-2,
+		'border-size-3 ' : $border-size-3,
+		'border-size-4 ' : $border-size-4,
+		'border-size-5 ' : $border-size-5,
+		'radius-1 ' : $radius-1,
+		'radius-2 ' : $radius-2,
+		'radius-3 ' : $radius-3,
+		'radius-4 ' : $radius-4,
+		'radius-5 ' : $radius-5,
+		'radius-6 ' : $radius-6,
+		'radius-7 ' : $radius-7,
+		'radius-round' : $radius-round,
+		'radius-pill' : $radius-pill,
+) !default

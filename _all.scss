@@ -3,6 +3,7 @@
 @import './lists/list-of-directions';
 @import './lists/list-of-layers';
 
+@import './maps/map-for-borders';
 @import './maps/map-for-breakpoints';
 @import './maps/map-for-flexbox';
 @import './maps/map-for-font-weights';
@@ -46,37 +47,24 @@
 
 @import './library/absolute';
 @import './library/animation';
-@import './library/background-img';
 @import './library/breakpoint-landscape';
 @import './library/breakpoint';
-@import './library/contrast';
-@import './library/dark-scheme';
-@import './library/ellipsis';
 @import './library/except';
 @import './library/fixed';
 @import './library/flex';
 @import './library/hide';
-@import './library/hover';
 @import './library/laptop';
-@import './library/light-scheme';
-@import './library/linear-gradient';
 @import './library/loadify';
 @import './library/flow';
 @import './library/only';
 @import './library/pc';
 @import './library/phone';
-@import './library/radial-gradient';
-@import './library/reduce';
 @import './library/remove';
 @import './library/screen-agent';
 @import './library/size';
 @import './library/tablet';
-@import './library/text-gradient';
-@import './library/text-image';
 @import './library/text-shadow';
 @import './library/text-stroke';
-@import './library/translate';
-@import './library/triangle';
 
 @import './properties/aspect-ratios';
 @import './properties/borders';
