@@ -3,6 +3,17 @@
 @import './lists/list-of-directions';
 @import './lists/list-of-layers';
 
+@import './properties/aspect-ratios';
+@import './properties/borders';
+@import './properties/breakpoints';
+@import './properties/color-palette';
+@import './properties/easing';
+@import './properties/animations';
+@import './properties/shadows';
+@import './properties/sizes';
+@import './properties/typography';
+@import './properties/tokens';
+
 @import './maps/map-for-borders';
 @import './maps/map-for-breakpoints';
 @import './maps/map-for-flexbox';
@@ -66,14 +77,4 @@
 @import './library/text-shadow';
 @import './library/text-stroke';
 
-@import './properties/aspect-ratios';
-@import './properties/borders';
-@import './properties/breakpoints';
-@import './properties/color-palette';
-@import './properties/easing';
-@import './properties/animations';
-@import './properties/shadows';
-@import './properties/sizes';
-@import './properties/typography';
 
-@import './properties/tokens';

@@ -1,6 +1,4 @@
 @charset "UTF-8";
-@use '../properties/breakpoints' as *;
-
 $map-for-pc : (
 		'ultrawide-max': (
 				width: $ultrawide-max,

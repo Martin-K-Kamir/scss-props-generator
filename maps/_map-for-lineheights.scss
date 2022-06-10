@@ -1,8 +1,6 @@
 @charset "UTF-8";
-@import '../properties/typography';
 
 $map-for-lineheights : (
-		'f-lineheight-0' : $f-lineheight-0,
 		'f-lineheight-1' : $f-lineheight-1,
 		'f-lineheight-2' : $f-lineheight-2,
 		'f-lineheight-3' : $f-lineheight-3,
@@ -11,4 +9,5 @@ $map-for-lineheights : (
 		'f-lineheight-6' : $f-lineheight-6,
 		'f-lineheight-7' : $f-lineheight-7,
 		'f-lineheight-8' : $f-lineheight-8,
+		'f-lineheight-9' : $f-lineheight-9,
 ) !default

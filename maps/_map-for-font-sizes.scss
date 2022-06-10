@@ -1,8 +1,6 @@
 @charset "UTF-8";
-@import '../properties/typography';
 
 $map-for-font-sizes : (
-		'f-size-0' : $f-size-0,
 		'f-size-1' : $f-size-1,
 		'f-size-2' : $f-size-2,
 		'f-size-3' : $f-size-3,
@@ -13,4 +11,10 @@ $map-for-font-sizes : (
 		'f-size-8' : $f-size-8,
 		'f-size-9' : $f-size-9,
 		'f-size-10' : $f-size-10,
+		'f-size-fluid-1' : $f-size-fluid-1,
+		'f-size-fluid-2' : $f-size-fluid-2,
+		'f-size-fluid-3' : $f-size-fluid-3,
+		'f-size-fluid-4' : $f-size-fluid-4,
+		'f-size-fluid-5' : $f-size-fluid-5,
+		'f-size-fluid-6' : $f-size-fluid-6,
 ) !default
