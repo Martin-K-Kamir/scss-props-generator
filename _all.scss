@@ -530,11 +530,21 @@ $list-for-font-s : (1.2rem, 2, 3, 4, 5.8rem, 6, 7, 8, 9.5, 10rem);
 }
 
 @function __decrease-number($number, $decrease) {
-	$number : __convert-to-number(__string-replace(#{$number}, 'rem', ''));
-	$value : $number - (math.div($number, 100) * $decrease);
-	@return $value;
+	@if ($decrease == 0) {
+		$number : __convert-to-number(__string-replace(#{$number}, 'rem', ''));
 
+		@return $number + 'rem';
+	} @else {
+		@debug $decrease;
+		$number : __convert-to-number(__string-replace(#{$number}, 'rem', ''));
+		$value1 : $number - (math.div($number, 100) * $decrease);
+
+		$value2 : __convert-to-number(__string-replace(#{$value1}, '%', ''));
+
+		@return $value2 + 'rem';
+	}
 }
+
 
 @function x($number) {
 	@return $number;
