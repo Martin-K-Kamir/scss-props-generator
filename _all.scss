@@ -593,3 +593,29 @@ $list-for-font-s : (1.2rem, 2, 3, 4, 5.8rem, 6, 7, 8, 9.5, 10rem);
 }
 
 */
+
+/* gulpfile
+'use strict';
+
+const gulp = require('gulp');
+const postcssPresetEnv = require('postcss-preset-env');
+const autoprefixer = require("autoprefixer");
+const sourcemaps = require('gulp-sourcemaps')
+const postcss = require('gulp-postcss')
+const cssnano = require('cssnano')
+
+
+gulp.task('production', () => {
+	return gulp.src('./www/assets-petqr/css/*.css')
+		.pipe(sourcemaps.init())
+		.pipe(postcss([autoprefixer, postcssPresetEnv(), cssnano()]))
+		.pipe(sourcemaps.write('.'))
+		.pipe(gulp.dest('./www/assets-petqr/css/'))
+})
+ */
+
+/* npm scripts
+    "watch": "sass --watch --poll --stop-on-error ./sass:./www/assets-petqr/css",
+    "production": "gulp production"
+
+ */
