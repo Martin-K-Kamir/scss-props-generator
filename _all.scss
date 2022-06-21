@@ -78,7 +78,7 @@
 @import './library/text-stroke';
 
 
-$map-for-scales  : (
+$map-for-scales          : (
 		'minor-second' : 1.067,
 		'major-second': 1.125,
 		'minor-third' : 1.200,
@@ -89,20 +89,23 @@ $map-for-scales  : (
 		'golden-ratio' : 1.618
 );
 
-$map-for-font-s  : (
-		'f-size-1a' : 1.1,
+$map-for-font-s          : (
+		'f-size-1a' : 2.1,
 		'f-size-2a' : 2.2,
-		'f-size-3a' : 3rem,
-		'f-size-4a' : 4.3,
-		'f-size-5a' : 5.5,
-		'f-size-6a' : 6,
-		'f-size-7a' : 7rem,
-		'f-size-8a' : 8,
-		'f-size-9a' : 9.9rem,
-		'f-size-10a' : 10,
+		'f-size-3a' : 2.3,
+		'f-size-4a' : 2.4,
+		'f-size-5a' : 2.5,
+		'f-size-55a' : 2.5,
+		'f-size-541a' : 2.5,
+		'f-size-5541a' : 2.5,
+		'f-size-6a' : 2.6,
+		'f-size-7a' : 2.7rem,
+		'f-size-8a' : 2.8,
+		'f-size-9a' : 2.9rem,
+		'f-size-10a' : 3rem,
 );
 
-$list-for-font-s : (1.2rem, 2, 3, 4, 5.8rem, 6, 7, 8, 9.5, 10rem);
+$list-for-font-s         : (1rem, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1);
 
 @function __convert-to-number($value) {
 	@if type-of($value) == 'number' {
@@ -525,17 +528,19 @@ $list-for-font-s : (1.2rem, 2, 3, 4, 5.8rem, 6, 7, 8, 9.5, 10rem);
 		@return $number + 'rem';
 	}
 
-	@debug $number;
 	@return $number;
 }
 
 @function __decrease-number($number, $decrease) {
+	@if (math.unit($number) != 'rem' and math.is-unitless($number) != true) {
+		@error 'Number must be only in rem or unitless. Change your #{$number} to #{__string-replace(#{$number}, #{math.unit($number)}, 'rem')} or #{__string-replace(#{$number}, #{math.unit($number)}, '')} without any unit.';
+	}
+
 	@if ($decrease == 0) {
 		$number : __convert-to-number(__string-replace(#{$number}, 'rem', ''));
 
 		@return $number + 'rem';
 	} @else {
-		@debug $decrease;
 		$number : __convert-to-number(__string-replace(#{$number}, 'rem', ''));
 		$value1 : $number - (math.div($number, 100) * $decrease);
 
@@ -545,26 +550,215 @@ $list-for-font-s : (1.2rem, 2, 3, 4, 5.8rem, 6, 7, 8, 9.5, 10rem);
 	}
 }
 
+@function slice($list, $start: 1, $end: length($list)) {
+	$result : null;
 
-@function x($number) {
-	@return $number;
+	@if type-of($start) != number or type-of($end) != number {
+		@warn "Either $start or $end are not a number for `slice`.";
+	} @else if $start > $end {
+		@warn "The start index has to be lesser than or equals to the end index for `slice`.";
+	} @else if $start < 1 or $end < 1 {
+		@warn "List indexes must be non-zero integers for `slice`.";
+	} @else if $start > length($list) {
+		@warn "List index is #{$start} but list is only #{length($list)} item long for `slice`.";
+	} @else if $end > length($list) {
+		@warn "List index is #{$end} but list is only #{length($list)} item long for `slice`.";
+	} @else {
+		$result : ();
+
+		@for $i from $start through $end {
+			$result : append($result, nth($list, $i));
+		}
+	}
+
+	@return $result;
 }
 
-@mixin generate-type-scale($base: null, $scale: null, $types: null, $preserve: 0, $utility-classes: false, $custom: null, $decrease: 0) {
+@function reverse($list, $recursive: false) {
+	$result : ();
+
+	@for $i from length($list) * -1 through -1 {
+		@if type-of(nth($list, abs($i))) == list and $recursive {
+			$result : append($result, reverse(nth($list, abs($i)), $recursive));
+		} @else {
+			$result : append($result, nth($list, abs($i)));
+		}
+	}
+
+	@return $result;
+}
+
+$list-for-font-roman-max : (
+		'big',
+		'bigger',
+		'biggest',
+		'large',
+		'larger',
+		'largest',
+		'extra-big',
+		'extra-bigger',
+		'extra-bigest',
+		'extra-large',
+		'extra-larger',
+		'extra-largest',
+		'ultra-big',
+		'ultra-bigger',
+		'ultra-bigest',
+		'ultra-large',
+		'ultra-larger',
+		'ultra-largest',
+);
+
+$list-for-font-roman-min : (
+		'medium',
+		'small',
+		'smaller',
+		'smallest',
+		'tiny',
+		'tiner',
+		'tinest',
+		'extra-small',
+		'extra-smaller',
+		'extra-smallest',
+		'extra-tiny',
+		'extra-tiner',
+		'extra-tinest',
+		'ultra-small',
+		'ultra-smaller',
+		'ultra-smallest',
+		'ultra-tiny',
+		'ultra-tiner',
+		'ultra-tinest',
+);
+
+$list-for-font-size-max  : (
+		'big',
+		'bigger',
+		'biggest',
+		'large',
+		'larger',
+		'largest',
+		'extra-big',
+		'extra-bigger',
+		'extra-bigest',
+		'extra-large',
+		'extra-larger',
+		'extra-largest',
+		'ultra-big',
+		'ultra-bigger',
+		'ultra-bigest',
+		'ultra-large',
+		'ultra-larger',
+		'ultra-largest',
+);
+
+$list-for-font-size-min  : (
+		'medium',
+		'small',
+		'smaller',
+		'smallest',
+		'tiny',
+		'tiner',
+		'tinest',
+		'extra-small',
+		'extra-smaller',
+		'extra-smallest',
+		'extra-tiny',
+		'extra-tiner',
+		'extra-tinest',
+		'ultra-small',
+		'ultra-smaller',
+		'ultra-smallest',
+		'ultra-tiny',
+		'ultra-tiner',
+		'ultra-tinest',
+);
+
+$list-for-font-min       : (
+		'm',
+		's',
+		'xs',
+		'xxs',
+		'xxxs',
+		'xxxxs',
+		'xxxxxs',
+		'xxxxxxs',
+		'xxxxxxxs',
+		'xxxxxxxxs',
+		'xxxxxxxxxs',
+		'xxxxxxxxxxs',
+		'xxxxxxxxxxxs',
+		'xxxxxxxxxxxxs',
+		'xxxxxxxxxxxxxs',
+		'xxxxxxxxxxxxxxs',
+		'xxxxxxxxxxxxxxxs',
+		'xxxxxxxxxxxxxxxxs',
+		'xxxxxxxxxxxxxxxxxs',
+);
+
+$list-for-font-max       : (
+		'l',
+		'xl',
+		'xxl',
+		'xxxl',
+		'xxxxl',
+		'xxxxxl',
+		'xxxxxxl',
+		'xxxxxxxl',
+		'xxxxxxxxl',
+		'xxxxxxxxxl',
+		'xxxxxxxxxxl',
+		'xxxxxxxxxxxl',
+		'xxxxxxxxxxxxl',
+		'xxxxxxxxxxxxxl',
+		'xxxxxxxxxxxxxxl',
+		'xxxxxxxxxxxxxxxl',
+		'xxxxxxxxxxxxxxxxl',
+		'xxxxxxxxxxxxxxxxxl',
+);
+
+@function __make-list($list, $i, $make-list-from-min, $make-list-from-max) {
+	$create-small-list : list.set-nth(reverse(slice($make-list-from-min, 1, math.ceil(math.div(list.length($list), 2)))), 1, 'min');
+	$create-big-list : list.set-nth(slice($make-list-from-max, 1, math.floor(math.div(list.length($list), 2))), -1, 'max');
+	$created-list : list.join($create-small-list, $create-big-list);
+	@return list.nth($created-list, $i);
+}
+
+@function __level($level, $i, $custom) {
+	@if ($level == 'numeric') {
+		@return $i;
+	} @else if ($level == 'thousand') {
+		@return $i + '00';
+	} @else if ($level == 'minmax') {
+		@return __make-list($custom, $i, $list-for-font-min, $list-for-font-max);
+	} @else if ($level == 'animal') {
+		// mouse cat dog hippo
+	} @else if ($level == 'roman') {
+		// I II III IV V
+	} @else if ($level == 'atomic') {
+		// (12) (13) (15)
+	} @else if ($level == 'size') {
+		@return __make-list($custom, $i, $list-for-font-alux-min, $list-for-font-alux-max);
+	} @else if ($level == 'greek') {
+		// alpha , beta, gamma
+	}
+
+}
+
+@mixin generate-type-scale($base: null, $scale: null, $types: null, $preserve: 0, $utility-classes: false, $custom: null, $decrease: 0, $custom-name: 'f-size-', $custom-level: 'numeric') {
 	@if (meta.type-of($custom) == 'list') {
 		@for $i from 1 through list.length($custom) {
-			//--f-size-#{$i} : #{__convert-to-rem(#{__decrease-number(list.nth($custom, $i), $decrease)})};
-			--f-size-#{$i} : #{x(__decrease-number(list.nth($custom, $i), $decrease))};
+			--#{$custom-name}#{__level($custom-level, $i, $custom)} : #{__decrease-number(list.nth($custom, $i), $decrease)};
 
 			@if (utility-classes) {
-				@at-root .f-size-#{$i} {
-					font-size : var(--f-size-#{$i});
+				@at-root .#{$custom-name}#{$i} {
+					font-size : var(--#{$custom-name}#{$i});
 				}
 			}
 		}
 	} @else if (meta.type-of($custom) == 'map') {
 		@each $key, $value in $custom {
-			--#{$key} : #{__decrease-number(__check-rem-unit($value), $decrease)};
+			--#{$key} : #{__decrease-number(($value), $decrease)};
 
 
 			@if (utility-classes) {
@@ -621,16 +815,11 @@ $list-for-font-s : (1.2rem, 2, 3, 4, 5.8rem, 6, 7, 8, 9.5, 10rem);
 			}
 		}
 	}
-
 }
 
 
 :root {
-	@include generate-type-scale($custom : (1rem, 2, 3, 3.5), $utility-classes : true);
-
-	@include breakpoint(max, 1000px) {
-		@include generate-type-scale($custom : (1rem, 2, 3rem, 3.5), $decrease : 50%);
-	}
+	@include generate-type-scale($custom : $list-for-font-s, $utility-classes : true, $custom-name : lol-, $custom-level : alux);
 
 	//
 	//@include breakpoint(max, 800px) {
@@ -649,4 +838,37 @@ $list-for-font-s : (1.2rem, 2, 3, 4, 5.8rem, 6, 7, 8, 9.5, 10rem);
 	//}
 }
 
+/*
+{
+  "name": "petcenter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "sass --watch --poll ./sass:./www/assets-petqr/css",
+    "production": "gulp production"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.7",
+    "cssnano": "^5.1.11",
+    "gulp": "^4.0.2",
+    "gulp-postcss": "^9.0.1",
+    "gulp-sass": "^5.1.0",
+    "postcss": "^8.4.14",
+    "postcss-cli": "^9.1.0",
+    "postcss-preset-env": "^7.7.1",
+    "sass": "^1.52.3"
+  },
+  "dependencies": {
+    "gulp-sourcemaps": "^3.0.0"
+  },
+  "browserslist": [
+    "> 0%",
+    "last 2 versions"
+  ]
+}
 
+
+ */
