@@ -1,4 +1,9 @@
 @charset "UTF-8";
+@use "sass:string";
+@use "sass:meta";
+@use "sass:math";
+@use "sass:map";
+@use "sass:list";
 
 @import './lists/list-of-directions';
 @import './lists/list-of-layers';
@@ -77,8 +82,10 @@
 @import './library/text-shadow';
 @import './library/text-stroke';
 
+@import 'decide-scale-calc';
+@import 'map-for-scalable-hierarchy';
 
-$map-for-scales          : (
+$map-for-scales  : (
 		'minor-second' : 1.067,
 		'major-second': 1.125,
 		'minor-third' : 1.200,
@@ -89,7 +96,7 @@ $map-for-scales          : (
 		'golden-ratio' : 1.618
 );
 
-$map-for-font-s          : (
+$map-for-font-s  : (
 		'f-size-1a' : 2.1,
 		'f-size-2a' : 2.2,
 		'f-size-3a' : 2.3,
@@ -105,7 +112,7 @@ $map-for-font-s          : (
 		'f-size-10a' : 3rem,
 );
 
-$list-for-font-s         : (1rem, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1);
+$list-for-font-s : (1, 2, 3, 4.5);
 
 @function __convert-to-number($value) {
 	@if type-of($value) == 'number' {
@@ -139,364 +146,6 @@ $list-for-font-s         : (1rem, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1);
 	@return if($minus, -$result, $result);
 }
 
-@function __decide-calc($base, $scale, $preserve, $i) {
-	@if ($i == 1) {
-		@if ($preserve >= 1) {
-			$calc : $base * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale));
-		}
-	}
-	@if ($i == 2) {
-		@if ($preserve >= 2) {
-			$calc : $base * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale));
-		}
-	}
-	@if ($i == 3) {
-		@if ($preserve >= 3) {
-			$calc : $base * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-	@if ($i == 4) {
-		@if ($preserve >= 4) {
-			$calc : $base * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 5) {
-		@if ($preserve >= 5) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 6) {
-		@if ($preserve >= 6) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 7) {
-		@if ($preserve >= 7) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 8) {
-		@if ($preserve >= 8) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 9) {
-		@if ($preserve >= 9) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 10) {
-		@if ($preserve >= 10) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 11) {
-		@if ($preserve >= 11) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 12) {
-		@if ($preserve >= 12) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 13) {
-		@if ($preserve >= 13) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 14) {
-		@if ($preserve >= 14) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 15) {
-		@if ($preserve >= 15) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 16) {
-		@if ($preserve >= 16) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 17) {
-		@if ($preserve >= 17) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 18) {
-		@if ($preserve >= 18) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 19) {
-		@if ($preserve >= 19) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 20) {
-		@if ($preserve >= 20) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 21) {
-		@if ($preserve >= 21) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 22) {
-		@if ($preserve >= 22) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 23) {
-		@if ($preserve >= 23) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 24) {
-		@if ($preserve >= 24) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 25) {
-		@if ($preserve >= 25) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 26) {
-		@if ($preserve >= 26) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 27) {
-		@if ($preserve >= 27) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 28) {
-		@if ($preserve >= 28) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 29) {
-		@if ($preserve >= 29) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 30) {
-		@if ($preserve >= 30) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 31) {
-		@if ($preserve >= 31) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 32) {
-		@if ($preserve >= 32) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 33) {
-		@if ($preserve >= 33) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 34) {
-		@if ($preserve >= 34) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 35) {
-		@if ($preserve >= 35) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 36) {
-		@if ($preserve >= 36) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 37) {
-		@if ($preserve >= 37) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 38) {
-		@if ($preserve >= 38) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 39) {
-		@if ($preserve >= 39) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-
-	@if ($i == 40) {
-		@if ($preserve >= 40) {
-			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
-			@return $calc;
-		} @else {
-			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
-		}
-	}
-}
 
 @function __string-replace($string, $search, $replace: '') {
 	$index : str-index($string, $search);
@@ -513,9 +162,9 @@ $list-for-font-s         : (1rem, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1);
 
 @function __decide-preserve($base, $scale, $preserve, $i) {
 	@if ($preserve >= $i) {
-		@return __number-slice(__decide-calc($base, $scale, $preserve, $i), 0, 7);
+		@return __number-slice(__decide-scale-calc($base, $scale, $preserve, $i), 0, 7);
 	} @else if ($preserve + 1 == $i) {
-		@return __decide-calc($base, $scale, $preserve, $i);
+		@return __decide-scale-calc($base, $scale, $preserve, $i);
 	} @else {
 		@return calc(var(--f-size-#{$i - 1}) * var(--scale));
 	}
@@ -588,142 +237,6 @@ $list-for-font-s         : (1rem, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1);
 	@return $result;
 }
 
-$list-for-font-greek     : (
-		'alfa', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota', 'kappa', 'lambda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega'
-);
-
-$list-for-font-nato      : (
-		'alfa', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india', 'juliett', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa', 'quebec', 'romeo', 'sierra', 'tango', 'uniform', 'victor', 'whiskey', 'xray', 'yankee', 'zulu'
-);
-
-$list-for-font-roman-max : (
-		'I',
-		'II',
-		'III',
-		'IV',
-		'V',
-		'VI',
-		'VII',
-		'VIII',
-		'IX',
-		'X',
-		'XI',
-		'XII',
-		'XIII',
-		'XIV',
-		'XV',
-		'XVI',
-		'XVII',
-		'XVIII',
-		'XIX',
-		'XX',
-		'XXI',
-		'XXII',
-		'XXIII',
-		'XXIV',
-		'XXV',
-		'XXVI',
-		'XXVII',
-		'XXVIII',
-		'XXIX',
-		'XXX',
-		'XXXI',
-		'XXXII',
-		'XXXIII',
-		'XXXIV',
-		'XXXXV',
-		'XXXVI',
-		'XXXVII',
-		'XXXVIII',
-		'XXXIX',
-		'XL',
-);
-
-$list-for-font-size-max  : (
-		'big',
-		'bigger',
-		'biggest',
-		'large',
-		'larger',
-		'largest',
-		'extra-big',
-		'extra-bigger',
-		'extra-bigest',
-		'extra-large',
-		'extra-larger',
-		'extra-largest',
-		'ultra-big',
-		'ultra-bigger',
-		'ultra-bigest',
-		'ultra-large',
-		'ultra-larger',
-		'ultra-largest',
-);
-
-$list-for-font-size-min  : (
-		'medium',
-		'small',
-		'smaller',
-		'smallest',
-		'tiny',
-		'tiner',
-		'tinest',
-		'extra-small',
-		'extra-smaller',
-		'extra-smallest',
-		'extra-tiny',
-		'extra-tiner',
-		'extra-tinest',
-		'ultra-small',
-		'ultra-smaller',
-		'ultra-smallest',
-		'ultra-tiny',
-		'ultra-tiner',
-		'ultra-tinest',
-);
-
-$list-for-font-min       : (
-		'm',
-		's',
-		'xs',
-		'xxs',
-		'xxxs',
-		'xxxxs',
-		'xxxxxs',
-		'xxxxxxs',
-		'xxxxxxxs',
-		'xxxxxxxxs',
-		'xxxxxxxxxs',
-		'xxxxxxxxxxs',
-		'xxxxxxxxxxxs',
-		'xxxxxxxxxxxxs',
-		'xxxxxxxxxxxxxs',
-		'xxxxxxxxxxxxxxs',
-		'xxxxxxxxxxxxxxxs',
-		'xxxxxxxxxxxxxxxxs',
-		'xxxxxxxxxxxxxxxxxs',
-);
-
-$list-for-font-max       : (
-		'l',
-		'xl',
-		'xxl',
-		'xxxl',
-		'xxxxl',
-		'xxxxxl',
-		'xxxxxxl',
-		'xxxxxxxl',
-		'xxxxxxxxl',
-		'xxxxxxxxxl',
-		'xxxxxxxxxxl',
-		'xxxxxxxxxxxl',
-		'xxxxxxxxxxxxl',
-		'xxxxxxxxxxxxxl',
-		'xxxxxxxxxxxxxxl',
-		'xxxxxxxxxxxxxxxl',
-		'xxxxxxxxxxxxxxxxl',
-		'xxxxxxxxxxxxxxxxxl',
-);
 
 @function __make-list($list, $i, $make-list-from-min, $make-list-from-max) {
 	$create-small-list : list.set-nth(reverse(slice($make-list-from-min, 1, math.ceil(math.div(list.length($list), 2)))), 1, 'min');
@@ -732,31 +245,103 @@ $list-for-font-max       : (
 	@return list.nth($created-list, $i);
 }
 
-@function __level($level, $i, $custom) {
+@function __level($level, $i, $custom, $atomic) {
 	@if ($level == 'numeric') {
 		@return $i;
 	} @else if ($level == 'thousand') {
 		@return $i + '00';
 	} @else if ($level == 'minmax') {
-		@return __make-list($custom, $i, $list-for-font-min, $list-for-font-max);
-	} @else if ($level == 'animal') {
-		// mouse cat dog hippo
-	} @else if ($level == 'roman') {
-		// I II III IV V
-	} @else if ($level == 'atomic') {
-		// (12) (13) (15)
-	} @else if ($level == 'size') {
-		@return __make-list($custom, $i, $list-for-font-alux-min, $list-for-font-alux-max);
-	} @else if ($level == 'greek') {
-		// alpha , beta, gamma
-	}
+		$list-of-higher-values : map.get($map-for-scalable-hierarchy, $level, higher-values);
+		$list-of-lower-values : map.get($map-for-scalable-hierarchy, $level, lower-values);
 
+		@if (list.length($custom) > list.length(list.join($list-of-higher-values, $list-of-lower-values))) {
+			@error 'do latera'
+		}
+
+		$create-small-list : list.set-nth(reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2)))), 1, 'min');
+		$create-big-list : list.set-nth(slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2))), -1, 'max');
+		$created-list : list.join($create-small-list, $create-big-list);
+
+		@return list.nth($created-list, $i);
+	} @else if ($level == 'atomic') {
+		$num : __string-replace(__string-replace($atomic, 'rem', ''), '.', '-');
+		@return $num;
+	} @else if ($level == 'size' or 'size-gradation' or 'size-and-number' or 'size-and-x') {
+		$list-of-higher-values : map.get($map-for-scalable-hierarchy, $level, higher-values);
+		$list-of-lower-values : map.get($map-for-scalable-hierarchy, $level, lower-values);
+
+		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size') {
+			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$created-list : list.join($create-small-list, $create-big-list);
+
+			@if (list.length($custom) > list.length($created-list) and $level == 'size') {
+				@error '1'
+			}
+
+			@return list.nth($created-list, $i);
+		}
+
+		$list-of-higher-values : map.get($map-for-scalable-hierarchy, size-gradation, higher-values);
+		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-gradation, lower-values);
+
+		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size-gradation') {
+			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$created-list : list.join($create-small-list, $create-big-list);
+
+			@if (list.length($custom) > list.length($created-list) and $level == 'size-gradation') {
+				@error '2'
+			}
+
+			@return list.nth($created-list, $i);
+		}
+
+		$list-of-higher-values : map.get($map-for-scalable-hierarchy, size-and-number, higher-values);
+		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-and-number, lower-values);
+
+		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size-and-number') {
+			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$created-list : list.join($create-small-list, $create-big-list);
+
+			@if (list.length($custom) > list.length($created-list) and $level == 'size-and-number') {
+				@error '3'
+			}
+
+			@return list.nth($created-list, $i);
+		}
+
+		$list-of-higher-values : map.get($map-for-scalable-hierarchy, size-and-x, higher-values);
+		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-and-x, lower-values);
+
+		@if ($level == 'size-and-x') {
+			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$created-list : list.join($create-small-list, $create-big-list);
+
+			@if (list.length($custom) > list.length($created-list)) {
+				@error '4'
+			}
+
+			@return list.nth($created-list, $i);
+		}
+
+	} @else if ($level == 'roman' or 'greek' or 'military' or 'planets' or 'nato' or 'primary') {
+		$list : map.get($map-for-scalable-hierarchy, $level);
+
+		@if (list.length($custom) > list.length($list)) {
+			@error 'do later aa'
+		}
+
+		@return list.nth($list, $i);
+	}
 }
 
 @mixin generate-type-scale($base: null, $scale: null, $types: null, $preserve: 0, $utility-classes: false, $custom: null, $decrease: 0, $custom-name: 'f-size-', $custom-level: 'numeric') {
 	@if (meta.type-of($custom) == 'list') {
 		@for $i from 1 through list.length($custom) {
-			--#{$custom-name}#{__level($custom-level, $i, $custom)} : #{__decrease-number(list.nth($custom, $i), $decrease)};
+			--#{$custom-name}#{__level($custom-level, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} : #{__decrease-number(list.nth($custom, $i), $decrease)};
 
 			@if (utility-classes) {
 				@at-root .#{$custom-name}#{$i} {
@@ -825,26 +410,11 @@ $list-for-font-max       : (
 	}
 }
 
-
 :root {
-	@include generate-type-scale($custom : $list-for-font-s, $utility-classes : true, $custom-name : lol-, $custom-level : alux);
+	@include generate-type-scale($custom : $list-for-font-s, $utility-classes : true, $custom-name : text-, $custom-level : atomic);
 
-	//
-	//@include breakpoint(max, 800px) {
-	//	@include generate-type-scale($custom : (1, 2, 3, 3.5), $decrease : 50%);
-	//}
-
-	//
-	//@include generate-type-scale($base : 0.8rem, $scale : 1.125, $types : 10, $utility-classes : true);
-	//
-	//@include breakpoint(max, pc-min) {
-	//	--f-size-base: 1rem;
-	//}
-	//
-	//@include breakpoint(max, tablet-min) {
-	//	--scale: 1.200;
-	//}
 }
+
 
 /*
 {

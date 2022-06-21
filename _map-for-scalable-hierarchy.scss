@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+$map-for-scalable-hierarchy : (
+		'military' : (
+				'recruit', 'private', 'corporal', 'sergeant', 'captain',
+				'major', 'lieutenant', 'continent', 'street', 'colonel', 'general'
+		),
+		'planets' : (
+				'mercury', 'venus', 'earth', 'mars', 'jupitor',
+				'saturn', 'uranus', 'neptune', 'pluto'
+		),
+		'greek' : (
+				'alfa', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota',
+				'kappa', 'lambda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau',
+				'upsilon', 'phi', 'chi', 'psi', 'omega'
+		),
+		'nato' : (
+				'alfa', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india',
+				'juliett', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa', 'quebec', 'romeo',
+				'sierra', 'tango', 'uniform', 'victor', 'whiskey', 'xray', 'yankee', 'zulu'
+		),
+		'roman' : (
+				'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
+				'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX',
+				'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX',
+				'XXXI', 'XXXII', 'XXXIII', 'XXXIV', 'XXXXV', 'XXXVI', 'XXXVII', 'XXXVIII', 'XXXIX', 'XL'
+		),
+		'primary': (
+				'primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'
+		),
+		'minmax' : (
+				'higher-values' : (
+						'l', 'xl', 'xxl', 'xxxl', 'xxxxl', 'xxxxxl', 'xxxxxxl', 'xxxxxxxl'
+				),
+				'lower-values': (
+						'm', 's', 'xs', 'xxs', 'xxxs', 'xxxxs', 'xxxxxs', 'xxxxxxs', 'xxxxxxs'
+				),
+		),
+		'size' : (
+				'higher-values' : (
+						'big', 'large', 'huge', 'giant', 'mega'
+				),
+				'lower-values': (
+						'medium', 'small', 'tiny', 'micro', 'atomic'
+				),
+		),
+		'size-gradation' : (
+				'higher-values' : (
+						'big', 'bigger', 'biggest', 'large', 'larger', 'largest', 'huge', 'giant', 'mega'
+				),
+				'lower-values': (
+						'medium', 'small', 'smaller', 'smallest', 'tiny', 'tinier', 'tiniest', 'micro', 'atomic'
+				),
+		),
+		'size-and-number' : (
+				'higher-values' : (
+						'big', 'big-2', 'big-3', 'large', 'large-2', 'large-3',
+						'huge', 'huge-2', 'huge-3', 'giant', 'giant-2', 'giant-3', 'mega', 'mega-2', 'mega-3',
+				),
+				'lower-values': (
+						'medium', 'small', 'small-2', 'small-3', 'tiny', 'tiny-2', 'tiny-3',
+						'micro', 'micro-2', 'micro-3', 'atomic', 'atomic-2', 'atomic-3',
+				),
+		),
+		'size-and-x' : (
+				'higher-values' : (
+						'big', 'big-xl', 'big-xxl', 'large', 'large-xl', 'large-xxl',
+						'huge', 'huge-xl', 'huge-xxl', 'giant', 'giant-xl', 'giant-xxl', 'mega', 'mega-xl', 'mega-xxl',
+				),
+				'lower-values': (
+						'medium', 'small', 'small-xl', 'small-xxl', 'tiny', 'tiny-xl', 'tiny-xxl',
+						'micro', 'micro-xl', 'micro-xxl', 'atomic', 'atomic-xl', 'atomic-xxl',
+				),
+		),
+
+) !default

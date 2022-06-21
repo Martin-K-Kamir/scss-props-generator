@@ -1,0 +1,359 @@
+
+@function __decide-scale-calc($base, $scale, $preserve, $i) {
+	@if ($i == 1) {
+		@if ($preserve >= 1) {
+			$calc : $base * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale));
+		}
+	}
+	@if ($i == 2) {
+		@if ($preserve >= 2) {
+			$calc : $base * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale));
+		}
+	}
+	@if ($i == 3) {
+		@if ($preserve >= 3) {
+			$calc : $base * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+	@if ($i == 4) {
+		@if ($preserve >= 4) {
+			$calc : $base * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 5) {
+		@if ($preserve >= 5) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 6) {
+		@if ($preserve >= 6) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 7) {
+		@if ($preserve >= 7) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 8) {
+		@if ($preserve >= 8) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 9) {
+		@if ($preserve >= 9) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 10) {
+		@if ($preserve >= 10) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 11) {
+		@if ($preserve >= 11) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 12) {
+		@if ($preserve >= 12) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 13) {
+		@if ($preserve >= 13) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 14) {
+		@if ($preserve >= 14) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 15) {
+		@if ($preserve >= 15) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 16) {
+		@if ($preserve >= 16) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 17) {
+		@if ($preserve >= 17) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 18) {
+		@if ($preserve >= 18) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 19) {
+		@if ($preserve >= 19) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 20) {
+		@if ($preserve >= 20) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 21) {
+		@if ($preserve >= 21) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 22) {
+		@if ($preserve >= 22) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 23) {
+		@if ($preserve >= 23) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 24) {
+		@if ($preserve >= 24) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 25) {
+		@if ($preserve >= 25) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 26) {
+		@if ($preserve >= 26) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 27) {
+		@if ($preserve >= 27) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 28) {
+		@if ($preserve >= 28) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 29) {
+		@if ($preserve >= 29) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 30) {
+		@if ($preserve >= 30) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 31) {
+		@if ($preserve >= 31) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 32) {
+		@if ($preserve >= 32) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 33) {
+		@if ($preserve >= 33) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 34) {
+		@if ($preserve >= 34) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 35) {
+		@if ($preserve >= 35) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 36) {
+		@if ($preserve >= 36) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 37) {
+		@if ($preserve >= 37) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 38) {
+		@if ($preserve >= 38) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 39) {
+		@if ($preserve >= 39) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+
+	@if ($i == 40) {
+		@if ($preserve >= 40) {
+			$calc : $base * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale * $scale;
+			@return $calc;
+		} @else {
+			@return calc(var(--f-size-base) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale) * var(--scale));
+		}
+	}
+}
