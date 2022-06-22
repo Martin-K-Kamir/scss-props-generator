@@ -1,0 +1,29 @@
+/**
+ * Returns true of false, depending on whether `$value` has one the types in `$values`.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * __has-type(string, string, number, list, map) => true;
+ * __has-type(number, color, calculation, string) => false;
+ * @overload __has-type($value, $values)
+ * @param $value the type that is being checked
+ * @param $values {arglist, list, string} - Should hold value of types that will be checked with the $value type.
+ * List of all sass types : https://sass-lang.com/documentation/modules/meta#type-of
+ * @return true or false
+ */
+@function __has-type($value ,$values...) {
+	// Checks if $values is different type then {arglist, string, list}
+	@if (meta.type-of($values) != 'arglist' and meta.type-of($values) != 'string' and meta.type-of($values) != 'list') {
+		@error 'Parameter $values of function __has-type must be list, arglist or a string(if one value is used). '
+	}
+
+	// Loop over $values and checks if $value have one of the type in $values list. If so returns true of false.
+	@for $i from 1 through list.length($values) {
+		@if (meta.type-of($value) == list.nth($values, $i)) {
+			@return true;
+		} @else {
+			@return false;
+		}
+	}
+}

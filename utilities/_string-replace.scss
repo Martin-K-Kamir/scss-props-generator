@@ -1,0 +1,30 @@
+/**
+ * Extracts a substring from `$value`. The extracted substring is based on `$search`
+ * and can be replaced with new substring by `$replace` or not used at all.
+ *
+ * @author - Kitty Giraudel - https://css-tricks.com/snippets/sass/str-replace-function/
+ * @modified - Martin Kamír
+ *
+ * @example
+ * __string-replace(hello world, world) => hello;
+ * __string-replace(5.1, .1) => 5;
+ * __string-replace(hello world, world, from mars) => hello from mars;
+ * __string-replace(hello world, l, x) => hexxo worxd;
+ * @overload __string-replace($value, $search, $replace: '')
+ * @param $value {string, function, number(converted to string. Use function __convert-to-number if needed to be number)} - Initial string
+ * @param $search {string} - Substring to replace
+ * @param $replace {string} - New value
+ * @return extracted new string
+ */
+@function __string-replace($value, $search, $replace: '') {
+	@if (__has-type($value, string, number, function)) {
+		$string : #{$value};
+		$index : str-index(#{$string}, $search);
+		@if $index {
+			@return str-slice($string, 1, $index - 1) + $replace + __string-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+		}
+		@return $string;
+	} @else {
+		@error 'Value for `string-replace` should be a string, function or a number. Value #{$value} is type of #{meta.type-of($value)}.'
+	}
+}

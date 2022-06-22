@@ -82,8 +82,12 @@
 @import './library/text-shadow';
 @import './library/text-stroke';
 
+@import './utilities/has-type';
 @import 'decide-scale-calc';
+@import './utilities/string-replace';
+
 @import 'map-for-scalable-hierarchy';
+
 
 $map-for-scales  : (
 		'minor-second' : 1.067,
@@ -114,50 +118,26 @@ $map-for-font-s  : (
 
 $list-for-font-s : (1, 2, 3, 4.5);
 
-@function __convert-to-number($value) {
-	@if type-of($value) == 'number' {
-		@return $value;
-	} @else if type-of($value) != 'string' {
-		$_ : log('Value for `to-number` should be a number or a string.');
-	}
-
-	$result : 0;
-	$digits : 0;
-	$minus : str-slice($value, 1, 1) == '-';
-	$numbers : ('0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9);
-
-	@for $i from if($minus, 2, 1) through str-length($value) {
-		$character : str-slice($value, $i, $i);
-
-		@if not (index(map-keys($numbers), $character) or $character == '.') {
-			@return to-length(if($minus, -$result, $result), str-slice($value, $i))
-		}
-
-		@if $character == '.' {
-			$digits : 1;
-		} @else if $digits == 0 {
-			$result : $result * 10 + map-get($numbers, $character);
-		} @else {
-			$digits : $digits * 10;
-			$result : $result + math.div(map-get($numbers, $character), $digits);
-		}
-	}
-
-	@return if($minus, -$result, $result);
-}
-
-
-@function __string-replace($string, $search, $replace: '') {
-	$index : str-index($string, $search);
-	@if $index {
-		@return str-slice($string, 1, $index - 1) + $replace + __string-replace(str-slice($string, $index + str-length($search)), $search, $replace);
-	}
-	@return $string;
-}
-
-@function __number-slice($number, $start-at, $end-at, $unit: 'rem') {
-	$number : string.slice(__string-replace(#{$number}, $unit), $start-at, $end-at) + $unit;
-	@return $number;
+/**
+ * Returns the slice of $number starting at index $start-at and ending at index $end-at.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * __has-type(1.198541) => true;
+ * __has-type(number, color, calculation, string) => false;
+ * @overload __has-type($value, $values)
+ * @param $value the type that is being checked
+ * @param $values {arglist, list, string} - Should hold value of types that will be checked with the $value type.
+ * List of all sass types : https://sass-lang.com/documentation/modules/meta#type-of
+ * @return true or false
+ */
+@function __number-slice($number, $start-at: 0, $end-at: 7, $unit: 'rem') {
+	$unitless-number: __string-replace($number, $unit);
+	$sliced-number : string.slice($unitless-number, $start-at, $end-at);
+	$adding-unit : $sliced-number + $unit;
+	//$number : __convert-to-number($adding-unit);
+	@return $adding-unit;
 }
 
 @function __decide-preserve($base, $scale, $preserve, $i) {
@@ -245,6 +225,7 @@ $list-for-font-s : (1, 2, 3, 4.5);
 	@return list.nth($created-list, $i);
 }
 
+
 @function __level($level, $i, $custom, $atomic) {
 	@if ($level == 'numeric') {
 		@return $i;
@@ -266,7 +247,7 @@ $list-for-font-s : (1, 2, 3, 4.5);
 	} @else if ($level == 'atomic') {
 		$num : __string-replace(__string-replace($atomic, 'rem', ''), '.', '-');
 		@return $num;
-	} @else if ($level == 'size' or 'size-gradation' or 'size-and-number' or 'size-and-x') {
+	} @else if ($level == 'size' or $level == 'size-gradation' or $level == 'size-and-number' or $level == 'size-and-x') {
 		$list-of-higher-values : map.get($map-for-scalable-hierarchy, $level, higher-values);
 		$list-of-lower-values : map.get($map-for-scalable-hierarchy, $level, lower-values);
 
@@ -327,7 +308,7 @@ $list-for-font-s : (1, 2, 3, 4.5);
 			@return list.nth($created-list, $i);
 		}
 
-	} @else if ($level == 'roman' or 'greek' or 'military' or 'planets' or 'nato' or 'primary') {
+	} @else if ($level == 'roman' or $level == 'greek' or $level == 'military' or $level == 'planets' or $level == 'nato' or $level == 'primary') {
 		$list : map.get($map-for-scalable-hierarchy, $level);
 
 		@if (list.length($custom) > list.length($list)) {
@@ -335,17 +316,36 @@ $list-for-font-s : (1, 2, 3, 4.5);
 		}
 
 		@return list.nth($list, $i);
+	} @else if (meta.type-of($level) == 'list') {
+		@return list.nth($level, $i);
 	}
 }
 
-@mixin generate-type-scale($base: null, $scale: null, $types: null, $preserve: 0, $utility-classes: false, $custom: null, $decrease: 0, $custom-name: 'f-size-', $custom-level: 'numeric') {
+@function __decide-class($custom-name, $custom-class) {
+	@if ($custom-class != null) {
+		@return $custom-class;
+	} @else {
+		@return $custom-name;
+	}
+}
+
+@function __decide-custom-naming($custom-level, $custom-level-class, $i, $custom, $atomic) {
+	@if ($custom-level-class != null) {
+		@return __level($custom-level-class, $i, $custom, $atomic);
+	} @else {
+		@return __level($custom-level, $i, $custom, $atomic);
+	}
+}
+
+
+@mixin generate-type-scale($base: null, $scale: null, $types: null, $preserve: 0, $utility-classes: false, $custom: null, $decrease: 0, $custom-name: 'f-size-', $custom-level: 'numeric', $custom-class: null, $custom-var: null, $custom-level-class: null, $custom-level-var: null) {
 	@if (meta.type-of($custom) == 'list') {
 		@for $i from 1 through list.length($custom) {
-			--#{$custom-name}#{__level($custom-level, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} : #{__decrease-number(list.nth($custom, $i), $decrease)};
+			--#{__decide-class($custom-name, $custom-var)}#{__decide-custom-naming($custom-level,$custom-level-var, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} : #{__decrease-number(list.nth($custom, $i), $decrease)};
 
 			@if (utility-classes) {
-				@at-root .#{$custom-name}#{$i} {
-					font-size : var(--#{$custom-name}#{$i});
+				@at-root .#{__decide-class($custom-name, $custom-class)}#{__decide-custom-naming($custom-level,$custom-level-class, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} {
+					font-size : var(--#{__decide-class($custom-name, $custom-var)}#{__decide-custom-naming($custom-level,$custom-level-var, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))});
 				}
 			}
 		}
@@ -411,42 +411,7 @@ $list-for-font-s : (1, 2, 3, 4.5);
 }
 
 :root {
-	@include generate-type-scale($custom : $list-for-font-s, $utility-classes : true, $custom-name : text-, $custom-level : atomic);
+	@include generate-type-scale($custom : $list-for-font-s, $utility-classes : true, $custom-level-class : minmax, $custom-name : lol-, $custom-var : text-, $custom-level-var : minmax);
 
 }
 
-
-/*
-{
-  "name": "petcenter",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "watch": "sass --watch --poll ./sass:./www/assets-petqr/css",
-    "production": "gulp production"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "autoprefixer": "^10.4.7",
-    "cssnano": "^5.1.11",
-    "gulp": "^4.0.2",
-    "gulp-postcss": "^9.0.1",
-    "gulp-sass": "^5.1.0",
-    "postcss": "^8.4.14",
-    "postcss-cli": "^9.1.0",
-    "postcss-preset-env": "^7.7.1",
-    "sass": "^1.52.3"
-  },
-  "dependencies": {
-    "gulp-sourcemaps": "^3.0.0"
-  },
-  "browserslist": [
-    "> 0%",
-    "last 2 versions"
-  ]
-}
-
-
- */
