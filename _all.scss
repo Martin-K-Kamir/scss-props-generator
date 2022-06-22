@@ -82,10 +82,13 @@
 @import './library/text-shadow';
 @import './library/text-stroke';
 
+// WIP
 @import './utilities/has-type';
 @import 'decide-scale-calc';
 @import './utilities/string-replace';
-
+@import 'number-slice';
+@import 'list-slice';
+@import 'list-reverse';
 @import 'map-for-scalable-hierarchy';
 
 
@@ -118,31 +121,11 @@ $map-for-font-s  : (
 
 $list-for-font-s : (1, 2, 3, 4.5);
 
-/**
- * Returns the slice of $number starting at index $start-at and ending at index $end-at.
- *
- * @author - Martin Kamír
- *
- * @example
- * __has-type(1.198541) => true;
- * __has-type(number, color, calculation, string) => false;
- * @overload __has-type($value, $values)
- * @param $value the type that is being checked
- * @param $values {arglist, list, string} - Should hold value of types that will be checked with the $value type.
- * List of all sass types : https://sass-lang.com/documentation/modules/meta#type-of
- * @return true or false
- */
-@function __number-slice($number, $start-at: 0, $end-at: 7, $unit: 'rem') {
-	$unitless-number: __string-replace($number, $unit);
-	$sliced-number : string.slice($unitless-number, $start-at, $end-at);
-	$adding-unit : $sliced-number + $unit;
-	//$number : __convert-to-number($adding-unit);
-	@return $adding-unit;
-}
+
 
 @function __decide-preserve($base, $scale, $preserve, $i) {
 	@if ($preserve >= $i) {
-		@return __number-slice(__decide-scale-calc($base, $scale, $preserve, $i), 0, 7);
+		@return __number-slice(__decide-scale-calc($base, $scale, $preserve, $i));
 	} @else if ($preserve + 1 == $i) {
 		@return __decide-scale-calc($base, $scale, $preserve, $i);
 	} @else {
@@ -150,15 +133,6 @@ $list-for-font-s : (1, 2, 3, 4.5);
 	}
 }
 
-@function __convert-to-rem($number) {
-	@if (math.unit(__convert-to-number($number)) == '%') {
-		@return __string-replace($number, '%', 'rem');
-	} @else if (math.is-unitless(__convert-to-number($number))) {
-		@return $number + 'rem';
-	}
-
-	@return $number;
-}
 
 @function __decrease-number($number, $decrease) {
 	@if (math.unit($number) != 'rem' and math.is-unitless($number) != true) {
@@ -179,48 +153,14 @@ $list-for-font-s : (1, 2, 3, 4.5);
 	}
 }
 
-@function slice($list, $start: 1, $end: length($list)) {
-	$result : null;
 
-	@if type-of($start) != number or type-of($end) != number {
-		@warn "Either $start or $end are not a number for `slice`.";
-	} @else if $start > $end {
-		@warn "The start index has to be lesser than or equals to the end index for `slice`.";
-	} @else if $start < 1 or $end < 1 {
-		@warn "List indexes must be non-zero integers for `slice`.";
-	} @else if $start > length($list) {
-		@warn "List index is #{$start} but list is only #{length($list)} item long for `slice`.";
-	} @else if $end > length($list) {
-		@warn "List index is #{$end} but list is only #{length($list)} item long for `slice`.";
-	} @else {
-		$result : ();
 
-		@for $i from $start through $end {
-			$result : append($result, nth($list, $i));
-		}
-	}
 
-	@return $result;
-}
-
-@function reverse($list, $recursive: false) {
-	$result : ();
-
-	@for $i from length($list) * -1 through -1 {
-		@if type-of(nth($list, abs($i))) == list and $recursive {
-			$result : append($result, reverse(nth($list, abs($i)), $recursive));
-		} @else {
-			$result : append($result, nth($list, abs($i)));
-		}
-	}
-
-	@return $result;
-}
 
 
 @function __make-list($list, $i, $make-list-from-min, $make-list-from-max) {
-	$create-small-list : list.set-nth(reverse(slice($make-list-from-min, 1, math.ceil(math.div(list.length($list), 2)))), 1, 'min');
-	$create-big-list : list.set-nth(slice($make-list-from-max, 1, math.floor(math.div(list.length($list), 2))), -1, 'max');
+	$create-small-list : list.set-nth(__list-reverse(__list-slice($make-list-from-min, 1, math.ceil(math.div(list.length($list), 2)))), 1, 'min');
+	$create-big-list : list.set-nth(__list-slice($make-list-from-max, 1, math.floor(math.div(list.length($list), 2))), -1, 'max');
 	$created-list : list.join($create-small-list, $create-big-list);
 	@return list.nth($created-list, $i);
 }
@@ -239,8 +179,8 @@ $list-for-font-s : (1, 2, 3, 4.5);
 			@error 'do latera'
 		}
 
-		$create-small-list : list.set-nth(reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2)))), 1, 'min');
-		$create-big-list : list.set-nth(slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2))), -1, 'max');
+		$create-small-list : list.set-nth(__list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2)))), 1, 'min');
+		$create-big-list : list.set-nth(__list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2))), -1, 'max');
 		$created-list : list.join($create-small-list, $create-big-list);
 
 		@return list.nth($created-list, $i);
@@ -252,8 +192,8 @@ $list-for-font-s : (1, 2, 3, 4.5);
 		$list-of-lower-values : map.get($map-for-scalable-hierarchy, $level, lower-values);
 
 		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size') {
-			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
 			$created-list : list.join($create-small-list, $create-big-list);
 
 			@if (list.length($custom) > list.length($created-list) and $level == 'size') {
@@ -267,8 +207,8 @@ $list-for-font-s : (1, 2, 3, 4.5);
 		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-gradation, lower-values);
 
 		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size-gradation') {
-			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
 			$created-list : list.join($create-small-list, $create-big-list);
 
 			@if (list.length($custom) > list.length($created-list) and $level == 'size-gradation') {
@@ -282,8 +222,8 @@ $list-for-font-s : (1, 2, 3, 4.5);
 		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-and-number, lower-values);
 
 		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size-and-number') {
-			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
 			$created-list : list.join($create-small-list, $create-big-list);
 
 			@if (list.length($custom) > list.length($created-list) and $level == 'size-and-number') {
@@ -297,8 +237,8 @@ $list-for-font-s : (1, 2, 3, 4.5);
 		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-and-x, lower-values);
 
 		@if ($level == 'size-and-x') {
-			$create-small-list : reverse(slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
+			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
+			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
 			$created-list : list.join($create-small-list, $create-big-list);
 
 			@if (list.length($custom) > list.length($created-list)) {
@@ -411,7 +351,8 @@ $list-for-font-s : (1, 2, 3, 4.5);
 }
 
 :root {
-	@include generate-type-scale($custom : $list-for-font-s, $utility-classes : true, $custom-level-class : minmax, $custom-name : lol-, $custom-var : text-, $custom-level-var : minmax);
+	@include generate-type-scale($custom: (1,2,3,4), $decrease: 10%, $utility-classes : true);
+	//@include generate-type-scale($base : 1rem, $types : 10, $scale : 1.125, $preserve : 5,  $utility-classes : true);
 
 }
 
