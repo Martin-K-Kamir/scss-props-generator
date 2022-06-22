@@ -134,22 +134,27 @@ $list-for-font-s : (1, 2, 3, 4.5);
 }
 
 
+@function __remove-unit-from-number($number, $unit: 'rem') {
+	$removed-unit: __string-replace($number, $unit);
+	$number : __convert-to-number($removed-unit);
+	@return $number;
+}
+
 @function __decrease-number($number, $decrease) {
+
 	@if (math.unit($number) != 'rem' and math.is-unitless($number) != true) {
 		@error 'Number must be only in rem or unitless. Change your #{$number} to #{__string-replace(#{$number}, #{math.unit($number)}, 'rem')} or #{__string-replace(#{$number}, #{math.unit($number)}, '')} without any unit.';
 	}
 
-	@if ($decrease == 0) {
-		$number : __convert-to-number(__string-replace(#{$number}, 'rem', ''));
+	@if ($decrease != 0) {
+		$number : __remove-unit-from-number($number);
+		$decreased-number : $number - (math.div($number, 100) * $decrease);
+		$number : __remove-unit-from-number($decreased-number, '%');
 
 		@return $number + 'rem';
+
 	} @else {
-		$number : __convert-to-number(__string-replace(#{$number}, 'rem', ''));
-		$value1 : $number - (math.div($number, 100) * $decrease);
-
-		$value2 : __convert-to-number(__string-replace(#{$value1}, '%', ''));
-
-		@return $value2 + 'rem';
+		@return $number ;
 	}
 }
 
@@ -351,8 +356,12 @@ $list-for-font-s : (1, 2, 3, 4.5);
 }
 
 :root {
-	@include generate-type-scale($custom: (1,2,3,4), $decrease: 10%, $utility-classes : true);
+	@include generate-type-scale($custom: (1rem,2,3rem,4), $decrease: 0%, $utility-classes : true);
 	//@include generate-type-scale($base : 1rem, $types : 10, $scale : 1.125, $preserve : 5,  $utility-classes : true);
 
+	@include breakpoint(max, 1000px) {
+	@include generate-type-scale($custom: (1rem,2,3rem,4), $decrease: 10%, $utility-classes : true);
+
+	}
 }
 

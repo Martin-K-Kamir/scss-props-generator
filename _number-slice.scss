@@ -20,15 +20,9 @@
 		@error 'Value of `$end-at => #{$end-at}` can not be less then `1`'
 	}
 
-	// Extract unit from number and convert it to string.
-	$number-unitless : __string-replace($number, $unit);
+	$removed-unit : __string-replace($number, $unit);
+	$sliced-number : string.slice($removed-unit, 0, $end-at);
+	$number : __convert-to-number($sliced-number);
 
-	// Slice the number. Based on index of value `$end-at`.
-	$number-sliced : string.slice($number-unitless, 0, $end-at);
-
-	// Convert number from string to number.
-	$number : __convert-to-number($number-sliced);
-
-	// Return and add unit back.
 	@return $number + $unit;
 }
