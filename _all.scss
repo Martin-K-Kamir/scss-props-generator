@@ -246,9 +246,11 @@ $list-for-font-s : (1, 2, 3, 4.5);
  *
  * @example
  * __get-suffix(numeric, (1rem, 2rem, 3rem, 4rem, 5rem), 3) => 3;
- * __get-suffix(hard-suffix, (1rem, 2rem, 3.5rem, 4rem, 5rem),, 3) => 3-5;
- * __get-suffix((1A, 2A, 3A, 4A, 5A, 6A), (1rem, 2rem, 3rem, 4rem, 5rem), 3) => 3;
- * __get-suffix(numeric, (1rem, 2rem, 3rem, 4rem, 5rem), 3) => 3;
+ * __get-suffix(numeric-hundreds, (1rem, 2rem, 3rem, 4rem, 5rem), 3) => 300;
+ * __get-suffix(hard-suffix, (1rem, 2rem, 3.5rem, 4rem, 5rem), 3.5rem, 3) => 3-5;
+ * __get-suffix((1A, 2A, 3A, 4A, 5A, 6A), (1rem, 2rem, 3rem, 4rem, 5rem), 3) => 3A;
+ * __get-suffix(roman, (1rem, 2rem, 3rem, 4rem, 5rem), 3) => III;
+ * __get-suffix(size, (1rem, 2rem, 3rem, 4rem, 5rem), 3) => medium;
  * __get-suffix(numeric, (1rem, 2rem, 3rem, 4rem, 5rem), 3) => 3;
  * @overload __get-suffix-list($set-suffix, $set-list-of-values, $minmax: false)
  * @param $set-suffix {string} - Name of the set suffix. Which is originally called from main `@mixin`.
