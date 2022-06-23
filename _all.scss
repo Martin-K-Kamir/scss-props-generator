@@ -84,12 +84,13 @@
 
 // WIP
 @import './utilities/has-type';
-@import 'decide-scale-calc';
+@import 'scalable-system';
+@import 'remove-unit';
 @import './utilities/string-replace';
 @import 'number-slice';
 @import 'list-slice';
 @import 'list-reverse';
-@import 'map-for-scalable-hierarchy';
+@import 'map-for-suffixes';
 
 
 $map-for-scales  : (
@@ -122,63 +123,122 @@ $map-for-font-s  : (
 $list-for-font-s : (1, 2, 3, 4.5);
 
 
+@function __generate-value($base, $ratio, $preserve, $i) {
 
-@function __decide-preserve($base, $scale, $preserve, $i) {
 	@if ($preserve >= $i) {
-		@return __number-slice(__decide-scale-calc($base, $scale, $preserve, $i));
+		$get-number : __scalable-system($base, $ratio, $preserve, $i);
+		$sliced-number : __number-slice($get-number);
+		$number : $sliced-number;
+
+		@return $number;
 	} @else if ($preserve + 1 == $i) {
-		@return __decide-scale-calc($base, $scale, $preserve, $i);
+		$get-number : __scalable-system($base, $ratio, $preserve, $i);
+		$number : $get-number;
+
+		@return $number;
 	} @else {
-		@return calc(var(--f-size-#{$i - 1}) * var(--scale));
+
+		@return calc(var(--f-size-#{$i - 1}) * var(--ratio));
 	}
 }
 
 
-@function __remove-unit-from-number($number, $unit: 'rem') {
-	$removed-unit: __string-replace($number, $unit);
-	$number : __convert-to-number($removed-unit);
-	@return $number;
-}
+/**
+ * Returns scaled value of `$number`.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * __number-scale(1rem, 50%) => 0.5rem;
+ * __number-scale(1rem, 150) => 1.5rem;
+ * @overload __number-scale($number, $scale: 100%)
+ * @param $number {number} - The number that is being scaled. Accepts only numbers with rem unit or no unit.
+ * @param $decrease {number} - Value that is being scaled by. Accepts only numbers with % unit or no unit.
+ * @return scaled number
+ */
+@function __decrease-number($number, $scale: 100%) {
 
-@function __decrease-number($number, $decrease) {
+	// Checks if `$scale` is not number
+	@if (meta.type-of($scale) != 'number') {
+		@error 'Value of `$scale` must be a number.';
+	}
+
+	// Checks if `$scale` have `%` as unit or is `unitless`
+	@if (math.unit($scale) != '%' and math.is-unitless($scale) != true or meta.type-of($scale) != 'number') {
+		@error 'Unit of `$scale` must be only in % or unitless. Change your #{$scale} to #{__string-replace(#{$scale}, #{math.unit($scale)}, '%')} or #{__string-replace(#{$scale}, #{math.unit($scale)}, '')} without any unit.';
+	}
+
+	// Checks if value of `$scale` is less than `0`
+	@if ($scale < 0) {
+		@error 'Value of `$scale => #{$scale}` must be greater than `0`.';
+	}
 
 	@if (math.unit($number) != 'rem' and math.is-unitless($number) != true) {
 		@error 'Number must be only in rem or unitless. Change your #{$number} to #{__string-replace(#{$number}, #{math.unit($number)}, 'rem')} or #{__string-replace(#{$number}, #{math.unit($number)}, '')} without any unit.';
 	}
 
-	@if ($decrease != 0) {
-		$number : __remove-unit-from-number($number);
-		$decreased-number : $number - (math.div($number, 100) * $decrease);
-		$number : __remove-unit-from-number($decreased-number, '%');
+	$scale : __remove-unit($scale, '%'); // Remove unit `%` from `$scale`
+	$number : math.div($number, 100) * $scale; // Calculates new value of `$number`
 
-		@return $number + 'rem';
+	@return $number;
+}
 
-	} @else {
-		@return $number ;
+
+//@function __make-list($list, $i, $make-list-from-min, $make-list-from-max) {
+//	$create-small-list : list.set-nth(__list-reverse(__list-slice($make-list-from-min, 1, math.ceil(math.div(list.length($list), 2)))), 1, 'min');
+//	$create-big-list : list.set-nth(__list-slice($make-list-from-max, 1, math.floor(math.div(list.length($list), 2))), -1, 'max');
+//	$created-list : list.join($create-small-list, $create-big-list);
+//	@return list.nth($created-list, $i);
+//}
+
+
+@function __get-suffix-list($suffix, $custom) {
+	$get-lower-list : map.get($map-for-suffixes, $suffix, lower-values);
+	$get-higher-list : map.get($map-for-suffixes, $suffix, higher-values);
+
+	$min-index : math.ceil(math.div(list.length($custom), 2));
+	$max-index : math.floor(math.div(list.length($custom), 2));
+
+	$sliced-lower-list : __list-slice($get-lower-list, $end : $min-index);
+	$sliced-higher-list : __list-slice($get-higher-list, $end : $max-index);
+
+	$list : list.join(__list-reverse($sliced-lower-list), $sliced-higher-list);
+
+	@return $list;
+}
+
+@function __validate-suffix($map, $suffix, $custom, $i) {
+
+	$result: 0;
+	@each $key, $value in $map {
+		@if (list.length($custom) < list.length($value) or $suffix == $key) {
+			@if (list.length($custom) > list.length($value) and $suffix == 'size') {
+				$result: map.get($map, 'size-gradation');
+			}
+
+			$result: list.nth($value, $i);
+		}
 	}
+
+	@return $result;
 }
 
+//@function __get-suffix($suffix, $custom-sizes, $literal-values, $i) {
+@function __level($suffix, $i, $custom, $literal-number) {
 
+	// Check for `numeric` scaling
+	@if ($suffix == 'numeric') {
+		@return $i; // Return number of `$i`
 
+		// Check for `numeric-hundreds` scaling
+	} @else if ($suffix == 'numeric-hundreds') {
+		@return $i + '00'; // Return number of `$i` plus `00`
 
+		// Check for `minmax` scaling
+	} @else if ($suffix == 'minmax') {
 
-
-@function __make-list($list, $i, $make-list-from-min, $make-list-from-max) {
-	$create-small-list : list.set-nth(__list-reverse(__list-slice($make-list-from-min, 1, math.ceil(math.div(list.length($list), 2)))), 1, 'min');
-	$create-big-list : list.set-nth(__list-slice($make-list-from-max, 1, math.floor(math.div(list.length($list), 2))), -1, 'max');
-	$created-list : list.join($create-small-list, $create-big-list);
-	@return list.nth($created-list, $i);
-}
-
-
-@function __level($level, $i, $custom, $atomic) {
-	@if ($level == 'numeric') {
-		@return $i;
-	} @else if ($level == 'thousand') {
-		@return $i + '00';
-	} @else if ($level == 'minmax') {
-		$list-of-higher-values : map.get($map-for-scalable-hierarchy, $level, higher-values);
-		$list-of-lower-values : map.get($map-for-scalable-hierarchy, $level, lower-values);
+		$list-of-higher-values : map.get($map-for-suffixes, $suffix, higher-values);
+		$list-of-lower-values : map.get($map-for-suffixes, $suffix, lower-values);
 
 		@if (list.length($custom) > list.length(list.join($list-of-higher-values, $list-of-lower-values))) {
 			@error 'do latera'
@@ -189,108 +249,79 @@ $list-for-font-s : (1, 2, 3, 4.5);
 		$created-list : list.join($create-small-list, $create-big-list);
 
 		@return list.nth($created-list, $i);
-	} @else if ($level == 'atomic') {
-		$num : __string-replace(__string-replace($atomic, 'rem', ''), '.', '-');
-		@return $num;
-	} @else if ($level == 'size' or $level == 'size-gradation' or $level == 'size-and-number' or $level == 'size-and-x') {
-		$list-of-higher-values : map.get($map-for-scalable-hierarchy, $level, higher-values);
-		$list-of-lower-values : map.get($map-for-scalable-hierarchy, $level, lower-values);
 
-		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size') {
-			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
-			$created-list : list.join($create-small-list, $create-big-list);
+		// Check for `literal-number`
+	} @else if ($suffix == 'literal-number') {
+		$removed-unit : __string-replace($literal-number, 'rem'); // Remove `unit` from `number`
+		$replaced-dot : __string-replace($removed-unit, '.', '-'); // Replace `.` with `-`. Because `.` is not allowed in class names
+		$number : $replaced-dot;
+		@return $number;
 
-			@if (list.length($custom) > list.length($created-list) and $level == 'size') {
-				@error '1'
-			}
+	} @else if ($suffix == 'size' or $suffix == 'size-gradation' or $suffix == 'size-and-number' or $suffix == 'size-and-x') {
 
-			@return list.nth($created-list, $i);
-		}
+		$size-suffixes : __get-suffix-list('size', $custom);
+		$size-gradation-suffixes : __get-suffix-list('size-gradation', $custom);
+		$size-and-number-suffixes : __get-suffix-list('size-and-number', $custom);
+		$size-and-x-suffixes : __get-suffix-list('size-and-x', $custom);
 
-		$list-of-higher-values : map.get($map-for-scalable-hierarchy, size-gradation, higher-values);
-		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-gradation, lower-values);
+		$map-of-suffixes : (
+				'size' : $size-suffixes,
+				'size-gradation' : $size-gradation-suffixes,
+				'size-and-number' : $size-and-number-suffixes,
+				'size-and-x' : $size-and-x-suffixes) ;
 
-		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size-gradation') {
-			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
-			$created-list : list.join($create-small-list, $create-big-list);
+		@return __validate-suffix($map-of-suffixes, $suffix, $custom, $i);
 
-			@if (list.length($custom) > list.length($created-list) and $level == 'size-gradation') {
-				@error '2'
-			}
-
-			@return list.nth($created-list, $i);
-		}
-
-		$list-of-higher-values : map.get($map-for-scalable-hierarchy, size-and-number, higher-values);
-		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-and-number, lower-values);
-
-		@if (list.length($custom) < list.length(list.join($list-of-higher-values, $list-of-lower-values)) or $level == 'size-and-number') {
-			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
-			$created-list : list.join($create-small-list, $create-big-list);
-
-			@if (list.length($custom) > list.length($created-list) and $level == 'size-and-number') {
-				@error '3'
-			}
-
-			@return list.nth($created-list, $i);
-		}
-
-		$list-of-higher-values : map.get($map-for-scalable-hierarchy, size-and-x, higher-values);
-		$list-of-lower-values : map.get($map-for-scalable-hierarchy, size-and-x, lower-values);
-
-		@if ($level == 'size-and-x') {
-			$create-small-list : __list-reverse(__list-slice($list-of-lower-values, 1, math.ceil(math.div(list.length($custom), 2))));
-			$create-big-list : __list-slice($list-of-higher-values, 1, math.floor(math.div(list.length($custom), 2)));
-			$created-list : list.join($create-small-list, $create-big-list);
-
-			@if (list.length($custom) > list.length($created-list)) {
-				@error '4'
-			}
-
-			@return list.nth($created-list, $i);
-		}
-
-	} @else if ($level == 'roman' or $level == 'greek' or $level == 'military' or $level == 'planets' or $level == 'nato' or $level == 'primary') {
-		$list : map.get($map-for-scalable-hierarchy, $level);
+	} @else if ($suffix == 'roman' or $suffix == 'greek' or $suffix == 'military' or $suffix == 'planets' or $suffix == 'nato' or $suffix == 'primary') {
+		$list : map.get($map-for-suffixes, $suffix);
 
 		@if (list.length($custom) > list.length($list)) {
 			@error 'do later aa'
 		}
 
 		@return list.nth($list, $i);
-	} @else if (meta.type-of($level) == 'list') {
-		@return list.nth($level, $i);
+	} @else if (meta.type-of($suffix) == 'list') {
+		@return list.nth($suffix, $i);
 	}
 }
 
-@function __decide-class($custom-name, $custom-class) {
-	@if ($custom-class != null) {
-		@return $custom-class;
+@function __decide-class($prefix, $prefix-class) {
+	@if ($prefix-class != null) {
+		@return $prefix-class;
 	} @else {
-		@return $custom-name;
+		@return $prefix;
 	}
 }
 
-@function __decide-custom-naming($custom-level, $custom-level-class, $i, $custom, $atomic) {
-	@if ($custom-level-class != null) {
-		@return __level($custom-level-class, $i, $custom, $atomic);
+@function __decide-custom-naming($suffix, $suffix-class, $i, $custom, $atomic) {
+	@if ($suffix-class != null) {
+		@return __level($suffix-class, $i, $custom, $atomic);
 	} @else {
-		@return __level($custom-level, $i, $custom, $atomic);
+		@return __level($suffix, $i, $custom, $atomic);
 	}
 }
 
-
-@mixin generate-type-scale($base: null, $scale: null, $types: null, $preserve: 0, $utility-classes: false, $custom: null, $decrease: 0, $custom-name: 'f-size-', $custom-level: 'numeric', $custom-class: null, $custom-var: null, $custom-level-class: null, $custom-level-var: null) {
+//$base
+//$ratio
+//$types
+//$preserve - needs to change
+//$utility-classes
+//$custom-sizes
+//$scale
+//$prefix
+//$suffix
+//$prefix-class
+//$suffix-class
+//$prefix-variable
+//$suffix-variable
+@mixin generate-type-scale($base: null, $ratio: null, $types: null, $preserve: 0, $utility-classes: false, $custom: null, $decrease: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
 	@if (meta.type-of($custom) == 'list') {
 		@for $i from 1 through list.length($custom) {
-			--#{__decide-class($custom-name, $custom-var)}#{__decide-custom-naming($custom-level,$custom-level-var, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} : #{__decrease-number(list.nth($custom, $i), $decrease)};
+			--#{__decide-class($prefix, $prefix-variable)}#{__decide-custom-naming($suffix,$suffix-variable, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} : #{__decrease-number(list.nth($custom, $i), $decrease)};
 
 			@if (utility-classes) {
-				@at-root .#{__decide-class($custom-name, $custom-class)}#{__decide-custom-naming($custom-level,$custom-level-class, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} {
-					font-size : var(--#{__decide-class($custom-name, $custom-var)}#{__decide-custom-naming($custom-level,$custom-level-var, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))});
+				@at-root .#{__decide-class($prefix, $prefix-class)}#{__decide-custom-naming($suffix,$suffix-class, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))} {
+					font-size : var(--#{__decide-class($prefix, $prefix-variable)}#{__decide-custom-naming($suffix,$suffix-variable, $i, $custom, $atomic: __decrease-number(list.nth($custom, $i), $decrease))});
 				}
 			}
 		}
@@ -322,26 +353,26 @@ $list-for-font-s : (1, 2, 3, 4.5);
 			@error "The preserve number is larger than the number of types. Use smaller number than #{$types}.";
 		}
 
-		@if (meta.type-of($scale) == string) {
-			$scale  : map.get($map-for-scales, $scale);
-			--scale : #{$scale};
+		@if (meta.type-of($ratio) == string) {
+			$ratio  : map.get($map-for-scales, $ratio);
+			--ratio : #{$ratio};
 		} @else {
-			--scale : #{$scale};
+			--ratio : #{$ratio};
 		}
 
 		@if ($preserve == 0) {
-			--f-size-start : calc(var(--f-size-base) / var(--scale));
-			--f-size-0     : calc(var(--f-size-start) * var(--scale));
+			--f-size-start : calc(var(--f-size-base) / var(--ratio));
+			--f-size-0     : calc(var(--f-size-start) * var(--ratio));
 
 			@for $i from 1 through $types {
-				--f-size-#{$i} : calc(var(--f-size-#{$i - 1}) * var(--scale));
+				--f-size-#{$i} : calc(var(--f-size-#{$i - 1}) * var(--ratio));
 			}
 		} @else {
-			$base          : math.div($base, $scale);
+			$base          : math.div($base, $ratio);
 			--f-size-0     : #{$base};
 
 			@for $i from 1 through $types {
-				--f-size-#{$i} : #{__decide-preserve($base, $scale, $preserve, $i)};
+				--f-size-#{$i} : #{__generate-value($base, $ratio, $preserve, $i)};
 			}
 		}
 
@@ -356,12 +387,11 @@ $list-for-font-s : (1, 2, 3, 4.5);
 }
 
 :root {
-	@include generate-type-scale($custom: (1rem,2,3rem,4), $decrease: 0%, $utility-classes : true);
-	//@include generate-type-scale($base : 1rem, $types : 10, $scale : 1.125, $preserve : 5,  $utility-classes : true);
+	@include generate-type-scale($custom : (1rem, 2, 3rem, 4, 5, 6, 6, 6, 6, 1, 1), $decrease : 150%, $utility-classes : true, $suffix : 'size');
+	//@include generate-type-scale($base : 1rem, $types : 10, $ratio : 1.125, $preserve : 5,  $utility-classes : true, $prefix: 'text-');
 
-	@include breakpoint(max, 1000px) {
-	@include generate-type-scale($custom: (1rem,2,3rem,4), $decrease: 10%, $utility-classes : true);
+	//@include breakpoint(max, 1000px) {
+	//@include generate-type-scale($custom: (1rem,2,3rem,4), $utility-classes : true);
 
-	}
 }
 

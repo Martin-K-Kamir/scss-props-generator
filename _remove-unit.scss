@@ -1,0 +1,19 @@
+/**
+ * Returns unitless number.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * __remove-unit(1rem) => 1;
+ * __remove-unit(5em, 'em') => 5;
+ * __remove-unit(15%, '%') => 15;
+ * @overload __remove-unit($number, $unit: 'rem')
+ * @param $number {number} - Number to remove unit from.
+ * @param $unit {string} - Unit to remove. As default 'rem' is set.
+ * @return number with no unit.
+ */
+@function __remove-unit($number, $unit: 'rem') {
+	$removed-unit : __string-replace($number, $unit); // Removes the unit
+	$number : __convert-to-number($removed-unit); // Converts back to number
+	@return $number;
+}

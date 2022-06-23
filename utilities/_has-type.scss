@@ -28,3 +28,21 @@
 	// If not throw error.
 	@error 'Value `#{$type}` have type of `#{meta.type-of($type)}`. Which does not correspond with one of these types `#{$types-list}`'
 }
+
+@function __has-value($type ,$types-list...) {
+	// Checks if `$types-list` is different type then {arglist, string, list}
+	@if (meta.type-of($types-list) != 'arglist' and meta.type-of($types-list) != 'string' and meta.type-of($types-list) != 'list') {
+		@error 'Parameter `$types-list` of function `__has-type` must be list, arglist or a string(if one value is used). '
+	}
+
+	// Loop over `$types-list` and checks if `$type` have one of the type in `$types-list` list. If so returns `true`.
+	@for $i from 1 through list.length($types-list) {
+		@if (meta.type-of($type) == list.nth($types-list, $i)) {
+			@return true;
+		} @else {
+			@return false;
+		}
+	}
+	// If not throw error.
+	@error 'Value `#{$type}` have type of `#{meta.type-of($type)}`. Which does not correspond with one of these types `#{$types-list}`'
+}
