@@ -1,0 +1,10 @@
+
+@function __map-keys($map) {
+	$keys : ();
+
+	@each $key, $_ in $map {
+		$keys : append($keys, $key, $separator : 'comma');
+	}
+
+	@return $keys;
+}

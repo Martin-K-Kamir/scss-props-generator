@@ -1,3 +1,7 @@
+@use "sass:list";
+@use "sass:meta";
+
+
 /**
  * Extracts a substring from `$value`. The extracted substring is based on `$search`
  * and can be replaced with new substring by `$replace` or not used at all.
@@ -17,12 +21,14 @@
  * @return extracted new string
  */
 @function __string-replace($value, $search, $replace: '') {
-	@if (__has-type($value, number, string, function)) {
+	@if (list.index((number, string), meta.type-of($value))) {
 		$string : #{$value};
 		$index : str-index(#{$string}, $search);
 		@if $index {
 			@return str-slice($string, 1, $index - 1) + $replace + __string-replace(str-slice($string, $index + str-length($search)), $search, $replace);
 		}
 		@return $string;
+	} @else {
+		@error "Parameter `$value` of function `__string-replace` is not a string or number. Parameter `$value` have type of `#{meta.type-of($value)}`";
 	}
 }
