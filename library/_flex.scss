@@ -37,10 +37,10 @@
 	$wrap          : null;
 	$content       : null;
 	$gap           : 0px;
-	$col-width-max : __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-max');
-	$col-width-md  : __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-md');
-	$col-width-sm  : __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-sm');
-	$col-width-min : __mapDeepGet($map-for-flexbox, 'grid-widths', 'col-width-min');
+	$col-width-max : __map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-max');
+	$col-width-md  : __map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-md');
+	$col-width-sm  : __map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-sm');
+	$col-width-min : __map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-min');
 
 	// Loop over the parameters to set col width properties for fluid grid based on the call. As default fluid grid is set to be cols-3.
 	@each $value in $params {
@@ -82,11 +82,11 @@
 	@each $value in $params {
 		// Check for string in the parameters. Based on params properties will do lookup in flexbox map to get their value.
 		@if type-of($value) == 'string' {
-			$justify   : __mapDeepGet($map-for-flexbox, 'justify', $value);
-			$align     : __mapDeepGet($map-for-flexbox, 'align', $value);
-			$direction : __mapDeepGet($map-for-flexbox, 'directions', $value);
-			$wrap      : __mapDeepGet($map-for-flexbox, 'wrap', $value);
-			$content   : __mapDeepGet($map-for-flexbox, 'content', $value);
+			$justify   : __map-deep-get($map-for-flexbox, 'justify', $value);
+			$align     : __map-deep-get($map-for-flexbox, 'align', $value);
+			$direction : __map-deep-get($map-for-flexbox, 'directions', $value);
+			$wrap      : __map-deep-get($map-for-flexbox, 'wrap', $value);
+			$content   : __map-deep-get($map-for-flexbox, 'content', $value);
 		}
 
 		// Check for number in the parameters. If there is number set gap value and call for __supportGap so in older browsers there will be gap aswell.

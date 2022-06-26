@@ -1,11 +1,11 @@
 
-@function __scalable-system($base, $ratio, $preserve, $i) {
+@function __scalable-system($base, $ratio, $preserve, $i, $variable-prefix) {
 	@if ($i == 1) {
 		@if ($preserve >= 1) {
 			$calc : $base * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio));
 		}
 	}
 	@if ($i == 2) {
@@ -13,7 +13,7 @@
 			$calc : $base * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio));
 		}
 	}
 	@if ($i == 3) {
@@ -21,7 +21,7 @@
 			$calc : $base * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 	@if ($i == 4) {
@@ -29,7 +29,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -38,7 +38,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -47,7 +47,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -56,7 +56,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -65,7 +65,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -74,7 +74,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -83,7 +83,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -92,7 +92,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -101,7 +101,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -110,7 +110,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -119,7 +119,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -128,7 +128,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -137,7 +137,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -146,7 +146,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -155,7 +155,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -164,7 +164,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -173,7 +173,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -182,7 +182,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -191,7 +191,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -200,7 +200,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -209,7 +209,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -218,7 +218,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -227,7 +227,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -236,7 +236,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -245,7 +245,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -254,7 +254,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -263,7 +263,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -272,7 +272,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -281,7 +281,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -290,7 +290,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -299,7 +299,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -308,7 +308,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -317,7 +317,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -326,7 +326,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -335,7 +335,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -344,7 +344,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 
@@ -353,7 +353,7 @@
 			$calc : $base * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio * $ratio;
 			@return $calc;
 		} @else {
-			@return calc(var(--f-size-base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
+			@return calc(var(--#{$variable-prefix}base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio));
 		}
 	}
 }

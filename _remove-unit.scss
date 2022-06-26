@@ -17,3 +17,9 @@
 	$number : __convert-to-number($removed-unit); // Converts back to number
 	@return $number;
 }
+
+@function __rem($number, $unit: 'rem') {
+	$removed-unit : __string-replace($number, $unit); // Removes the unit
+	$number : __convert-to-number($removed-unit); // Converts back to number
+	@return $number + 'rem';
+}

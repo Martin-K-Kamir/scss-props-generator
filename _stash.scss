@@ -1,0 +1,33 @@
+/*
+	//$TYPES_MAX_LIMIT : 40;
+	//$TYPES_MIN_LIMIT : 3;
+	//@if ($length > $TYPES_MAX_LIMIT) {
+	//	@error "The maximum number of length is 40. Use smaller number than #{$length}.";
+	//} @else if ($length < $TYPES_MIN_LIMIT) {
+	//	@error "The minimum number of length is 3. Use larger number than #{$length}.";
+	//} @else if ($preserve > $length) {
+	//	@error "The preserve number is larger than the number of length. Use smaller number than #{$length}.";
+	//}
+ */
+
+$config : (
+		'utility-classes' : true,
+		'modular-scaling' : (
+				'base' : null,
+				'ratio' : null,
+				'length' : null,
+				'preserve' : 0,
+		),
+		'custom-scaling' : (
+				'custom-values' : $map-ff,
+				'scale' : 100%,
+		),
+		'naming-convention' : (
+				'prefix' : 'f-size',
+				'prefix-class' : null,
+				'prefix-variable' : null,
+				'suffix' : 'numeric',
+				'suffix-class' : null,
+				'suffix-variable' : null,
+		)
+);
