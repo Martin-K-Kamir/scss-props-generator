@@ -131,13 +131,8 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 @function __scale-number($number, $scale: 100%) {
 
 	// Checks if `$scale` is not number
-	@if (meta.type-of($scale) != 'number') {
+	@if (meta.type-of($scale) != number) {
 		@error 'Value of `$scale` must be a number.';
-	}
-
-	// Checks if `$number` is not number
-	@if (meta.type-of($number) != 'number') {
-		@error 'Value of `$number` must be a number.';
 	}
 
 	// Checks if `$scale` have `%` as unit or is `unitless`
@@ -148,6 +143,10 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 	// Checks if value of `$scale` is less than `0`
 	@if ($scale < 0) {
 		@error 'Parameter `$scale` holds value `#{$scale}`. Value must be greater than `0`.';
+	}
+
+	@if (meta.type-of($number) == string) {
+		@return $number;
 	}
 
 	$scale : __remove-unit($scale, '%'); // Remove unit `%` from `$scale`
@@ -392,14 +391,23 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 	}
 }
 
+
 @mixin generate-type-scale($config: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $custom-values: null, $scale: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
 
 	@if ($config != null) {
 
-		@each $key, $value in $config {
-			@debug  $key;
+		@each $key, $map in $config {
 			@if (meta.type-of($key) != string) {
-				@error 'Parameter `$config` at mixin NECO, must be a type of map with keys of type of string.';
+				@error 'Invalid type: Parameter `$config` at mixin NECO, must be a type of map with keys of type string.';
+			} @else if (meta.type-of($key) == string and string.length($key) < 1) {
+				@error 'Invalid length: Parameter `$config` at mixin NECO, must be a map with keys of type string with atleast one character or more.';
+			}
+			@each $key, $value in $map {
+				@if (meta.type-of($key) != string) {
+					@error 'Invalid type: Parameter `$config` at mixin NECO, must be a type of map with keys of type string.';
+				} @else if (meta.type-of($key) == string and string.length($key) < 1) {
+					@error 'Invalid length: Parameter `$config` at mixin NECO, must be a map with keys of type string with atleast one character or more.';
+				}
 			}
 		}
 
@@ -423,23 +431,23 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 	}
 
 	@if ($base != null and $custom-values != null) {
-		@error 'Invalide usage: Parameters `$base` and `$custom-values` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$base` and `$custom-values` at mixin NECO, cannot be used together.';
 	} @else if ($ratio != null and $custom-values != null) {
-		@error 'Invalide usage: Parameters `$ratio` and `$custom-values` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$ratio` and `$custom-values` at mixin NECO, cannot be used together.';
 	} @else if ($length != null and $custom-values != null) {
-		@error 'Invalide usage: Parameters `$length` and `$custom-values` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$length` and `$custom-values` at mixin NECO, cannot be used together.';
 	} @else if ($preserve != 0 and $custom-values != null) {
-		@error 'Invalide usage: Parameters `$preserve` and `$custom-values` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$preserve` and `$custom-values` at mixin NECO, cannot be used together.';
 	}
 
 	@if ($base != null and $scale != 100%) {
-		@error 'Invalide usage: Parameters `$base` and `$scale` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$base` and `$scale` at mixin NECO, cannot be used together.';
 	} @else if ($ratio != null and $scale != 100%) {
-		@error 'Invalide usage: Parameters `$ratio` and `$scale` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$ratio` and `$scale` at mixin NECO, cannot be used together.';
 	} @else if ($length != null and $scale != 100%) {
-		@error 'Invalide usage: Parameters `$length` and `$scale` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$length` and `$scale` at mixin NECO, cannot be used together.';
 	} @else if ($preserve != 0 and $scale != 100%) {
-		@error 'Invalide usage: Parameters `$preserve` and `$scale` at mixin NECO, cannot be used together.';
+		@error 'Invalid usage: Parameters `$preserve` and `$scale` at mixin NECO, cannot be used together.';
 	}
 
 	@if ($base != null) {
@@ -455,45 +463,45 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 		@include __preserve-errors($preserve, $length);
 	}
 	@if ($utility-classes != true and $utility-classes != false) {
-		@error 'Invalide type: Parameter `$utility-classes` at mixin NECO, must be a boolean.';
+		@error 'Invalid type: Parameter `$utility-classes` at mixin NECO, must be a boolean.';
 	}
 	@if ($custom-values != null) {
 		@if (meta.type-of($custom-values) != map) {
-			@error 'Invalide type: Parameter `$custom-values` at mixin NECO, must be a map.';
+			@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map.';
 		} @else if (meta.type-of($custom-values) == map and $prefix != 'f-size-') {
-			@error 'Invalide usage: Parameters `$custom-values` and `$prefix` at mixin NECO, cannot be used together.';
+			@error 'Invalid usage: Parameters `$custom-values` and `$prefix` at mixin NECO, cannot be used together.';
 		} @else if (meta.type-of($custom-values) == map and $prefix-class != null) {
-			@error 'Invalide usage: Parameters `$custom-values` and `$prefix-class` at mixin NECO, cannot be used together.';
+			@error 'Invalid usage: Parameters `$custom-values` and `$prefix-class` at mixin NECO, cannot be used together.';
 		} @else if (meta.type-of($custom-values) == map and $prefix-variable != null) {
-			@error 'Invalide usage: Parameters `$custom-values` and `$prefix-variable` at mixin NECO, cannot be used together.';
+			@error 'Invalid usage: Parameters `$custom-values` and `$prefix-variable` at mixin NECO, cannot be used together.';
 		} @else if (meta.type-of($custom-values) == map and $suffix != 'numeric') {
-			@error 'Invalide usage: Parameters `$custom-values` and `$suffix` at mixin NECO, cannot be used together.';
+			@error 'Invalid usage: Parameters `$custom-values` and `$suffix` at mixin NECO, cannot be used together.';
 		} @else if (meta.type-of($custom-values) == map and $suffix-class != null) {
-			@error 'Invalide usage: Parameters `$custom-values` and `$suffix-class` at mixin NECO, cannot be used together.';
+			@error 'Invalid usage: Parameters `$custom-values` and `$suffix-class` at mixin NECO, cannot be used together.';
 		} @else if (meta.type-of($custom-values) == map and $suffix-variable != null) {
-			@error 'Invalide usage: Parameters `$custom-values` and `$suffix-variable` at mixin NECO, cannot be used together.';
+			@error 'Invalid usage: Parameters `$custom-values` and `$suffix-variable` at mixin NECO, cannot be used together.';
 		}
 		@each $key, $value in $custom-values {
 			@if (meta.type-of($value) != number and meta.type-of($value) != string and meta.type-of($value) != boolean and meta.type-of($value) != map) {
-				@error 'Invalide type: Parameter `$custom-values` at mixin NECO, must be a map with values of type number, string, boolean or map.';
+				@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with values of type number, string, boolean or map.';
 			} @else if (meta.type-of($value) == string) {
 				@if (string.length($value) < 1) {
-					@error 'Invalide length: Parameter `$custom-values` at mixin NECO, must be a map with values of type string with length greater than 0.';
+					@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with values of type string with length greater than 0.';
 				}
 			} @else if (meta.type-of($key) != string) {
-				@error 'Invalide type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
+				@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
 			} @else if (string.length($key) < 1) {
-				@error 'Invalide length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
+				@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
 			}
 		}
 	}
 	@if ($scale) {
 		@if (meta.type-of($scale) != 'number') {
-			@error 'Invalide type: Parameter `$scale` at mixin NECO, must be a number.';
+			@error 'Invalid type: Parameter `$scale` at mixin NECO, must be a number.';
 		} @else if (math.unit($scale) != '%') {
-			@error 'Invalide unit: Parameter `$scale` at mixin NECO, must be a number with unit of %.';
+			@error 'Invalid unit: Parameter `$scale` at mixin NECO, must be a number with unit of %.';
 		} @else if ($scale < 0) {
-			@error 'Invalide value: Parameter `$scale` at mixin NECO, must be a number greater than 0.';
+			@error 'Invalid value: Parameter `$scale` at mixin NECO, must be a number greater than 0.';
 		}
 	}
 	@if ($prefix != null) {
@@ -559,17 +567,18 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 
 		@if (map.has-key($map, 'breakpoint-condition')) {
 			$breakpoint-condition : map.get($map, 'breakpoint-condition');
+			$map                  : map.remove($map, 'breakpoint-condition');
 
 			@if ($breakpoint-condition == 'min' or $breakpoint-condition == 'max') {
 				@each $breakpoint, $map-values in $map {
 					@if ($breakpoint == 'default') {
 						@each $key, $value in $map-values {
 							@if (meta.type-of($key) != string) {
-								@error 'Invalide type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
+								@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
 							} @else if (string.length($key) < 1) {
-								@error 'Invalide length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
-							} @else if (meta.type-of($value) != number) {
-								@error 'Invalide type: Outputted values must be type of number.';
+								@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
+							} @else if (meta.type-of($value) != number and meta.type-of($value) != string) {
+								@error 'Invalid type: Outputted values must be type of number OR STRING FIX ERRORS YOU LAZZY SHIT.';
 							}
 
 							$value    : __scale-number($value, $scale);
@@ -587,17 +596,19 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 					} @else {
 						@include breakpoint($breakpoint-condition, $breakpoint) {
 							@each $key, $value in $map-values {
-								@if (meta.type-of($value) == number) {
-									@if (meta.type-of($key) != string) {
-										@error 'Invalide type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
-									} @else if (string.length($key) < 1) {
-										@error 'Invalide length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
-									}
 
-									$value    : __scale-number($value, $scale);
 
-									--#{$key} : #{$value};
+								@if (meta.type-of($key) != string) {
+									@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
+								} @else if (string.length($key) < 1) {
+									@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
+								} @else if (meta.type-of($value) != number and meta.type-of($value) != string) {
+									@error 'Invalid type: Outputted values must be type of number OR STRING FIX ERRORS YOU LAZZY SHIT.';
 								}
+
+								$value    : __scale-number($value, $scale);
+
+								--#{$key} : #{$value};
 
 
 							}
@@ -606,7 +617,7 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 
 				}
 			} @else {
-				@error 'Invalide key value: `breakpoint-condition` must be either `min` or `max` not `#{$breakpoint-condition}`.';
+				@error 'Invalid key value: `breakpoint-condition` must be either `min` or `max` not `#{$breakpoint-condition}`.';
 			}
 
 		} @else {
@@ -626,14 +637,13 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 				}
 			}
 
-			@if ($config != null and map.has-key($config, 'breakpoint-condition')) {
+			@if ($config != null and map.has-key($config,'custom-scaling', 'breakpoint-condition')) {
 				$breakpoint-condition : map.get($config, 'custom-scaling', 'breakpoint-condition');
 				$breakpoints          : map.get($config, 'custom-scaling', 'breakpoints');
 
 				@each $breakpoint-key, $breakpoint-map in $breakpoints {
 					@include breakpoint($breakpoint-condition, $breakpoint-key) {
 						@each $key, $value in $breakpoint-map {
-							@debug $value;
 							$value    : __scale-number($value, $scale); // Value of current `$key` in each loop from map of custom values. The value is scaled based on `$breakpoint-value` value. As default `$breakpoint-value` is set to 100%.
 
 							//!IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$key` and `$value`.
@@ -741,7 +751,7 @@ $list-s    : (1rem, 2, 3rem, 4.5);
 $map-ff    : (
 		'breakpoint-condition': 'max',
 		'default' : (
-				'f-size-1' : 1rem,
+				'f-size-1' : #{var(--f-size-asd)},
 				'f-size-2' : 1.5rem,
 				'f-size-3' : 2rem,
 				'f-size-4' : 2.5rem,
@@ -753,7 +763,7 @@ $map-ff    : (
 				'f-size-10' : 8rem,
 		),
 		'tablet-md' : (
-				'f-size-7' : #333333,
+				'f-size-7' : #{var(--f-size-asd)},
 				'f-size-8' : 3rem,
 				'f-size-9' : 4rem,
 				'f-size-10' : 5rem,
@@ -765,61 +775,32 @@ $map-ff    : (
 );
 
 $map-f     : (
-		'f-size-1' : 2,
+		'f-size-1' : #{var(--f-size-asd)},
 		'f-size-2' : 1.5,
 		'f-size-3' : 2,
-		'f-size-4' : 2.5,
+		'f-size-4' : 2.5rem,
 		'f-size-5' : 3,
 		'f-size-6' : 3.5rem,
-		'f-size-7' : 4,
-		'f-size-8' : 5,
-		'f-size-9' : 6,
-		'f-size-10' : 7,
+		'f-size-7' : 4rem,
+		'f-size-8' : 5rem,
+		'f-size-9' : 6rem,
+		'f-size-10' : 7rem,
 );
 
 $map-fmin  : (
-		'f-size-7' : 4,
+		'f-size-7' : #{var(--f-size-asd)},
 		'f-size-8' : 3,
 		'f-size-9' : 4,
-		'f-size-10' : 5,
+		'f-size-10' : 6rem,
 );
 
 $map-fmin2 : (
-		'f-size-9' : 3,
-		'f-size-10' : 55,
-);
-
-//
-//$config : (
-//		'utility-classes' : 1,
-//		'modular-scaling' : (
-//				'base' : 1rem,
-//				'ratio' : 'major-second',
-//				'length' : 10,
-//				'preserve' : 5,
-//		),
-//);
-
-//$config    : (
-//		'custom-scaling' : (
-//				'custom-values' : $map-f,
-//				'breakpoint-condition' : max,
-//				'breakpoints': (
-//						'tablet-md' : $map-fmin,
-//						'tablet-min' : $map-fmin2,
-//				),
-//		)
-//);
-
-$config    : (
-		'' : (
-				'custom-values' : $map-ff,
-				'scale' : 50%,
-		)
+		'f-size-9' : #{var(--f-size-asd)},
+		'f-size-10' : 5rem,
 );
 
 $config : (
-		'' : (
+		'modular-scaling' : (
 				'base' : 1rem,
 				'ratio' : 'major-second',
 				'length' : 10,
@@ -827,8 +808,37 @@ $config : (
 		),
 );
 
+$config    : (
+		'custom-scaling' : (
+				'custom-values' : $map-f,
+				'breakpoint-condition' : 'max',
+				'breakpoints': (
+						'tablet-md' : $map-fmin,
+						'tablet-min' : $map-fmin2,
+				),
+		),
+);
+
+//$config    : (
+//		'custom-scaling': (
+//				'custom-values' : $map-f,
+//		),
+//);
+
+
+// TO DO
+// CHECK 'breakpoint-condition' AND 'max or min',
+// CHECK FOR custom-values
+// CHECK FOR breakpoints
+// CHECK FOR breakpoints -> value is map
+// Check maps
+// Check lists
+// modular-scaling -> generated-scaling
+
 
 :root {
+	--f-size-asd : 6rem;
+
 	@include generate-type-scale($config);
 	//@include generate-type-scale($custom-values : $map-f, $scale : 100%);
 	//@include generate-type-scale($base : 2rem, $ratio : 'major-second', $length : 9, $prefix: 'text-', $suffix-variable: 'size-and-x-minmax');
@@ -836,10 +846,6 @@ $config : (
 	@include breakpoint(max, 1000px) {
 	}
 }
-
-
-
-
 
 
 
