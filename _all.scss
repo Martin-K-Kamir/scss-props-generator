@@ -782,7 +782,7 @@
 }
 
 
-$map-ff       : (
+$map-ff          : (
 		'breakpoint-condition': 'max',
 		'default' : (
 				'f-size-1' : #{var(--f-size-asd)},
@@ -808,7 +808,7 @@ $map-ff       : (
 		),
 );
 
-$map-f        : (
+$map-f           : (
 		'f-size-1' : #{var(--f-size-asd)},
 		'f-size-2' : 1.5,
 		'f-size-3' : 2,
@@ -821,19 +821,19 @@ $map-f        : (
 		'f-size-10' : 7rem,
 );
 
-$map-fmin     : (
+$map-fmin        : (
 		'f-size-7' : #{var(--f-size-asd)},
 		'f-size-8' : 3,
 		'f-size-9' : 4,
 		'f-size-10' : 6rem,
 );
 
-$map-fmin2    : (
+$map-fmin2       : (
 		'f-size-9' : #{var(--f-size-asd)},
 		'f-size-10' : 5rem,
 );
 
-$config       : (
+$config          : (
 		'modular-scaling' : (
 				'base' : 1rem,
 				'ratio' : 'major-second',
@@ -842,7 +842,7 @@ $config       : (
 		),
 );
 
-$config       : (
+$config          : (
 		'custom-scaling' : (
 				'custom-values' : $map-f,
 				'breakpoint-condition' : 'max',
@@ -854,12 +854,12 @@ $config       : (
 );
 
 
-$list-f       : (1rem, 1.5rem, 1.8rem, 2rem, 2.5rem, 3rem, 3.5rem, 4rem, 5rem, 6rem);
-$list-fa      : (2rem, 2.5rem, 2.8rem, 3rem, 3.5rem, 4rem, 4.5rem, 5rem, 6rem, 7rem);
-$list-fmin    : (2.8rem, 3.2rem, 3.5rem, 4rem, 5rem);
-$list-fminer  : (3.8rem, 4.8rem);
-$list-fminest : (4.5rem);
-$config       : (
+$list-f          : (1rem, 1.5rem, 1.8rem, 2rem, 2.5rem, 3rem, 3.5rem, 4rem, 5rem, 6rem);
+$list-fa         : (2rem, 2.5rem, 2.8rem, 3rem, 3.5rem, 4rem, 4.5rem, 5rem, 6rem, 7rem);
+$list-fmin       : (2.8rem, 3.2rem, 3.5rem, 4rem, 5rem);
+$list-fminer     : (3.8rem, 4.8rem);
+$list-fminest    : (4.5rem);
+$config          : (
 		'custom-scaling': (
 				'custom-values' : $list-f,
 				'scale' : 100%,
@@ -881,17 +881,154 @@ $config       : (
 //		),
 //);
 
+@function _config-get($config, $key) {
+	@if map.has-key($config, $key) {
+		@return map.get($config, $key);
+	} @else {
+		@return $config;
+	}
+}
 
-@mixin font-scale($config) {
+
+@mixin generatorA($config) {
+ // shooo
+};
+
+
+@mixin _validate-parameters($config) {
+	$selector : map.get($config, 'selector');
+	$base : map.get($config, 'base');
+	@debug $config;
+};
+
+
+
+@mixin generate-fonts-scale($config: null, $base: null, $ratio: null, $length: 0, $preserve: 0, $utility-classes: true, $custom-values: null, $scale: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
+	$_key    : 'fonts-scale';
+	$_config : (
+			'selector' : 'font-size',
+			'base' : $base,
+			'ratio' : $ratio,
+			'length' : $length,
+			'preserve' : $preserve,
+			'utility-classes' : $utility-classes,
+			'custom-values' : $custom-values,
+			'scale' : $scale,
+			'prefix' : $prefix,
+			'suffix' : $suffix,
+			'prefix-class' : $prefix-class,
+			'prefix-variable' : $prefix-variable,
+			'suffix-class' : $suffix-class,
+			'suffix-variable' : $suffix-variable,
+	);
+
+
+	@if $config != null {
+		$_config : map.deep-merge($_config, _config-get($config, $_key));
+	}
+
+	@include _validate-parameters($_config);
+	@include generatorA($_config)
+}
+
+@mixin generate-flows-scale($config, $base: null, $ratio: null, $length: 0, $preserve: 0, $utility-classes: true, $custom-values: null, $scale: 100%, $prefix: 'space-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
+	$_key    : 'flows-scale';
+	$_config : (
+			'base' : $base,
+			'ratio' : $ratio,
+			'length' : $length,
+			'preserve' : $preserve,
+			'utility-classes' : $utility-classes,
+			'custom-values' : $custom-values,
+			'scale' : $scale,
+			'prefix' : $prefix,
+			'suffix' : $suffix,
+			'prefix-class' : $prefix-class,
+			'prefix-variable' : $prefix-variable,
+			'suffix-class' : $suffix-class,
+			'suffix-variable' : $suffix-variable,
+	);
+
+
+	@if $config != null {
+		$_config : map.deep-merge($_config, _config-get($config, $_key));
+	}
+
+	@include _validate-parameters($_config);
+	@include generatorA($_config);
 
 }
 
-@mixin flow-scale($config) {
-}
+$test-config     : (
+		'bas' : 2rem,
+		'ratio' : 1.125,
+		'length' : 10,
+);
+
+$config-ultimate : (
+		'fonts-scale' : (
+				'custom-values' : $list-f,
+				'breakpoints': (
+						'pc-xs' : $list-fmin,
+						'tablet-max' : $list-fminer,
+						'phone-max' : $list-fminest,
+				),
+		),
+		'flows-scale' : (
+				'base' : 1rem,
+				'ratio' : 'major-second',
+				'length' : 10,
+		),
+		'fluid-fonts' : (
+			// config
+		),
+		'fluid-spaces' : (
+			// config
+		),
+		'colors-scale' : (
+				'predefined' : true,
+				'scale' : (20%, 40%, 80%),
+				'primary' : crimson,
+				'secondary' : steelblue,
+				'tertiary' : (
+						'src' : ('list'),
+						'default' : #555555,
+						'lighter' : #555555,
+						'light' : #555555,
+						'dark' : #555555,
+						'darker' : #555555,
+				),
+				'text' : #000000,
+				'surface' : #ffffff,
+				'btn-primary' : #333333,
+				'btn-secondary' : crimson,
+				'facebook' : true,
+				'twitter' : true,
+				'instagram' : true,
+				'state' : (
+						'predefined' : true,
+						'src' : ('map'),
+						'error' : #333333,
+						'warning' : #333333,
+						'success' : #333333,
+				),
+		),
+		'line-height' : (
+				'src' : $map-for-lineheights,
+				'prefix' : 'line-height-',
+		),
+		'letter-spacing' : $map-for-letterspacing,
+		'shadows' : $map-for-shadows,
+		'properties' : 'all'
+);
+
 
 :root {
 	//--f-size-asd : 6rem;
-
+	//@include generate-fonts-scale($test-config);
+	//@include generate-fonts-scale($base : 1rem, $ratio: 1.125, $length: 10);
+	@include generate-fonts-scale($config-ultimate);
+	@include generate-flows-scale($test-config);
 
 	@include generator($custom-values : $list-f, $prefix : 'text-', $suffix : 'numeric', $utility-classes : false);
 	@include generator($custom-values : $list-fa, $prefix : 'size-', $suffix : 'size-x-minmax', $utility-classes : false);
@@ -902,30 +1039,24 @@ $config       : (
 	@include breakpoint(max, 1000px) {
 	}
 }
-//
-//
-//$config       : (
-//		'font-scale' : (
-//				'custom-scaling': (
-//						'custom-values' : $list-f,
-//						'breakpoints': (
-//								'pc-xs' : $list-fmin,
-//								'tablet-max' : $list-fminer,
-//								'phone-max' : $list-fminest,
-//						),
-//				),
-//		),
-//		'flow-scale' : (
-//				'modular-scaling': (
-//						'base' : 1rem,
-//						'ratio' : 'major-second',
-//						'length' : 10,
-//				),
-//		),
-//		'line-height' : (
-//				'src' : $map-for-lineheights,
-//				'prefix' : 'line-height-',
-//		),
-//		'letter-spacing' : $map-for-letterspacing,
-//		'shadows' : $map-for-shadows,
-//);
+
+@mixin generate-fluid-fonts($config) {
+	// do something
+}
+
+@mixin generate-fluid-flows($config) {
+	// do something
+}
+
+@mixin generate-colors-scale($config) {
+	// do something
+}
+
+@mixin generate-properties($config) {
+	// do something
+}
+
+@mixin generator($config) {
+	// do something
+}
+
