@@ -193,7 +193,7 @@ $list-fminest    : (4.5rem);
 //);
 
 
-@function __get-value($base, $ratio, $preserve, $i, $variable-prefix: null, $variable-suffix: null) {
+@function _get-value($base, $ratio, $preserve, $i, $variable-prefix: null, $variable-suffix: null) {
 	@if ($preserve >= $i) {
 		$get-number : __scalable-system($base, $ratio, $preserve, $i, $variable-prefix);
 		$sliced-number : __number-slice($get-number);
@@ -254,21 +254,21 @@ $list-fminest    : (4.5rem);
 /**
  * Returns `$list` of corresponding suffixes. Based on `$set-suffix`.
  *
- * NOTE: This is helper function for function `__get-suffix-list`.
+ * NOTE: This is helper function for function `_get-suffix-list`.
  *
  * @author - Martin Kamír
  *
  * @example
- * __get-suffix-list('size-x-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, s, m, l, max);
- * __get-suffix-list('size-x', (1rem, 2rem, 3rem, 4rem, 5rem)) => (xs, s, m, l, xl);
- * __get-suffix-list('size-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, small, medium, large, max);
- * @overload __get-suffix-list($set-suffix, $set-list-of-values, $minmax: false)
+ * _get-suffix-list('size-x-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, s, m, l, max);
+ * _get-suffix-list('size-x', (1rem, 2rem, 3rem, 4rem, 5rem)) => (xs, s, m, l, xl);
+ * _get-suffix-list('size-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, small, medium, large, max);
+ * @overload _get-suffix-list($set-suffix, $set-list-of-values, $minmax: false)
  * @param $set-suffix {string} - Name of the set suffix that will be used in outputting the suffix. Which is originally called from main `@mixin` as `suffix` parameter.
  * @param $set-list-of-values {list} - List of values that are being used for generating. Which is originally called from main `@mixin` as `$custom-sizes` parameter.
  * @param $minmax {boolean} - As default set to false. If set to true, suffixes will be generated for `min` and `max` values.
  * @return list of suffixes
  */
-@function __get-suffix-list($set-suffix, $length, $minmax: false) {
+@function _get-suffix-list($set-suffix, $length, $minmax: false) {
 	// Get higher and lower suffixes list from map for suffixes
 	$get-lower-list : map.get($map-for-suffixes, $set-suffix, lower-values);
 	$get-higher-list : map.get($map-for-suffixes, $set-suffix, higher-values);
@@ -306,17 +306,17 @@ $list-fminest    : (4.5rem);
  * @author - Martin Kamír
  *
  * @example
- * __get-suffix(numeric, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.2rem, 2) => 2;
- * __get-suffix(numeric-hundreds, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.2rem, 2) => 200;
- * __get-suffix(hard-suffix, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.5rem, 3) => 2-5;
- * __get-suffix((1A, 2A, 3A, 4A, 5A, 6A), (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 4rem, 4) => 4A;
- * __get-suffix(roman, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.5rem, 3) => III;
- * __get-suffix(size, (1rem, 2rem, 3rem, 4rem, 5rem), 3rem, 3) => medium;
- * __get-suffix(size-x-minmax, (1rem, 2rem, 3rem, 4rem, 5rem), 1rem, 1) => min;
- * __get-suffix(size-and-number, (1rem, 2rem, 3rem, 4rem, 5rem), 1rem, 1) => small-2;
- * __get-suffix(size-and-x, (1rem, 2rem, 3rem, 4rem, 5rem), 5rem, 5) => big-xl;
+ * _get-suffix(numeric, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.2rem, 2) => 2;
+ * _get-suffix(numeric-hundreds, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.2rem, 2) => 200;
+ * _get-suffix(hard-suffix, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.5rem, 3) => 2-5;
+ * _get-suffix((1A, 2A, 3A, 4A, 5A, 6A), (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 4rem, 4) => 4A;
+ * _get-suffix(roman, (1rem, 2.2rem, 2.5rem, 4rem, 5rem), 2.5rem, 3) => III;
+ * _get-suffix(size, (1rem, 2rem, 3rem, 4rem, 5rem), 3rem, 3) => medium;
+ * _get-suffix(size-x-minmax, (1rem, 2rem, 3rem, 4rem, 5rem), 1rem, 1) => min;
+ * _get-suffix(size-and-number, (1rem, 2rem, 3rem, 4rem, 5rem), 1rem, 1) => small-2;
+ * _get-suffix(size-and-x, (1rem, 2rem, 3rem, 4rem, 5rem), 5rem, 5) => big-xl;
  *
- * @overload __get-suffix($set-suffix: 'numeric', $set-list-of-values, $i)
+ * @overload _get-suffix($set-suffix: 'numeric', $set-list-of-values, $i)
  *
  * @param $set-suffix {string} - As default set to `numeric`.
  * It is name of the set suffix that will be used in outputting the suffix.
@@ -329,7 +329,7 @@ $list-fminest    : (4.5rem);
  * @param $i {number} - The current index in loop.
  * @return string suffix
  */
-@function __get-suffix($set-suffix: 'numeric', $length,  $i) {
+@function _get-suffix($set-suffix: 'numeric', $length,  $i) {
 
 	@if ($set-suffix == 'numeric') {
 		@return $i; // Returns the current number based on the index
@@ -350,18 +350,18 @@ $list-fminest    : (4.5rem);
 
 		// Map which holds corresponding suffixes for `size scaling`
 		$map-of-suffixes : (
-				'size' : __get-suffix-list($set-suffix, $length),
-				'size-minmax' : __get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-shorted' : __get-suffix-list($set-suffix, $length),
-				'size-shorted-minmax' : __get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-x' : __get-suffix-list($set-suffix, $length),
-				'size-x-minmax' : __get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-gradation' : __get-suffix-list($set-suffix, $length),
-				'size-gradation-minmax' : __get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-and-number' : __get-suffix-list($set-suffix, $length),
-				'size-and-number-minmax' : __get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-and-x' : __get-suffix-list($set-suffix, $length),
-				'size-and-x-minmax' : __get-suffix-list($set-suffix, $length, $minmax : true)
+				'size' : _get-suffix-list($set-suffix, $length),
+				'size-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
+				'size-shorted' : _get-suffix-list($set-suffix, $length),
+				'size-shorted-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
+				'size-x' : _get-suffix-list($set-suffix, $length),
+				'size-x-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
+				'size-gradation' : _get-suffix-list($set-suffix, $length),
+				'size-gradation-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
+				'size-and-number' : _get-suffix-list($set-suffix, $length),
+				'size-and-number-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
+				'size-and-x' : _get-suffix-list($set-suffix, $length),
+				'size-and-x-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true)
 		);
 
 		// Loop over map and check if `$set-suffix` corresponding with `$key-suffix`
@@ -377,9 +377,9 @@ $list-fminest    : (4.5rem);
 
 @function __set-suffix($set-suffix, $set-specified-suffix, $length, $i) {
 	@if ($set-specified-suffix != null) {
-		@return __get-suffix($set-specified-suffix, $length, $i);
+		@return _get-suffix($set-specified-suffix, $length, $i);
 	} @else {
-		@return __get-suffix($set-suffix, $length, $i);
+		@return _get-suffix($set-suffix, $length, $i);
 	}
 }
 
@@ -392,7 +392,7 @@ $list-fminest    : (4.5rem);
 }
 
 
-@function __set-prefix($set-prefix, $set-specified-prefix) {
+@function _set-prefix($set-prefix, $set-specified-prefix) {
 	@if ($set-specified-prefix != null) {
 		@return $set-specified-prefix;
 	} @else {
@@ -400,15 +400,20 @@ $list-fminest    : (4.5rem);
 	}
 }
 
-@mixin __variable-body($prefix, $suffix, $value) {
+@mixin _variable($prefix, $suffix, $value) {
 	--#{$prefix}#{$suffix} : #{$value};
 }
 
-@mixin __declaration-body($prefix, $suffix, $selector: 'font-size') {
-	#{$selector} : var(--#{$prefix}#{$suffix});
+@mixin _declaration($prefix, $suffix, $value, $selector: 'font-size') {
+	@if $selector == 'none' {
+		--#{$prefix}: var(--#{$prefix}#{$suffix});
+	} @else {
+		#{$selector} : var(--#{$prefix}#{$suffix});
+	}
+
 }
 
-@function __class-body($prefix, $suffix,) {
+@function _class($prefix, $suffix) {
 	@return #{$prefix}#{$suffix};
 }
 
@@ -441,7 +446,7 @@ $list-fminest    : (4.5rem);
 	$prefix-specified-variable : $prefix-variable;
 	$suffix-specified-class    : $suffix-class;
 	$suffix-specified-variable : $suffix-variable;
-	$variable-prefix           : __set-prefix($prefix, $prefix-specified-variable); // Variable prefix based on called `$prefix` or `$prefix-variable` parameters. `$prefix-variable` have bigger priority than `$prefix`.
+	$variable-prefix           : _set-prefix($prefix, $prefix-specified-variable); // Variable prefix based on called `$prefix` or `$prefix-variable` parameters. `$prefix-variable` have bigger priority than `$prefix`.
 
 	////////////////////////////////////////
 	// Checks if `$custom-values` is list.
@@ -457,11 +462,11 @@ $list-fminest    : (4.5rem);
 			@include __variable-body($variable-prefix, $variable-suffix, $value);
 
 			@if ($utility-classes) {
-				$class-prefix : __set-prefix($prefix, $prefix-specified-class); // Class prefix based on called `$prefix` or `$prefix-class` parameters. `$prefix-class` have bigger priority than `$prefix`.
+				$class-prefix : _set-prefix($prefix, $prefix-specified-class); // Class prefix based on called `$prefix` or `$prefix-class` parameters. `$prefix-class` have bigger priority than `$prefix`.
 				$class-suffix : __set-suffix($suffix, $suffix-specified-class, $custom-values-length, $i); // Class suffix based on called `$suffix` or `$suffix-class` parameters. `$suffix-class` have bigger priority than `$suffix`.
 
 				// !IMPORTANT! - The actual class which is outputted. The class is outputted based on `$prefix-class` and `$suffix-class`.
-				@at-root .#{__class-body($class-prefix, $class-suffix)} {
+				@at-root .#{_class($class-prefix, $class-suffix)} {
 
 					// !IMPORTANT! - The actual declaration line which is outputted. The declaration is outputted based on `$prefix-class` and `$suffix-class`.
 					@include __declaration-body($variable-prefix, $variable-suffix);
@@ -648,10 +653,10 @@ $list-fminest    : (4.5rem);
 
 				// If utility classes are true do as mentioned above.
 				@if ($utility-classes) {
-					$class-prefix : __set-prefix($prefix, $prefix-specified-class);
+					$class-prefix : _set-prefix($prefix, $prefix-specified-class);
 					$class-suffix : __set-suffix($suffix, $suffix-specified-class, $length, $i);
 
-					@at-root .#{__class-body($class-prefix, $class-suffix)} {
+					@at-root .#{_class($class-prefix, $class-suffix)} {
 						@include __declaration-body($variable-prefix, $variable-suffix);
 					}
 				}
@@ -661,8 +666,8 @@ $list-fminest    : (4.5rem);
 
 				// At first iteration in the loop
 				@if ($i == 1) {
-					// !IMPORTANT -  The actual value which is outputted. By using `__get-value` function.
-					$value                  : __get-value($base, $ratio, $preserve, $i, $variable-prefix);
+					// !IMPORTANT -  The actual value which is outputted. By using `_get-value` function.
+					$value                  : _get-value($base, $ratio, $preserve, $i, $variable-prefix);
 
 					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
 					@include __variable-body($variable-prefix, $variable-suffix, $value);
@@ -671,8 +676,8 @@ $list-fminest    : (4.5rem);
 				} @else {
 					$variable-suffix-before : __set-suffix($suffix, $suffix-specified-variable, $length, $i - 1); // Variable suffix from the previous iteration. So we can chain all the values and generate the scalable values.
 
-					// !IMPORTANT -  The actual value which is outputted. By using `__get-value` function.
-					$value                  : __get-value($base, $ratio, $preserve, $i, $variable-prefix, $variable-suffix-before);
+					// !IMPORTANT -  The actual value which is outputted. By using `_get-value` function.
+					$value                  : _get-value($base, $ratio, $preserve, $i, $variable-prefix, $variable-suffix-before);
 
 					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
 					@include __variable-body($variable-prefix, $variable-suffix, $value);
@@ -680,10 +685,10 @@ $list-fminest    : (4.5rem);
 
 				// If utility classes are true do as mentioned above.
 				@if ($utility-classes) {
-					$class-prefix : __set-prefix($prefix, $prefix-specified-class);
+					$class-prefix : _set-prefix($prefix, $prefix-specified-class);
 					$class-suffix : __set-suffix($suffix, $suffix-specified-class, $length, $i);
 
-					@at-root .#{__class-body($class-prefix, $class-suffix)} {
+					@at-root .#{_class($class-prefix, $class-suffix)} {
 						@include __declaration-body($variable-prefix, $variable-suffix);
 					}
 				}
@@ -693,82 +698,59 @@ $list-fminest    : (4.5rem);
 }
 
 @mixin generatorA($config) {
-	$base              : map.get($config, 'base');
-	$ratio             : map.get($config, 'ratio');
-	$length            : map.get($config, 'length');
-	$preserve          : map.get($config, 'preserve');
-	$utility-classes   : map.get($config, 'utility-classes');
-	$src               : map.get($config, 'src');
-	$break-at          : map.get($config, 'break-at');
-	$breakpoints       : map.get($config, 'breakpoints');
-	$scale             : map.get($config, 'scale');
-	$prefix            : map.get($config, 'prefix');
-	$prefix-class      : map.get($config, 'prefix-class');
-	$prefix-variable   : map.get($config, 'prefix-variable');
-	$suffix            : map.get($config, 'suffix');
-	$suffix-class      : map.get($config, 'suffix-class');
-	$suffix-variable   : map.get($config, 'suffix-variable');
 
-	$src-length        : list.length($src);
-	$prefix-c          : __set-prefix($prefix, $prefix-class);
-	$prefix-v          : __set-prefix($prefix, $prefix-variable);
-	$suffix-c          : _set-suffix($suffix, $suffix-class);
-	$suffix-v          : _set-suffix($suffix, $suffix-variable);
-	$ratio             : if(map.has-key($map-for-ratios, $ratio), map.get($map-for-ratios, $ratio), $ratio);
+	$selector        : map.get($config, 'selector');
+	$base            : map.get($config, 'base');
+	$ratio           : map.get($config, 'ratio');
+	$length          : map.get($config, 'length');
+	$preserve        : map.get($config, 'preserve');
+	$utility-classes : map.get($config, 'utility-classes');
+	$src             : map.get($config, 'src');
+	$break-at        : map.get($config, 'break-at');
+	$breakpoints     : map.get($config, 'breakpoints');
+	$scale           : map.get($config, 'scale');
+	$prefix          : map.get($config, 'prefix');
+	$prefix-class    : map.get($config, 'prefix-class');
+	$prefix-variable : map.get($config, 'prefix-variable');
+	$suffix          : map.get($config, 'suffix');
+	$suffix-class    : map.get($config, 'suffix-class');
+	$suffix-variable : map.get($config, 'suffix-variable');
 
-	--ratio            : #{$ratio};
-	--#{$prefix-v}base : #{$base};
+	$src-length      : list.length($src);
+	$ratio           : if(map.has-key($map-for-ratios, $ratio), map.get($map-for-ratios, $ratio), $ratio);
 
+
+	$prefix : _set-prefix($prefix, $prefix-variable);
+	$suffix : _set-suffix($suffix, $suffix-variable);
+	--#{$prefix}ratio          : #{$ratio};
+	--#{$prefix}base : #{$base};
 
 	@for $i from 1 through $length {
-		$variable-suffix : __set-suffix($suffix, $suffix-variable, $length, $i);
+		$_suffix                : _get-suffix($suffix, $length, $i);
+		$__suffix               : null;
+		$value                  : calc(var(--#{$prefix}base) * var(--ratio));
 
-		@if ($preserve == 0) {
-			@if ($i == 1) {
-				$value                  : calc(var(--#{$prefix-v}base) * var(--ratio));
+		@if $i > 1 {
+			$__suffix : _get-suffix($suffix, $length, $i - 1);
+			$value    : calc(var(--#{$prefix}#{$__suffix}) * var(--ratio));
+		}
 
-				@include __variable-body($prefix-v, $variable-suffix, $value);
+		@if $preserve > 1 {
+			$value : _get-value($base, $ratio, $preserve, $i, $prefix);
 
-			} @else {
-				$variable-suffix-before : __set-suffix($suffix, $suffix-variable, $length, $i - 1);
-				$value                  : calc(var(--#{$prefix-v}#{$variable-suffix-before}) * var(--ratio));
-
-				@include __variable-body($prefix-v, $variable-suffix, $value);
-			}
-
-			@if ($utility-classes) {
-				$class-prefix : __set-prefix($prefix, $prefix-class);
-				$class-suffix : __set-suffix($suffix, $suffix-class, $length, $i);
-
-				@at-root .#{__class-body($class-prefix, $class-suffix)} {
-					@include __declaration-body($prefix-v, $variable-suffix);
-				}
-			}
-
-		} @else {
-			@if ($i == 1) {
-
-				$value                  : __get-value($base, $ratio, $preserve, $i, $prefix-v);
-
-				@include __variable-body($prefix-v, $variable-suffix, $value);
-
-
-			} @else {
-				$variable-suffix-before : __set-suffix($suffix, $suffix-variable, $length, $i - 1);
-
-				$value                  : __get-value($base, $ratio, $preserve, $i, $prefix-v, $variable-suffix-before);
-
-				@include __variable-body($prefix-v, $variable-suffix, $value);
-			}
-
-			@if ($utility-classes) {
-				$class-suffix : __set-suffix($suffix, $suffix-class, $length, $i);
-
-				@at-root .#{__class-body($prefix-c, $class-suffix)} {
-					@include __declaration-body($prefix-v, $variable-suffix);
-				}
+			@if $i > 1 {
+				$value : _get-value($base, $ratio, $preserve, $i, $prefix, $__suffix);
 			}
 		}
+
+		@include _variable($prefix, $_suffix, $value);
+
+		@if ($utility-classes) {
+			@at-root .#{_class(_set-prefix($prefix, $prefix-class), _get-suffix(_set-suffix($suffix, $suffix-class), $length, $i))} {
+				@include _declaration($prefix, $_suffix, $value,  $selector);
+			}
+		}
+
 	}
 }
 
@@ -833,7 +815,6 @@ $list-fminest    : (4.5rem);
 	$suffix          : map.get($config, 'suffix');
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
-
 
 	@if ($base != null or $ratio != null or $length != 1 or $preserve != 0) and
 		($src != null or $break-at != null or $breakpoints != null or $scale != 100%) {
@@ -930,7 +911,7 @@ $list-fminest    : (4.5rem);
 	@include generatorA($_config)
 }
 
-@mixin generate-flow-scales($config, $base: null, $ratio: null, $length: 0, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'space-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
+@mixin generate-flow-scales($config, $base: null, $ratio: null, $length: 0, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'flow-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
 	$key     : 'flow-scales';
 	$_config : (
 			'selector' : 'none',
@@ -1018,9 +999,13 @@ $config-ultimate : (
 $test-config     : (
 		'base' : 1rem,
 		'ratio' : 'major-second',
-		'length' : 10,
-		'preserve' : 5,
-		'suffix-variable' : 'roman',
+		'length' : 5,
+);
+
+$test-config2    : (
+		'base' : 0.5rem,
+		'ratio' : 'minor-second',
+		'length' : 5,
 );
 
 :root {
@@ -1028,7 +1013,7 @@ $test-config     : (
 	//@include generate-font-scales($test-config);
 	//@include generate-font-scales($base : 5rem, $ratio: 1.125, $length: 10);
 	//@include generate-font-scales($config-ultimate);
-	//@include generate-flow-scales($test-config);
+	@include generate-flow-scales($test-config2);
 	@include generate-font-scales($test-config);
 	//@include generate-flow-scales($config-ultimate);
 
