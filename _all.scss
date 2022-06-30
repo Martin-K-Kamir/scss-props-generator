@@ -124,21 +124,14 @@ $list-fminest    : (4.5rem);
 	@return if(type-of($value) != 'list', ($value,), $value);
 }
 
-@function _get-value($base, $ratio, $preserve, $i, $variable-prefix: null, $variable-suffix: null) {
+@function _get-value($base, $ratio, $preserve, $i, $prefix: null, $suffix: null) {
+
 	@if ($preserve >= $i) {
-		$get-number : __scalable-system($base, $ratio, $preserve, $i, $variable-prefix);
-		$sliced-number : __number-slice($get-number);
-		$number : $sliced-number;
-
-		@return $number;
+		@return _number-slice(_get-scale($base, $ratio, $preserve, $i, $prefix));
 	} @else if ($preserve + 1 == $i) {
-		$get-number : __scalable-system($base, $ratio, $preserve, $i, $variable-prefix);
-		$number : $get-number;
-
-		@return $number;
+		@return _get-scale($base, $ratio, $preserve, $i, $prefix);
 	} @else {
-
-		@return calc(var(--#{$variable-prefix}#{$variable-suffix}) * var(--ratio));
+		@return calc(var(--#{$prefix}#{$suffix}) * var(--ratio));
 	}
 }
 
@@ -183,27 +176,27 @@ $list-fminest    : (4.5rem);
 }
 
 /**
- * Returns `$list` of corresponding suffixes. Based on `$set-suffix`.
+ * Returns `$list` of corresponding suffixes. Based on `$suffix`.
  *
- * NOTE: This is helper function for function `_get-suffix-list`.
+ * NOTE: This is helper function for function `_create-suffix-list`.
  *
  * @author - Martin Kamír
  *
  * @example
- * _get-suffix-list('size-x-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, s, m, l, max);
- * _get-suffix-list('size-x', (1rem, 2rem, 3rem, 4rem, 5rem)) => (xs, s, m, l, xl);
- * _get-suffix-list('size-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, small, medium, large, max);
- * @overload _get-suffix-list($set-suffix, $set-list-of-values, $minmax: false)
- * @param $set-suffix {string} - Name of the set suffix that will be used in outputting the suffix. Which is originally called from main `@mixin` as `suffix` parameter.
+ * _create-suffix-list('size-x-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, s, m, l, max);
+ * _create-suffix-list('size-x', (1rem, 2rem, 3rem, 4rem, 5rem)) => (xs, s, m, l, xl);
+ * _create-suffix-list('size-minmax', (1rem, 2rem, 3rem, 4rem, 5rem), $minmax: true) => (min, small, medium, large, max);
+ * @overload _create-suffix-list($suffix, $set-list-of-values, $minmax: false)
+ * @param $suffix {string} - Name of the set suffix that will be used in outputting the suffix. Which is originally called from main `@mixin` as `suffix` parameter.
  * @param $set-list-of-values {list} - List of values that are being used for generating. Which is originally called from main `@mixin` as `$custom-sizes` parameter.
  * @param $minmax {boolean} - As default set to false. If set to true, suffixes will be generated for `min` and `max` values.
  * @return list of suffixes
  */
-@function _get-suffix-list($set-suffix, $length, $minmax: false) {
-	// Get higher and lower suffixes list from map for suffixes
-	$get-lower-list : map.get($map-for-suffixes, $set-suffix, lower-values);
-	$get-higher-list : map.get($map-for-suffixes, $set-suffix, higher-values);
+@function _create-suffix-list($suffix, $length, $minmax: false) {
 
+	// Get higher and lower suffixes list from map for suffixes
+	$lower-values : map.get($map-for-suffixes, $suffix, lower-values);
+	$higher-values : map.get($map-for-suffixes, $suffix, higher-values);
 
 	// Get the minimum and maximum index by
 	// 1. Getting the length of the list
@@ -213,9 +206,8 @@ $list-fminest    : (4.5rem);
 	$max-index : math.floor(math.div($length, 2));
 
 	// Slice the list to get the minimum and maximum values
-	$lower-list : __list-slice($get-lower-list, $end : $min-index);
-	$higher-list : __list-slice($get-higher-list, $end : $max-index);
-
+	$lower-list : __list-slice($lower-values, $end : $min-index);
+	$higher-list : __list-slice($higher-values, $end : $max-index);
 
 	// If `$minmax` is true, add `min` and `max` values to the list
 	@if ($minmax == true) {
@@ -232,7 +224,7 @@ $list-fminest    : (4.5rem);
 }
 
 /**
- * Returns string or number(as string) of suffix based on current `$i`, which have to corresponding with `$set-suffix`.
+ * Returns string or number(as string) of suffix based on current `$i`, which have to corresponding with `$suffix`.
  *
  * @author - Martin Kamír
  *
@@ -247,9 +239,9 @@ $list-fminest    : (4.5rem);
  * _get-suffix(size-and-number, (1rem, 2rem, 3rem, 4rem, 5rem), 1rem, 1) => small-2;
  * _get-suffix(size-and-x, (1rem, 2rem, 3rem, 4rem, 5rem), 5rem, 5) => big-xl;
  *
- * @overload _get-suffix($set-suffix: 'numeric', $set-list-of-values, $i)
+ * @overload _get-suffix($suffix: 'numeric', $set-list-of-values, $i)
  *
- * @param $set-suffix {string} - As default set to `numeric`.
+ * @param $suffix {string} - As default set to `numeric`.
  * It is name of the set suffix that will be used in outputting the suffix.
  * Which is originally called from main `@mixin` as `suffix` parameter.
  *
@@ -260,53 +252,54 @@ $list-fminest    : (4.5rem);
  * @param $i {number} - The current index in loop.
  * @return string suffix
  */
-@function _get-suffix($set-suffix: 'numeric', $length,  $i) {
+@function _get-suffix($suffix: 'numeric', $length,  $i) {
 
-	@if ($set-suffix == 'numeric') {
+	@if ($suffix == 'numeric') {
 		@return $i; // Returns the current number based on the index
 
-	} @else if ($set-suffix == 'numeric-hundreds') {
+	} @else if ($suffix == 'numeric-hundreds') {
 		@return $i + '00'; // Returns the current number based on the index and adds `00` to the end
 
-	} @else if (meta.type-of($set-suffix) == 'list') {
-		// Checks if `$set-suffix` is list. Which means that is custom suffixes list
-		@return list.nth($set-suffix, $i); // Returns suffix from list based on current `$i` in loop
+	} @else if (meta.type-of($suffix) == 'list') {
+		// Checks if `$suffix` is list. Which means that is custom suffixes list
+		@return list.nth($suffix, $i); // Returns suffix from list based on current `$i` in loop
 
-	} @else if (list.index(('roman', 'greek', 'military', 'planets', 'nato', 'alphabet', 'alphabet-upper', 'primary'), $set-suffix)) {
-		// Get corresponding suffix list based on `$set-suffix`
-		$list-of-suffixes : map.get($map-for-suffixes, $set-suffix);
+	} @else if (list.index(('roman', 'greek', 'military', 'planets', 'nato', 'alphabet', 'alphabet-upper', 'primary'), $suffix)) {
+		// Get corresponding suffix list based on `$suffix`
+		$list-of-suffixes : map.get($map-for-suffixes, $suffix);
 
 		@return list.nth($list-of-suffixes, $i); // Returns suffix from list based on current `$i` in loop
-	} @else if (list.index(('size', 'size-minmax', 'size-shorted', 'size-shorted-minmax', 'size-x', 'size-x-minmax', 'size-gradation', 'size-gradation-minmax', 'size-and-number', 'size-and-number-minmax', 'size-and-x', 'size-and-x-minmax'), $set-suffix)) {
+	} @else if (list.index(('size', 'size-minmax', 'size-shorted', 'size-shorted-minmax', 'size-x', 'size-x-minmax', 'size-gradation', 'size-gradation-minmax', 'size-and-number', 'size-and-number-minmax', 'size-and-x', 'size-and-x-minmax'), $suffix)) {
 
 		// Map which holds corresponding suffixes for `size scaling`
 		$map-of-suffixes : (
-				'size' : _get-suffix-list($set-suffix, $length),
-				'size-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-shorted' : _get-suffix-list($set-suffix, $length),
-				'size-shorted-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-x' : _get-suffix-list($set-suffix, $length),
-				'size-x-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-gradation' : _get-suffix-list($set-suffix, $length),
-				'size-gradation-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-and-number' : _get-suffix-list($set-suffix, $length),
-				'size-and-number-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true),
-				'size-and-x' : _get-suffix-list($set-suffix, $length),
-				'size-and-x-minmax' : _get-suffix-list($set-suffix, $length, $minmax : true)
+				'size' : _create-suffix-list($suffix, $length),
+				'size' : _create-suffix-list($suffix, $length),
+				'size-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
+				'size-shorted' : _create-suffix-list($suffix, $length),
+				'size-shorted-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
+				'size-x' : _create-suffix-list($suffix, $length),
+				'size-x-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
+				'size-gradation' : _create-suffix-list($suffix, $length),
+				'size-gradation-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
+				'size-and-number' : _create-suffix-list($suffix, $length),
+				'size-and-number-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
+				'size-and-x' : _create-suffix-list($suffix, $length),
+				'size-and-x-minmax' : _create-suffix-list($suffix, $length, $minmax : true)
 		);
 
-		// Loop over map and check if `$set-suffix` corresponding with `$key-suffix`
+		// Loop over map and check if `$suffix` corresponding with `$key-suffix`
 		@each $key-suffix, $list-of-suffixes in $map-of-suffixes {
-			@if ($set-suffix == $key-suffix) {
+			@if ($suffix == $key-suffix) {
 				@return list.nth($list-of-suffixes, $i); // Returns suffix from list based on current `$i` in loop
 			}
 		}
 	} @else {
-		@error 'Invalid suffix type of #{$set-suffix}. Valid types are: #{__map-keys($map-for-suffixes)}';
+		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{__map-keys($map-for-suffixes)}';
 	}
 }
 
-@function _set-name($name, $specified-name) {
+@function _get-name($name, $specified-name) {
 	@if ($specified-name != null) {
 		@return $specified-name;
 	} @else {
@@ -317,17 +310,14 @@ $list-fminest    : (4.5rem);
 @mixin _variable($prefix, $suffix: null, $value, $suffix-is: true) {
 	--#{$prefix}#{$suffix} : #{$value};
 }
+
 @mixin stack-classes($prefix: null) {
 	@at-root .stack {
-		display         : flex;
-		flex-direction  : column;
-		justify-content : flex-start;
+		display : grid;
+		gap     : var(--#{if($prefix != null, $prefix, 'space')});;
 	}
 	@at-root .stack > * {
-		margin-block : 0;
-	}
-	@at-root .stack > * + * {
-		margin-block-start : var(--#{if($prefix != null, $prefix, 'space')});
+		margin : 0;
 	}
 }
 
@@ -345,8 +335,7 @@ $list-fminest    : (4.5rem);
 }
 
 
-
-@mixin generatorA($config) {
+@mixin _scale-generator($config) {
 
 	$key             : map.get($config, 'key');
 	$selector        : map.get($config, 'selector');
@@ -366,15 +355,17 @@ $list-fminest    : (4.5rem);
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
 
-	$keys            : null;
 	$src-length      : list.length($src);
 	$src-type        : meta.type-of($src);
 	$ratio           : if(map.has-key($map-for-ratios, $ratio), map.get($map-for-ratios, $ratio), $ratio);
 
-	$prefix          : _set-name($prefix, $prefix-variable);
-	$suffix          : _set-name($suffix, $suffix-variable);
+	$prefix          : _get-name($prefix, $prefix-variable);
+	$suffix          : _get-name($suffix, $suffix-variable);
+	$_suffix         : null;
 	$_prefix         : null;
-
+	$keys            : null;
+	$suffix-prev     : null;
+	$value           : null;
 
 	@if $base != null {
 		--#{$prefix}ratio : #{$ratio};
@@ -388,23 +379,22 @@ $list-fminest    : (4.5rem);
 	}
 
 	@for $i from 1 through if($length != null, $length, $src-length) {
-		$_suffix      : _get-suffix($suffix, $length, $i);
-		$_suffix-prev : null;
-		$value        : null;
+		$_suffix : _get-suffix($suffix, $length, $i);
+		$_prefix : _get-name($prefix, $prefix-variable);
 
 		@if $base != null {
 			$value : calc(var(--#{$prefix}base) * var(--ratio));
 
 			@if $i > 1 {
-				$_suffix-prev : _get-suffix($suffix, $length, $i - 1);
-				$value        : calc(var(--#{$prefix}#{$_suffix-prev}) * var(--ratio));
+				$suffix-prev : _get-suffix($suffix, $length, $i - 1);
+				$value       : calc(var(--#{$prefix}#{$suffix-prev}) * var(--ratio));
 			}
 
 			@if $preserve > 1 {
 				$value : _get-value($base, $ratio, $preserve, $i, $prefix);
 
 				@if $i > 1 {
-					$value : _get-value($base, $ratio, $preserve, $i, $prefix, $_suffix-prev);
+					$value : _get-value($base, $ratio, $preserve, $i, $prefix, $suffix-prev);
 				}
 			}
 		}
@@ -415,18 +405,15 @@ $list-fminest    : (4.5rem);
 		}
 
 		@if $src-type == map {
-			$_suffix : '';
 			$_prefix : list.nth($keys, $i);
+			$_suffix : '';
 		}
 
-		@include _variable(if($src-type == map, $_prefix, $prefix), $_suffix, $value);
+		@include _variable($_prefix, $_suffix, $value);
 
 		@if ($utility-classes) {
-			$class-prefix : if($src-type == map, $_prefix, _set-name($prefix, $prefix-class));
-			$class-suffix : if($src-type == map, $_suffix, _set-name($suffix, $suffix-class));
-
-			@at-root .#{_class($class-prefix, $class-suffix)} {
-				@include _declaration(if($src-type == map, $_prefix, $prefix), $_suffix, $value, $selector);
+			@at-root .#{_class(if($src-type == map, $_prefix, _get-name($prefix, $prefix-class)), _get-suffix(if($src-type == map, $_suffix, _get-name($suffix, $suffix-class)), $src-length, $i))} {
+				@include _declaration($_prefix, $_suffix, $value, $selector);
 			}
 		}
 	}
@@ -447,16 +434,16 @@ $list-fminest    : (4.5rem);
 				$y : $src-length - list.length($src) + 1;
 
 				@while $y <= $src-length {
-					$value   : _scale-number(list.nth($src, $x), $scale);
+					$_prefix : _get-name($prefix, $prefix-variable);
 					$_suffix : _get-suffix($suffix, $src-length, $y);
+					$value   : _scale-number(list.nth($src, $x), $scale);
 
 					@if $src-type == map {
-						$prefix : list.nth($keys, $x);
+						$_prefix : list.nth($keys, $x);
 						$_suffix : '';
 					}
 
-					//@include _variable(if($src-type == map, $_prefix, $prefix), $_suffix, $value);
-					@include _variable($prefix, $_suffix, $value);
+					@include _variable($_prefix, $_suffix, $value);
 
 					$y       : $y + 1;
 					$x       : $x + 1;
@@ -465,15 +452,14 @@ $list-fminest    : (4.5rem);
 		}
 	}
 
-
-	//@if $key == 'space-scales' and $utility-classes == true {
-	//	@include stack-classes($prefix);
-	//}
+	@if $key == 'space-scales' and $utility-classes == true {
+		@include stack-classes($prefix);
+	}
 }
 
 ;
 
-@function _config-get($config, $key) {
+@function _get-config($config, $key) {
 	@if meta.type-of($config) != map {
 		@error "Invalid type parameter: '$config' must be a map.";
 	}
@@ -485,7 +471,7 @@ $list-fminest    : (4.5rem);
 	}
 }
 
-@mixin _validate-keys($map) {
+@mixin _validate-keys($map, $valid-keys: null) {
 	$valid-keys : ('key', 'selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
 	$keys       : ();
 
@@ -595,6 +581,16 @@ $list-fminest    : (4.5rem);
 	}
 }
 
+@mixin generator($config) {
+
+	@include generate-font-scales($config);
+	@include generate-space-scales($config);
+	@include generate-fluid-fonts($config);
+	@include generate-fluid-spaces($config);
+	@include generate-colors($config);
+	@include generate-properties($config);
+}
+
 @mixin generate-font-scales($config: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
 	$key     : 'font-scales';
 	$_config : (
@@ -616,13 +612,12 @@ $list-fminest    : (4.5rem);
 	);
 
 	@if $config != null {
-		$_config : map.deep-merge($_config, _config-get($config, $key));
+		$_config : map.deep-merge($_config, _get-config($config, $key));
 	}
 
 	@include _validate-config-parameters($_config);
-	@include generatorA($_config)
+	@include _scale-generator($_config)
 }
-
 @mixin generate-space-scales($config, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'space-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
 	$key     : 'space-scales';
 	$_config : (
@@ -645,13 +640,26 @@ $list-fminest    : (4.5rem);
 
 
 	@if $config != null {
-		$_config : map.deep-merge($_config, _config-get($config, $key));
+		$_config : map.deep-merge($_config, _get-config($config, $key));
 	}
 
 	@include _validate-config-parameters($_config);
-	@include generatorA($_config);
+	@include _scale-generator($_config);
 
 }
+@mixin generate-fluid-fonts($config) {
+	// do something
+};
+@mixin generate-fluid-spaces($config) {
+	// do something
+};
+@mixin generate-colors($config) {
+	// do something
+};
+@mixin generate-properties($config) {
+	// do something
+};
+
 
 $map-ff          : (
 		'break-at': 'max',
@@ -697,22 +705,27 @@ $map-fmin        : (
 
 $config-ultimate : (
 		'font-scales' : (
-				'src' : $map-f,
+			//'base' : 1rem,
+			//'ratio' : 'major-second',
+			//'length' : 10,
+				'src' : $list-f,
 			//'src' : $list-f,
 			//	'scale' : 150%,
 				'break-at' : 'max',
 				'breakpoints': (
-						'pc-xs' : $map-fmin,
+						'pc-xs' : $list-fmin,
 						'tablet-max' : $list-fminer,
-					//'phone-max' : $list-fminest,
+						'phone-max' : $list-fminest,
 				),
-			//'prefix' : 'font-size-',
-			//'suffix' : 'numeric-hundreds',
+				'prefix' : 'text-',
+				'suffix-variable' : 'numeric-hundreds',
+				'suffix-class' : 'roman',
 		),
 		'space-scales' : (
-				'base' : 1rem,
+				'base' : 1.5rem,
 				'ratio' : 'major-second',
 				'length' : 10,
+				'preserve' : 5,
 		),
 );
 
@@ -736,15 +749,15 @@ $test-config2    : (
 	//@include generate-font-scales($test-config);
 	//@include generate-font-scales($base : 5rem, $ratio: 1.125, $length: 10);
 	//@include generate-font-scales($config-ultimate);
-	//@include generate-space-scales($config-ultimate);
+	@include generate-space-scales($config-ultimate);
 	@include generate-font-scales($config-ultimate);
 	//@include generate-flow-scales($config-ultimate);
 
-	//@include generator($custom-values : $list-f, $prefix : 'text-', $suffix : 'numeric', $utility-classes : false);
-	//@include generator($custom-values : $list-fa, $prefix : 'size-', $suffix : 'size-x-minmax', $utility-classes : false);
-	//@include generator($config);
-	//@include generator($custom-values : $map-f, $scale : 100%);
-	//@include generator($base : 2rem, $ratio : 'major-second', $length : 9, $prefix: 'text-', $suffix-variable: 'size-and-x-minmax');
+	//@include _scale-generator($custom-values : $list-f, $prefix : 'text-', $suffix : 'numeric', $utility-classes : false);
+	//@include _scale-generator($custom-values : $list-fa, $prefix : 'size-', $suffix : 'size-x-minmax', $utility-classes : false);
+	//@include _scale-generator($config);
+	//@include _scale-generator($custom-values : $map-f, $scale : 100%);
+	//@include _scale-generator($base : 2rem, $ratio : 'major-second', $length : 9, $prefix: 'text-', $suffix-variable: 'size-and-x-minmax');
 
 	@include breakpoint(max, 1000px) {
 	}
@@ -764,10 +777,6 @@ $test-config2    : (
 }
 
 @mixin generate-properties($config) {
-	// do something
-}
-
-@mixin generator($config) {
 	// do something
 }
 

@@ -5,15 +5,15 @@
  * @author - Martin Kamír
  *
  * @example
- * __number-slice(1.198541rem, 4, rem) => 1.19rem;
- * __number-slice(1.198541rem, 6, em) => 1.1985em;
+ * _number-slice(1.198541rem, 4, rem) => 1.19rem;
+ * _number-slice(1.198541rem, 6, em) => 1.1985em;
  * @overload __number-slice($number, $start-at: 0, $end-at: 4, $unit: 'rem')
  * @param $number {number} - Number converted to string to be sliced.
  * @param $end-at {number} - The index of the last character of the substring.
  * @param $unit {string} - Unit that will be removed before substring and then add back at returning
  * @return the sliced number with unit
  */
-@function __number-slice($number, $end-at: 4, $unit: 'rem') {
+@function _number-slice($number, $end-at: 4, $unit: 'rem') {
 
 	// Checks if value of `$end-at` is equal or less then 1. If so throw error.
 	@if ($end-at <= 1) {
