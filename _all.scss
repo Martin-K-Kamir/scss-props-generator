@@ -93,105 +93,36 @@
 @import 'map-for-suffixes';
 
 
-$map-ff          : (
-		'breakpoint-condition': 'max',
-		'default' : (
-				'f-size-1' : #{var(--f-size-asd)},
-				'f-size-2' : 1.5rem,
-				'f-size-3' : 2rem,
-				'f-size-4' : 2.5rem,
-				'f-size-5' : 3rem,
-				'f-size-6' : 3.5rem,
-				'f-size-7' : 4rem,
-				'f-size-8' : 5rem,
-				'f-size-9' : 6rem,
-				'f-size-10' : 8rem,
-		),
-		'tablet-md' : (
-				'f-size-7' : #{var(--f-size-asd)},
-				'f-size-8' : 3rem,
-				'f-size-9' : 4rem,
-				'f-size-10' : 5rem,
-		),
-		'tablet-min' : (
-				'f-size-9' : 3rem,
-				'f-size-10' : 2rem,
-		),
-);
-
-$map-f           : (
-		'f-size-1' : #{var(--f-size-asd)},
-		'f-size-2' : 1.5,
-		'f-size-3' : 2,
-		'f-size-4' : 2.5rem,
-		'f-size-5' : 3,
-		'f-size-6' : 3.5rem,
-		'f-size-7' : 4rem,
-		'f-size-8' : 5rem,
-		'f-size-9' : 6rem,
-		'f-size-10' : 7rem,
-);
-
-$map-fmin        : (
-		'f-size-7' : #{var(--f-size-asd)},
-		'f-size-8' : 3,
-		'f-size-9' : 4,
-		'f-size-10' : 6rem,
-);
-
-$map-fmin2       : (
-		'f-size-9' : #{var(--f-size-asd)},
-		'f-size-10' : 5rem,
-);
-
-//$config          : (
-//		'modular-scaling' : (
-//				'base' : 1rem,
-//				'ratio' : 'major-second',
-//				'length' : 10,
-//				'preserve' : 5,
-//		),
-//);
-
-//$config          : (
-//		'custom-scaling' : (
-//				'custom-values' : $map-f,
-//				'breakpoint-condition' : 'max',
-//				'breakpoints': (
-//						'tablet-md' : $map-fmin,
-//						'tablet-min' : $map-fmin2,
-//				),
-//		),
-//);
-
-
-$list-f          : (1rem, 1.5rem, 1.8rem, 2rem, 2.5rem, 3rem, 3.5rem, 4rem, 5rem, 6rem);
+$list-f          : (1rem, 1.5rem, 1.8rem, 2rem, 2.5rem, 3rem, 3.5rem, 4rem, 5rem, 6rem, 8rem);
 $list-fa         : (2rem, 2.5rem, 2.8rem, 3rem, 3.5rem, 4rem, 4.5rem, 5rem, 6rem, 7rem);
 $list-fmin       : (2.8rem, 3.2rem, 3.5rem, 4rem, 5rem);
-$list-fminer     : (3.8rem, 4.8rem);
+$list-fminer     : (3.5rem, 4.8rem);
 $list-fminest    : (4.5rem);
-//$config          : (
-//		'custom-scaling': (
-//				'custom-values' : $list-f,
-//				'scale' : 100%,
-//				'breakpoint-condition' : 'max',
-//				'breakpoints': (
-//						'pc-xs' : $list-fmin,
-//						'tablet-max' : $list-fminer,
-//						'phone-max' : $list-fminest,
-//				),
-//		),
-//		'naming-convention' : (
-//				'suffix-variable' : 'size-and-number',
-//		)
-//);
 
-//$config    : (
-//		'custom-scaling': (
-//				'custom-values' : $map-f,
-//		),
-//);
 
+@function to-list($value, $keep: 'both') {
+	$keep : if(index('keys' 'values', $keep), $keep, 'both');
+
+	@if type-of($value) == 'map' {
+		$keys : ();
+		$values : ();
+
+		@each $key, $val in $value {
+			$keys : append($keys, $key);
+			$values : append($values, $val);
+		}
+
+		@if $keep == 'keys' {
+			@return $keys;
+		} @else if $keep == 'values' {
+			@return $values;
+		} @else {
+			@return zip($keys, $values);
+		}
+	}
+
+	@return if(type-of($value) != 'list', ($value,), $value);
+}
 
 @function _get-value($base, $ratio, $preserve, $i, $variable-prefix: null, $variable-suffix: null) {
 	@if ($preserve >= $i) {
@@ -217,14 +148,14 @@ $list-fminest    : (4.5rem);
  * @author - Martin Kamír
  *
  * @example
- * __scale-number(1rem, 50%) => 0.5rem;
- * __scale-number(1rem, 150) => 1.5rem;
- * @overload __scale-number($number, $scale: 100%)
+ * _scale-number(1rem, 50%) => 0.5rem;
+ * _scale-number(1rem, 150) => 1.5rem;
+ * @overload _scale-number($number, $scale: 100%)
  * @param $number {number} - The number that is being scaled. Accepts only numbers with rem unit or no unit.
  * @param $decrease {number} - Value that is being scaled by. Accepts only numbers with % unit or no unit.
  * @return scaled number
  */
-@function __scale-number($number, $scale: 100%) {
+@function _scale-number($number, $scale: 100%) {
 
 	// Checks if `$scale` is not number
 	@if (meta.type-of($scale) != number) {
@@ -375,38 +306,34 @@ $list-fminest    : (4.5rem);
 	}
 }
 
-@function __set-suffix($set-suffix, $set-specified-suffix, $length, $i) {
-	@if ($set-specified-suffix != null) {
-		@return _get-suffix($set-specified-suffix, $length, $i);
+@function _set-name($name, $specified-name) {
+	@if ($specified-name != null) {
+		@return $specified-name;
 	} @else {
-		@return _get-suffix($set-suffix, $length, $i);
+		@return $name;
 	}
 }
 
-@function _set-suffix($set-suffix, $set-specified-suffix) {
-	@if ($set-specified-suffix != null) {
-		@return $set-specified-suffix;
-	} @else {
-		@return $set-suffix;
-	}
-}
-
-
-@function _set-prefix($set-prefix, $set-specified-prefix) {
-	@if ($set-specified-prefix != null) {
-		@return $set-specified-prefix;
-	} @else {
-		@return $set-prefix;
-	}
-}
-
-@mixin _variable($prefix, $suffix, $value) {
+@mixin _variable($prefix, $suffix: null, $value, $suffix-is: true) {
 	--#{$prefix}#{$suffix} : #{$value};
+}
+@mixin stack-classes($prefix: null) {
+	@at-root .stack {
+		display         : flex;
+		flex-direction  : column;
+		justify-content : flex-start;
+	}
+	@at-root .stack > * {
+		margin-block : 0;
+	}
+	@at-root .stack > * + * {
+		margin-block-start : var(--#{if($prefix != null, $prefix, 'space')});
+	}
 }
 
 @mixin _declaration($prefix, $suffix, $value, $selector: 'font-size') {
 	@if $selector == 'none' {
-		--#{$prefix}: var(--#{$prefix}#{$suffix});
+		--#{$prefix} : var(--#{$prefix}#{$suffix});
 	} @else {
 		#{$selector} : var(--#{$prefix}#{$suffix});
 	}
@@ -418,287 +345,10 @@ $list-fminest    : (4.5rem);
 }
 
 
-@mixin generator($config: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $custom-values: null, $scale: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
-
-	@if ($config != null) {
-		$base                 : map.get($config, 'modular-scaling', 'base');
-		$ratio                : map.get($config, 'modular-scaling', 'ratio');
-		$length               : map.get($config, 'modular-scaling', 'length');
-		$preserve             : if(map.get($config, 'modular-scaling', 'preserve') != null, map.get($config, 'modular-scaling', 'preserve'), 0);
-		$utility-classes      : if(map.get($config, 'utility-classes') != null, map.get($config, 'utility-classes'), true);
-
-		$custom-values        : map.get($config, 'custom-scaling', 'custom-values');
-		$custom-values-length : list.length($custom-values);
-		$breakpoint-condition : map.get($config, 'custom-scaling', 'breakpoint-condition');
-		$breakpoints          : map.get($config, 'custom-scaling', 'breakpoints');
-		$scale                : if(map.get($config, 'custom-scaling', 'scale') != null, map.get($config, 'custom-scaling', 'scale'), 100%);
-
-		$prefix               : if(map.get($config, 'naming-convention', 'prefix') != null, map.get($config, 'naming-convention', 'prefix'), 'f-size-');
-		$prefix-class         : map.get($config, 'naming-convention', 'prefix-class');
-		$prefix-variable      : map.get($config, 'naming-convention', 'prefix-variable');
-		$suffix               : if(map.get($config, 'naming-convention', 'suffix') != null, map.get($config, 'naming-convention', 'suffix'), 'numeric');
-		$suffix-class         : map.get($config, 'naming-convention', 'suffix-class');
-		$suffix-variable      : map.get($config, 'naming-convention', 'suffix-variable');
-	}
-
-	$custom-values-length      : list.length($custom-values);
-	$prefix-specified-class    : $prefix-class;
-	$prefix-specified-variable : $prefix-variable;
-	$suffix-specified-class    : $suffix-class;
-	$suffix-specified-variable : $suffix-variable;
-	$variable-prefix           : _set-prefix($prefix, $prefix-specified-variable); // Variable prefix based on called `$prefix` or `$prefix-variable` parameters. `$prefix-variable` have bigger priority than `$prefix`.
-
-	////////////////////////////////////////
-	// Checks if `$custom-values` is list.
-	// List gives better options of easy/fast modification than map, because we can fast generate the prefix name or suffix, but it has own limitation.
-	// By using list it's possible use custom values. Which gives more control of values rather than generated scalable values.
-	@if (meta.type-of($custom-values) == list) {
-		@for $i from 1 through list.length($custom-values) {
-			$value           : __scale-number(list.nth($custom-values, $i), $scale); // Value of current `$i` in loop from list of custom values. The value is scaled based on `$scale` value. As default `$scale` is set to 100%.
-			$hard-suffix     : $value;
-			$variable-suffix : __set-suffix($suffix, $suffix-specified-variable, $custom-values-length, $i); // Variable suffix based on called `$suffix` or `$suffix-variable` parameters. `$suffix-variable` have bigger priority than `$suffix`.
-
-			// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$prefix-variable`, `$suffix-variable` and `$value`.
-			@include __variable-body($variable-prefix, $variable-suffix, $value);
-
-			@if ($utility-classes) {
-				$class-prefix : _set-prefix($prefix, $prefix-specified-class); // Class prefix based on called `$prefix` or `$prefix-class` parameters. `$prefix-class` have bigger priority than `$prefix`.
-				$class-suffix : __set-suffix($suffix, $suffix-specified-class, $custom-values-length, $i); // Class suffix based on called `$suffix` or `$suffix-class` parameters. `$suffix-class` have bigger priority than `$suffix`.
-
-				// !IMPORTANT! - The actual class which is outputted. The class is outputted based on `$prefix-class` and `$suffix-class`.
-				@at-root .#{_class($class-prefix, $class-suffix)} {
-
-					// !IMPORTANT! - The actual declaration line which is outputted. The declaration is outputted based on `$prefix-class` and `$suffix-class`.
-					@include __declaration-body($variable-prefix, $variable-suffix);
-				}
-			}
-		}
-
-
-		@if ($config != null and map.has-key($config,'custom-scaling', 'breakpoint-condition')) {
-			$breakpoint-condition : map.get($config, 'custom-scaling', 'breakpoint-condition');
-			$breakpoints          : map.get($config, 'custom-scaling', 'breakpoints');
-			$breakpoints-length   : list.length($breakpoints);
-
-
-			@for $x from 1 through list.length($breakpoints) {
-				$breakpoint-key         : list.nth(list.nth($breakpoints, $x), 1);
-				$breakpoint-list        : list.nth(list.nth($breakpoints, $x), 2);
-				$breakpoint-list-length : list.length($breakpoint-list);
-
-				@include breakpoint($breakpoint-condition, $breakpoint-key) {
-
-					$x    : $custom-values-length;
-					$y    : 1;
-					$diff : $custom-values-length - $breakpoint-list-length + 1;
-					@debug $diff;
-					@while $diff <= $x {
-
-						$value           : __scale-number(list.nth($breakpoint-list, $y), $scale); // Value of current `$i` in loop from list of custom values. The value is scaled based on `$scale` value. As default `$scale` is set to 100%.
-						$hard-suffix     : $value;
-						$variable-suffix : __set-suffix($suffix, $suffix-specified-variable, $custom-values-length, $diff); // Variable suffix based on called `$suffix` or `$suffix-variable` parameters. `$suffix-variable` have bigger priority than `$suffix`.
-
-						// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$prefix-variable`, `$suffix-variable` and `$value`.
-						@include __variable-body($variable-prefix, $variable-suffix, $value);
-						$diff            : $diff + 1;
-						$y               : $y + 1;
-					}
-				}
-			}
-
-		}
-
-
-		////////////////////////////////////////
-		// Checks if `$custom-values` is map.
-		// Map gives more global usage. Means the same map can be used in different places throughout the code.
-		// Map is easier to use than list, because it's not that abstracted away unlike list or generating scalable values.
-		// The modification of map is unlimited, but changing values in map can be more repetitive and time consuming. List or generated scalable values have faster way of modification.
-		// Like list by using map it's possible use custom values. Which gives more control of values rather than generated scalable
-	} @else if (meta.type-of($custom-values) == map) {
-		$map                      : $custom-values;
-
-		@if (map.has-key($map, 'breakpoint-condition')) {
-			$breakpoint-condition : map.get($map, 'breakpoint-condition');
-			$map                  : map.remove($map, 'breakpoint-condition');
-
-			@if ($breakpoint-condition == 'min' or $breakpoint-condition == 'max') {
-				@each $breakpoint, $map-values in $map {
-					@if ($breakpoint == 'default') {
-						@each $key, $value in $map-values {
-							@if (meta.type-of($key) != string) {
-								@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
-							} @else if (string.length($key) < 1) {
-								@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
-							} @else if (meta.type-of($value) != number and meta.type-of($value) != string) {
-								@error 'Invalid type: Outputted values must be type of number OR STRING FIX ERRORS YOU LAZZY SHIT.';
-							}
-
-							$value    : __scale-number($value, $scale);
-
-							--#{$key} : #{$value};
-
-							@if (utility-classes) {
-								// !IMPORTANT! - The actual class which is outputted. The class is outputted based on `$key`.
-								@at-root .#{$key} {
-									// !IMPORTANT! - The actual declaration line which is outputted. The declaration is outputted based on `$key`.
-									font-size : var(--#{$key});
-								}
-							}
-						}
-					} @else {
-						@include breakpoint($breakpoint-condition, $breakpoint) {
-							@each $key, $value in $map-values {
-
-								@if (meta.type-of($key) != string) {
-									@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
-								} @else if (string.length($key) < 1) {
-									@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
-								} @else if (meta.type-of($value) != number and meta.type-of($value) != string) {
-									@error 'Invalid type: Outputted values must be type of number OR STRING FIX ERRORS YOU LAZZY SHIT.';
-								}
-
-								$value    : __scale-number($value, $scale);
-
-								--#{$key} : #{$value};
-							}
-						}
-					}
-
-				}
-			} @else {
-				@error 'Invalid key value: `breakpoint-condition` must be either `min` or `max` not `#{$breakpoint-condition}`.';
-			}
-
-		} @else {
-
-			@each $key, $value in $map {
-				$value    : __scale-number($value, $scale); // Value of current `$key` in each loop from map of custom values. The value is scaled based on `$scale` value. As default `$scale` is set to 100%.
-
-				//!IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$key` and `$value`.
-				--#{$key} : #{$value};
-
-				@if (utility-classes) {
-					// !IMPORTANT! - The actual class which is outputted. The class is outputted based on `$key`.
-					@at-root .#{$key} {
-						// !IMPORTANT! - The actual declaration line which is outputted. The declaration is outputted based on `$key`.
-						font-size : var(--#{$key});
-					}
-				}
-			}
-
-			@if ($config != null and map.has-key($config,'custom-scaling', 'breakpoint-condition')) {
-				$breakpoint-condition : map.get($config, 'custom-scaling', 'breakpoint-condition');
-				$breakpoints          : map.get($config, 'custom-scaling', 'breakpoints');
-
-				@each $breakpoint-key, $breakpoint-map in $breakpoints {
-					@include breakpoint($breakpoint-condition, $breakpoint-key) {
-						@each $key, $value in $breakpoint-map {
-							$value    : __scale-number($value, $scale); // Value of current `$key` in each loop from map of custom values. The value is scaled based on `$breakpoint-value` value. As default `$breakpoint-value` is set to 100%.
-
-							//!IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$key` and `$value`.
-							--#{$key} : #{$value};
-						}
-					}
-				}
-			}
-		}
-
-
-		////////////////////////////////////////
-		// Generates scalable values.
-		// Values are generated based on `$base`, `$ratio` and `$length` values.
-		// Generating modular type scale is the fastest way of creating scalable sizes.
-		// Easy to control with two properties, which is --base and --ratio css properties that can be modified any time and all the values will adjust to that.
-		// By using `$preserve` parameter we can prevent the first values in type scale won't adjust. Good usage is for the smaller values like 0.5rem - 2rem that we don't want to adjust.
-		//
-	} @else {
-		--#{$variable-prefix}base : #{$base}; // The base value, which is the first value in type scale and all the next values are generated from this value.
-
-		// Checks if `$ratio` is string.
-		//`$ratio` parameter can be number or string
-		@if (meta.type-of($ratio) == string) {
-			$ratio  : map.get($map-for-ratios, $ratio); // If `$ratio` is string, then check in the `$map-for-ratios`, which ratio to use.
-			--ratio : #{$ratio}; // Outputs the ratio number value.
-		} @else {
-			--ratio : #{$ratio}; // Else just output the `$ratio` based on the parameter.
-		}
-
-		// Loop over the `$length` parameter and generate from that number the scalable values.
-		@for $i from 1 through $length {
-			$hard-suffix     : 'none'; // Hard suffix is disabled. In my opinion with scalable values wouldn't be good idea to have hard suffix values.
-			$variable-suffix : __set-suffix($suffix, $suffix-specified-variable, $length, $i); // Variable suffix based on called `$suffix` or `$suffix-variable` parameters. `$suffix-variable` have bigger priority than `$suffix`.
-
-			// Checks if there will be any value preserved.
-			@if ($preserve == 0) {
-
-				// At first iteration in the loop
-				@if ($i == 1) {
-					// !IMPORTANT -  The actual value which is outputted. Calculating the `$base` value with `$ratio`.
-					$value                  : calc(var(--#{$variable-prefix}base) * var(--ratio));
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-
-					// In next iterations
-				} @else {
-					$variable-suffix-before : __set-suffix($suffix, $suffix-specified-variable, $length, $i - 1); // Variable suffix from the previous iteration. So we can chain all the values and generate the scalable values.
-
-					// !IMPORTANT -  The actual value which is outputted. Calculating the previous variable value with `$ratio`.
-					$value                  : calc(var(--#{$variable-prefix}#{$variable-suffix-before}) * var(--ratio));
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-				}
-
-				// If utility classes are true do as mentioned above.
-				@if ($utility-classes) {
-					$class-prefix : _set-prefix($prefix, $prefix-specified-class);
-					$class-suffix : __set-suffix($suffix, $suffix-specified-class, $length, $i);
-
-					@at-root .#{_class($class-prefix, $class-suffix)} {
-						@include __declaration-body($variable-prefix, $variable-suffix);
-					}
-				}
-
-				// Else if there are any values which has to be preserved.
-			} @else {
-
-				// At first iteration in the loop
-				@if ($i == 1) {
-					// !IMPORTANT -  The actual value which is outputted. By using `_get-value` function.
-					$value                  : _get-value($base, $ratio, $preserve, $i, $variable-prefix);
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-
-					// In next iterations
-				} @else {
-					$variable-suffix-before : __set-suffix($suffix, $suffix-specified-variable, $length, $i - 1); // Variable suffix from the previous iteration. So we can chain all the values and generate the scalable values.
-
-					// !IMPORTANT -  The actual value which is outputted. By using `_get-value` function.
-					$value                  : _get-value($base, $ratio, $preserve, $i, $variable-prefix, $variable-suffix-before);
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-				}
-
-				// If utility classes are true do as mentioned above.
-				@if ($utility-classes) {
-					$class-prefix : _set-prefix($prefix, $prefix-specified-class);
-					$class-suffix : __set-suffix($suffix, $suffix-specified-class, $length, $i);
-
-					@at-root .#{_class($class-prefix, $class-suffix)} {
-						@include __declaration-body($variable-prefix, $variable-suffix);
-					}
-				}
-			}
-		}
-	}
-}
 
 @mixin generatorA($config) {
 
+	$key             : map.get($config, 'key');
 	$selector        : map.get($config, 'selector');
 	$base            : map.get($config, 'base');
 	$ratio           : map.get($config, 'ratio');
@@ -716,42 +366,109 @@ $list-fminest    : (4.5rem);
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
 
+	$keys            : null;
 	$src-length      : list.length($src);
+	$src-type        : meta.type-of($src);
 	$ratio           : if(map.has-key($map-for-ratios, $ratio), map.get($map-for-ratios, $ratio), $ratio);
 
+	$prefix          : _set-name($prefix, $prefix-variable);
+	$suffix          : _set-name($suffix, $suffix-variable);
+	$_prefix         : null;
 
-	$prefix : _set-prefix($prefix, $prefix-variable);
-	$suffix : _set-suffix($suffix, $suffix-variable);
-	--#{$prefix}ratio          : #{$ratio};
-	--#{$prefix}base : #{$base};
 
-	@for $i from 1 through $length {
-		$_suffix                : _get-suffix($suffix, $length, $i);
-		$__suffix               : null;
-		$value                  : calc(var(--#{$prefix}base) * var(--ratio));
+	@if $base != null {
+		--#{$prefix}ratio : #{$ratio};
+		--#{$prefix}base  : #{$base};
+	}
 
-		@if $i > 1 {
-			$__suffix : _get-suffix($suffix, $length, $i - 1);
-			$value    : calc(var(--#{$prefix}#{$__suffix}) * var(--ratio));
-		}
+	@if $src-type == map {
+		$keys       : to-list($src, 'keys');
+		$src        : to-list($src, 'values');
+		$src-length : list.length($src);
+	}
 
-		@if $preserve > 1 {
-			$value : _get-value($base, $ratio, $preserve, $i, $prefix);
+	@for $i from 1 through if($length != null, $length, $src-length) {
+		$_suffix      : _get-suffix($suffix, $length, $i);
+		$_suffix-prev : null;
+		$value        : null;
+
+		@if $base != null {
+			$value : calc(var(--#{$prefix}base) * var(--ratio));
 
 			@if $i > 1 {
-				$value : _get-value($base, $ratio, $preserve, $i, $prefix, $__suffix);
+				$_suffix-prev : _get-suffix($suffix, $length, $i - 1);
+				$value        : calc(var(--#{$prefix}#{$_suffix-prev}) * var(--ratio));
+			}
+
+			@if $preserve > 1 {
+				$value : _get-value($base, $ratio, $preserve, $i, $prefix);
+
+				@if $i > 1 {
+					$value : _get-value($base, $ratio, $preserve, $i, $prefix, $_suffix-prev);
+				}
 			}
 		}
 
-		@include _variable($prefix, $_suffix, $value);
+		@if $src-type == list or $src-type == map {
+			$_suffix : _get-suffix($suffix, $src-length, $i);
+			$value   : _scale-number(list.nth($src, $i), $scale);
+		}
+
+		@if $src-type == map {
+			$_suffix : '';
+			$_prefix : list.nth($keys, $i);
+		}
+
+		@include _variable(if($src-type == map, $_prefix, $prefix), $_suffix, $value);
 
 		@if ($utility-classes) {
-			@at-root .#{_class(_set-prefix($prefix, $prefix-class), _get-suffix(_set-suffix($suffix, $suffix-class), $length, $i))} {
-				@include _declaration($prefix, $_suffix, $value,  $selector);
+			$class-prefix : if($src-type == map, $_prefix, _set-name($prefix, $prefix-class));
+			$class-suffix : if($src-type == map, $_suffix, _set-name($suffix, $suffix-class));
+
+			@at-root .#{_class($class-prefix, $class-suffix)} {
+				@include _declaration(if($src-type == map, $_prefix, $prefix), $_suffix, $value, $selector);
 			}
 		}
-
 	}
+
+	@if ($break-at != null) {
+		@for $i from 1 through list.length($breakpoints) {
+			$breakpoint : list.nth(list.nth($breakpoints, $i), 1);
+			$src        : list.nth(list.nth($breakpoints, $i), 2);
+			$src-type   : meta.type-of(list.nth(list.nth($breakpoints, $i), 2));
+
+			@if $src-type == map {
+				$keys : to-list($src, 'keys');
+				$src  : to-list($src, 'values');
+			}
+
+			@include breakpoint($break-at, $breakpoint) {
+				$x : 1;
+				$y : $src-length - list.length($src) + 1;
+
+				@while $y <= $src-length {
+					$value   : _scale-number(list.nth($src, $x), $scale);
+					$_suffix : _get-suffix($suffix, $src-length, $y);
+
+					@if $src-type == map {
+						$prefix : list.nth($keys, $x);
+						$_suffix : '';
+					}
+
+					//@include _variable(if($src-type == map, $_prefix, $prefix), $_suffix, $value);
+					@include _variable($prefix, $_suffix, $value);
+
+					$y       : $y + 1;
+					$x       : $x + 1;
+				}
+			}
+		}
+	}
+
+
+	//@if $key == 'space-scales' and $utility-classes == true {
+	//	@include stack-classes($prefix);
+	//}
 }
 
 ;
@@ -769,7 +486,7 @@ $list-fminest    : (4.5rem);
 }
 
 @mixin _validate-keys($map) {
-	$valid-keys : ('selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
+	$valid-keys : ('key', 'selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
 	$keys       : ();
 
 	@each $key, $value in $map {
@@ -816,20 +533,15 @@ $list-fminest    : (4.5rem);
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
 
-	@if ($base != null or $ratio != null or $length != 1 or $preserve != 0) and
+
+	@if ($base != null or $ratio != null or $length != null or $preserve != 0) and
 		($src != null or $break-at != null or $breakpoints != null or $scale != 100%) {
 		@error "Invalid set of parameters: 'base', 'ratio', 'length', 'preserve' AND 'src', 'break-at', 'breakpoints', 'scale' are mutually exclusive.";
 	}
 
-	@if (meta.type-of($src) == map) and
-		($prefix != 'f-size-' or $prefix-class != null or $prefix-variable != null or $suffix != 'numeric' or $suffix-class != null or $suffix-variable != null) and
-		($src != null or $break-at != null or $breakpoints != null or $scale != 100%) {
-		@error "Invalid set of parameters: Using 'src' as type of map with 'src', 'break-at', 'breakpoints', 'scale' AND 'prefix', 'prefix-class', 'prefix-variable', 'suffix', 'suffix-class', 'suffix-variable' are mutually exclusive. Using 'src' as type of list is allowed with prefixes/suffixes.";
-	}
-
 	@if (meta.type-of($base) != 'null' and meta.type-of($base) != number) or
 		 (meta.type-of($ratio) != 'null' and meta.type-of($ratio) != string and meta.type-of($ratio) != number) or
-		 (meta.type-of($length) != number) or
+		 (meta.type-of($length) != 'null' and meta.type-of($length) != number) or
 		 (meta.type-of($utility-classes) != bool) or
 		 (meta.type-of($src) != 'null' and meta.type-of($src) != map and meta.type-of($src) != list and meta.type-of($src) != arglist and meta.type-of($src) != number) or
 		 (meta.type-of($break-at) != 'null' and meta.type-of($break-at) != string) or
@@ -838,9 +550,9 @@ $list-fminest    : (4.5rem);
 		 (meta.type-of($prefix) != string) or
 		 (meta.type-of($prefix-class) != 'null' and meta.type-of($prefix-class) != string) or
 		 (meta.type-of($prefix-variable) != 'null' and meta.type-of($prefix-variable) != string) or
-		 (meta.type-of($suffix) != string) or
-		 (meta.type-of($suffix-class) != 'null' and meta.type-of($suffix-class) != string) or
-		 (meta.type-of($suffix-variable) != 'null' and meta.type-of($suffix-variable) != string) {
+		 (meta.type-of($suffix) != string and meta.type-of($suffix) != list) or
+		 (meta.type-of($suffix-class) != 'null' and meta.type-of($suffix-class) != string and meta.type-of($suffix-class) != list) or
+		 (meta.type-of($suffix-variable) != 'null' and meta.type-of($suffix-variable) != string and meta.type-of($suffix-variable) != list) {
 		@error 'Invalid type value: check if values hold the corresponding type.';
 	}
 
@@ -852,13 +564,13 @@ $list-fminest    : (4.5rem);
 		@error "Invalid value: 'base' must be a number with a unit.";
 	}
 
-	@if (meta.type-of($ratio) != string and meta.type-of($ratio) != 'null' and  math.is-unitless($ratio) != true) or
+	@if (meta.type-of($ratio) != string and meta.type-of($ratio) != 'null' and math.is-unitless($ratio) != true) or
 		(math.is-unitless($preserve) != true) or
-		(math.is-unitless($length) != true) {
+		(meta.type-of($ratio) != 'null' and math.is-unitless($length) != true) {
 		@error "Invalid value: 'ratio', 'preserve', 'length' must be a number with no unit.";
 	}
 
-	@if math.round($preserve) != $preserve or math.round($length) != $length {
+	@if math.round($preserve) != $preserve or (meta.type-of($ratio) != 'null' and math.round($length) != $length) {
 		@error "Invalid value: 'preserve', 'length' must be an integer.";
 	}
 
@@ -866,11 +578,11 @@ $list-fminest    : (4.5rem);
 		@error "Invalid value: 'ratio' must be one of #{__map-keys($map-for-ratios)}.";
 	}
 
-	@if $preserve > $length {
+	@if meta.type-of($ratio) != 'null' and ($preserve > $length) {
 		@error "Invalid value: 'preserve' must be less than or equal to 'length'.";
 	}
 
-	@if $length > 40 or $length < 1 {
+	@if (meta.type-of($ratio) != 'null') and ($length > 40 or $length < 1) {
 		@error "Invalid value: 'length' must be between 1 and 40.";
 	};
 
@@ -883,9 +595,10 @@ $list-fminest    : (4.5rem);
 	}
 }
 
-@mixin generate-font-scales($config: null, $base: null, $ratio: null, $length: 1, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
+@mixin generate-font-scales($config: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
 	$key     : 'font-scales';
 	$_config : (
+			'key': $key,
 			'selector' : 'font-size',
 			'base' : $base,
 			'ratio' : $ratio,
@@ -902,7 +615,6 @@ $list-fminest    : (4.5rem);
 			'suffix-variable' : $suffix-variable,
 	);
 
-
 	@if $config != null {
 		$_config : map.deep-merge($_config, _config-get($config, $key));
 	}
@@ -911,9 +623,10 @@ $list-fminest    : (4.5rem);
 	@include generatorA($_config)
 }
 
-@mixin generate-flow-scales($config, $base: null, $ratio: null, $length: 0, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'space-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
-	$key     : 'flow-scales';
+@mixin generate-space-scales($config, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: 'space-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
+	$key     : 'space-scales';
 	$_config : (
+			'key': $key,
 			'selector' : 'none',
 			'base' : $base,
 			'ratio' : $ratio,
@@ -938,6 +651,124 @@ $list-fminest    : (4.5rem);
 	@include _validate-config-parameters($_config);
 	@include generatorA($_config);
 
+}
+
+$map-ff          : (
+		'break-at': 'max',
+		'src' : (
+				'f-size-1' : 1rem,
+				'f-size-2' : 1.5rem,
+				'f-size-3' : 2rem,
+				'f-size-4' : 2.5rem,
+				'f-size-5' : 3rem,
+				'f-size-6' : 3.5rem,
+				'f-size-7' : 4rem,
+				'f-size-8' : 5rem,
+				'f-size-9' : 6rem,
+				'f-size-10' : 8rem,
+		),
+		'tablet-md' : (
+				'f-size-7' : 1rem,
+				'f-size-8' : 3rem,
+				'f-size-9' : 4rem,
+				'f-size-10' : 5rem,
+		),
+		'tablet-min' : (
+				'f-size-9' : 3rem,
+				'f-size-10' : 2rem,
+		),
+);
+
+$map-f           : (
+		'text-1' : 1rem,
+		'text-2' : 1.5rem,
+		'text-3' : 2rem,
+		'text-4' : 2.5rem,
+		'text-5' : 3rem,
+);
+
+$map-fmin        : (
+		'text-8' : 1rem,
+		'text-9' : 1.5rem,
+		'text-10' : 2rem,
+		'text-11' : 2.5rem,
+		'text-12' : 3rem,
+);
+
+$config-ultimate : (
+		'font-scales' : (
+				'src' : $map-f,
+			//'src' : $list-f,
+			//	'scale' : 150%,
+				'break-at' : 'max',
+				'breakpoints': (
+						'pc-xs' : $map-fmin,
+						'tablet-max' : $list-fminer,
+					//'phone-max' : $list-fminest,
+				),
+			//'prefix' : 'font-size-',
+			//'suffix' : 'numeric-hundreds',
+		),
+		'space-scales' : (
+				'base' : 1rem,
+				'ratio' : 'major-second',
+				'length' : 10,
+		),
+);
+
+$test-config     : (
+	//'base' : 1rem,
+	//'ratio' : 'major-second',
+	//'length' : 5,
+		'src' : $list-f,
+		'prefix' : 'text-',
+);
+
+$test-config2    : (
+	//'base' : 0.5rem,
+	//'ratio' : 'minor-second',
+	//'length' : 5,
+		'src' : $list-f,
+);
+
+:root {
+	//--f-size-asd : 6rem;
+	//@include generate-font-scales($test-config);
+	//@include generate-font-scales($base : 5rem, $ratio: 1.125, $length: 10);
+	//@include generate-font-scales($config-ultimate);
+	//@include generate-space-scales($config-ultimate);
+	@include generate-font-scales($config-ultimate);
+	//@include generate-flow-scales($config-ultimate);
+
+	//@include generator($custom-values : $list-f, $prefix : 'text-', $suffix : 'numeric', $utility-classes : false);
+	//@include generator($custom-values : $list-fa, $prefix : 'size-', $suffix : 'size-x-minmax', $utility-classes : false);
+	//@include generator($config);
+	//@include generator($custom-values : $map-f, $scale : 100%);
+	//@include generator($base : 2rem, $ratio : 'major-second', $length : 9, $prefix: 'text-', $suffix-variable: 'size-and-x-minmax');
+
+	@include breakpoint(max, 1000px) {
+	}
+}
+
+/*
+@mixin generate-fluid-fonts($config) {
+	// do something
+}
+
+@mixin generate-fluid-flows($config) {
+	// do something
+}
+
+@mixin generate-colors-scale($config) {
+	// do something
+}
+
+@mixin generate-properties($config) {
+	// do something
+}
+
+@mixin generator($config) {
+	// do something
 }
 
 
@@ -995,58 +826,5 @@ $config-ultimate : (
 				'suffix' : 'roman',
 		),
 );
-
-$test-config     : (
-		'base' : 1rem,
-		'ratio' : 'major-second',
-		'length' : 5,
-);
-
-$test-config2    : (
-		'base' : 0.5rem,
-		'ratio' : 'minor-second',
-		'length' : 5,
-);
-
-:root {
-	//--f-size-asd : 6rem;
-	//@include generate-font-scales($test-config);
-	//@include generate-font-scales($base : 5rem, $ratio: 1.125, $length: 10);
-	//@include generate-font-scales($config-ultimate);
-	@include generate-flow-scales($test-config2);
-	@include generate-font-scales($test-config);
-	//@include generate-flow-scales($config-ultimate);
-
-	//@include generator($custom-values : $list-f, $prefix : 'text-', $suffix : 'numeric', $utility-classes : false);
-	//@include generator($custom-values : $list-fa, $prefix : 'size-', $suffix : 'size-x-minmax', $utility-classes : false);
-	//@include generator($config);
-	//@include generator($custom-values : $map-f, $scale : 100%);
-	//@include generator($base : 2rem, $ratio : 'major-second', $length : 9, $prefix: 'text-', $suffix-variable: 'size-and-x-minmax');
-
-	@include breakpoint(max, 1000px) {
-	}
-}
-
-/*
-@mixin generate-fluid-fonts($config) {
-	// do something
-}
-
-@mixin generate-fluid-flows($config) {
-	// do something
-}
-
-@mixin generate-colors-scale($config) {
-	// do something
-}
-
-@mixin generate-properties($config) {
-	// do something
-}
-
-@mixin generator($config) {
-	// do something
-}
-
 
 */
