@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+/**
+ * Returns number with rem unit.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _to-rem(1) => 1rem;
+ * _to-rem(1px) => 1rem;
+ * _to-rem(1%) => 1rem;
+ * @overload _to-rem($number)
+ * @param $number {number} - Number which will be converted to rem.
+ * @return number with rem unit.
+ */
+@function _to-rem($number) {
+	$unit : math.unit($number);
+	$removed-unit : _string-replace($number, $unit);
+	$number : _convert-to-number($removed-unit);
+	@return $number + 'rem';
+}

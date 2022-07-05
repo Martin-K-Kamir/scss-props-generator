@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+@function _class-shell($prefix, $suffix) {
+	@return #{$prefix}#{$suffix};
+}

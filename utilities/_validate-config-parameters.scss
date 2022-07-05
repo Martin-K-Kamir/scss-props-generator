@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+/**
+ * Validate config parameters
+ *
+ * NOTE: This function is helper function for _process-config-parameters function.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _validate-config-parameters($config) {
+
+
+	// Get config keys
+	$base            : map.get($config, 'base');
+	$ratio           : map.get($config, 'ratio');
+	$length          : map.get($config, 'length');
+	$preserve        : map.get($config, 'preserve');
+	$utility-classes : map.get($config, 'utility-classes');
+	$src             : map.get($config, 'src');
+	$break-at        : map.get($config, 'break-at');
+	$breakpoints     : map.get($config, 'breakpoints');
+	$scale           : map.get($config, 'scale');
+	$prefix          : map.get($config, 'prefix');
+	$prefix-class    : map.get($config, 'prefix-class');
+	$prefix-variable : map.get($config, 'prefix-variable');
+	$suffix          : map.get($config, 'suffix');
+	$suffix-class    : map.get($config, 'suffix-class');
+	$suffix-variable : map.get($config, 'suffix-variable');
+	
+	// Preventing $base, $ratio, $length and $preserve to be used together with $src and $scale.
+	// The reason behind this is we don't want generate ratio scaled values with custom values from map or list.
+	@if ($base != null or $ratio != null or $length != null or $preserve != 0) and
+		($src != null  or $scale != 100%) {
+		@error "Invalid set of parameters: 'base', 'ratio', 'length', 'preserve' AND 'src', 'break-at', 'breakpoints', 'scale' are mutually exclusive.";
+	}
+
+	// Prevent parameters to have incorrect type values i.g $base parameter being a color type or $utility-classes parameter being string type and so on...
+	@if (meta.type-of($base) != 'null' and meta.type-of($base) != number) or
+		 (meta.type-of($ratio) != 'null' and meta.type-of($ratio) != string and meta.type-of($ratio) != number) or
+		 (meta.type-of($length) != 'null' and meta.type-of($length) != number) or
+		 (meta.type-of($utility-classes) != bool) or
+		 (meta.type-of($src) != 'null' and meta.type-of($src) != map and meta.type-of($src) != list and meta.type-of($src) != arglist and meta.type-of($src) != number) or
+		 (meta.type-of($break-at) != 'null' and meta.type-of($break-at) != string) or
+		 (meta.type-of($breakpoints) != 'null' and meta.type-of($breakpoints) != map) or
+		 (meta.type-of($scale) != number) or
+		 (meta.type-of($prefix) != string) or
+		 (meta.type-of($prefix-class) != 'null' and meta.type-of($prefix-class) != string) or
+		 (meta.type-of($prefix-variable) != 'null' and meta.type-of($prefix-variable) != string) or
+		 (meta.type-of($suffix) != string and meta.type-of($suffix) != list) or
+		 (meta.type-of($suffix-class) != 'null' and meta.type-of($suffix-class) != string and meta.type-of($suffix-class) != list) or
+		 (meta.type-of($suffix-variable) != 'null' and meta.type-of($suffix-variable) != string and meta.type-of($suffix-variable) != list) {
+		@error 'Invalid type value: check if values hold the corresponding type.';
+	}
+
+	// Prevent $base and $scale values to be below 0.
+	@if (meta.type-of($base) != 'null' and $base < 0) or ($scale < 0) {
+		@error "Invalid value: 'base', 'length', 'scale' must be greater than or equal to 0.";
+	}
+
+	// Prevent $base value to be unitless number.
+	@if meta.type-of($base) != 'null' and math.is-unitless($base) {
+		@error "Invalid value: 'base' must be a number with a unit.";
+	}
+
+	// Prevent $ratio, $length and $preserve values to be number with unit.
+	@if (meta.type-of($ratio) != string and meta.type-of($ratio) != 'null' and math.is-unitless($ratio) != true) or
+		(math.is-unitless($preserve) != true) or
+		(meta.type-of($ratio) != 'null' and math.is-unitless($length) != true) {
+		@error "Invalid value: 'ratio', 'preserve', 'length' must be a number with no unit.";
+	}
+
+	// Prevent $preserve and $length values to be decimal numbers.
+	@if math.round($preserve) != $preserve or (meta.type-of($ratio) != 'null' and math.round($length) != $length) {
+		@error "Invalid value: 'preserve', 'length' must be an integer.";
+	}
+
+	// If $ratio is type of string check for the corresponding ratio type.
+	@if (meta.type-of($ratio) != number) and meta.type-of($ratio) != 'null' and map.has-key($map-for-ratios, $ratio) != true {
+		@error "Invalid value: 'ratio' must be one of #{_map-keys($map-for-ratios)}.";
+	}
+
+	// Prevent $preserve value being greater than $length.
+	@if meta.type-of($ratio) != 'null' and ($preserve > $length) {
+		@error "Invalid value: 'preserve' must be less than or equal to 'length'.";
+	}
+
+	// Prevent $length value being greater than 40 or less than 1.
+	@if (meta.type-of($ratio) != 'null') and ($length > 40 or $length < 1) {
+		@error "Invalid value: 'length' must be between 1 and 40.";
+	};
+
+	// Prevent $scale value to have a different unit than percentage.
+	@if (math.unit($scale) != '%') {
+		@error "Invalid value: 'scale' must be a percentage.";
+	}
+
+	// Prevent $break-at value to be different than 'max' or 'min'.
+	@if ($break-at != null and $break-at != 'min' and $break-at != 'max') {
+		@error "Invalid value: 'break-at' must be 'min' or 'max'.";
+	}
+
+	// Making sure $breakpoint parameter is always used with $break-at parameter.
+	@if ($breakpoints != null and $break-at == null) {
+		@error "Invalid usage: 'breakpoints' parameter must be used with 'break-at' parameter.";
+	}
+
+	// Validate the config keys.
+	@include _validate-config-keys($config);
+}

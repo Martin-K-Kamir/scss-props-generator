@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+$map-for-breakpoints : (
+		'box' : 1,
+		'landscape' : math.div(5, 4),
+		'portrait' : math.div(3, 4),
+		'widescreen' : math.div(16, 9),
+		'ultrawide' : math.div(18, 5),
+		'golden' : math.div(1.618, 1),
+) !default;

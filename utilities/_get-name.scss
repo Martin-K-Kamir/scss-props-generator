@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+@function _get-name($name, $specified-name) {
+	@if ($specified-name != null) {
+		@return $specified-name;
+	} @else {
+		@return $name;
+	}
+}

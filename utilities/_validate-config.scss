@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+/**
+ * Returns validated config map by the given key.
+ *
+ * NOTE: This function is helper function for _process-config-parameters function.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _validate-config(map, 'font-scales') => map
+ * @overload _validate-config($config, $key)
+ * @param $config {map} - Config map.
+ * @param $key {string} - Key of the config map.
+ */
+@function _validate-config($config, $key) {
+	@if meta.type-of($config) != map {
+		@error "Invalid type parameter: '$config' must be a map.";
+	}
+
+	// If the config map has the key with the corresponding given key, return that map else return the whole config map
+	@if map.has-key($config, $key) {
+		@return map.get($config, $key);
+	} @else {
+		@return $config;
+	}
+}

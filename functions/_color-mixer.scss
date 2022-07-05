@@ -46,14 +46,14 @@
 	// check if second digit is not 0
 	@if ($second-light-value != 0) {
 		// 1. merge first digit with second digi and convert it into number type
-		$merge : __to-number($first-light-value + $second-light-value);
+		$merge : _convert-to-number($first-light-value + $second-light-value);
 
 		// 2. devide integer so there is decimal point and set that value to $light-value
 		$light-value : math.div($merge, 10);
 	}
 
 	// slice last digit of the number and convert it into number type
-	$opacity-value : __to-number(string.slice(#{$number-modifier}, 3, 3));
+	$opacity-value : _convert-to-number(string.slice(#{$number-modifier}, 3, 3));
 
 	// check if $opacity-value is not 0
 	@if $opacity-value == 0 {

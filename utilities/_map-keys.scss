@@ -1,5 +1,6 @@
+@charset "UTF-8";
 
-@function __map-keys($map) {
+@function _map-keys($map) {
 	$keys : ();
 
 	@each $key, $_ in $map {

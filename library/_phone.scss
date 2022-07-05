@@ -3,11 +3,11 @@
 @mixin phone($device, $orientation: null) {
 	@if map-has-key($map-for-smartphones, $device) {
 		@if $orientation == portrait or $orientation == null {
-			@media only screen and (device-width : __map-deep-get($map-for-smartphones, $device, 'width')) and (device-height : __map-deep-get($map-for-smartphones, $device, 'height')) and (orientation : portrait) {
+			@media only screen and (device-width : _map-deep-get($map-for-smartphones, $device, 'width')) and (device-height : _map-deep-get($map-for-smartphones, $device, 'height')) and (orientation : portrait) {
 				@content;
 			}
 		} @else if $orientation == landscape {
-			@media only screen and (device-width : __map-deep-get($map-for-smartphones, $device, 'height')) and (device-height : __map-deep-get($map-for-smartphones, $device, 'width')) and (orientation : landscape) {
+			@media only screen and (device-width : _map-deep-get($map-for-smartphones, $device, 'height')) and (device-height : _map-deep-get($map-for-smartphones, $device, 'width')) and (orientation : landscape) {
 				@content;
 			}
 		}

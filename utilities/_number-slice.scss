@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+/**
+ * Returns slice of number. As default slice ends at 4. Which means the number will have hundredth digit.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _number-slice(1.198541rem, 4, rem) => 1.19rem;
+ * _number-slice(1.198541rem, 6, em) => 1.1985em;
+ * @overload _number-slice($number, $end-at: 4, $unit)
+ * @param $number {number} - Number to be sliced.
+ * @param $end-at {number} - The index of the last character of the substring.
+ * @param $unit {string} - Unit that will be removed before substring and then add back at returning.
+ * @return the sliced number with unit.
+ */
+@function _number-slice($number, $end-at: 4, $unit) {
+
+	// Checks if value of `$end-at` is equal or less then 1. If so throw error.
+	@if ($end-at <= 1) {
+		@error 'Value of `$end-at => #{$end-at}` can not be less then `1`'
+	}
+
+	$removed-unit : _string-replace($number, $unit);
+	$sliced-number : string.slice($removed-unit, 0, $end-at);
+	$number : _convert-to-number($sliced-number);
+
+	@return $number + $unit;
+}

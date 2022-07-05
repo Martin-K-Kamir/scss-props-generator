@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+/**
+ * Checks if used keys in config map are valid.
+ *
+ * NOTE: This function is helper function for _validate-config-parameters function.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _validate-config-keys($map) {
+	$valid-keys : ('key', 'selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
+	$keys       : ();
+
+	// Loop over map.
+	@each $key, $value in $map {
+		$keys : list.append($keys, $key); // Append key to list.
+
+		// Check if value is a map.
+		@if meta.type-of($value) == map {
+			$map : map.deep-remove($map, $value); // Remove nested map.
+			$map : map.merge($map, $value); // Merge removed map to current scope in main map.
+		}
+
+		// Loop over new map and check if keys are string and at least 1 character long.
+		@each $key, $value in $map {
+			@if meta.type-of($key) != string {
+				@error "Invalid key '#{$key}': all keys must be a string in the map.";
+			} @else if string.length($key) < 1 {
+				@error "Invalid key length: all keys must be at least 1 character in the map.";
+			}
+		}
+	}
+
+	// Loop over keys list and check if all keys are valid.
+	@for $i from 1 through list.length($keys) {
+		@if (list.nth($valid-keys, $i) != list.nth($keys, $i)) {
+			@error "Invalid parameter '#{list.nth($keys, $i)}': parameters must be one of these: #{$valid-keys}.";
+		}
+	}
+}

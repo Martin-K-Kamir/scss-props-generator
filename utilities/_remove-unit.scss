@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+/**
+ * Returns unitless number.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _remove-unit(1rem) => 1;
+ * _remove-unit(5em, 'em') => 5;
+ * _remove-unit(15%, '%') => 15;
+ * @overload _remove-unit($number, $unit)
+ * @param $number {number} - Number to remove unit from.
+ * @param $unit {string} - Unit to remove.
+ * @return number with no unit.
+ */
+@function _remove-unit($number, $unit) {
+	$removed-unit : _string-replace($number, $unit);
+	$number : _convert-to-number($removed-unit);
+	@return $number;
+}
+

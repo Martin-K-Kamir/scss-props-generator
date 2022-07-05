@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+/**
+ * Returns either 1. calculated number or 2. calculation method with scaled ratio affected by current index($i) in the loop or 2. calculation method.
+ *
+ * NOTE: This function is a building block for the generated scalable system functionality when $preserve parameter is used.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _get-value(1rem, 2, 5, 2, f-size, 5) => 16rem
+ * _get-value(1rem, 2, 5, 6, f-size, 5) => calc(var(--f-size-base) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio))
+ * _get-value(1rem, 2, 5, 7, f-size, 5) => calc(var(--f-size-6) * var(--f-size-ratio))
+ * @overload _get-value($base, $ratio, $preserve, $i, $prefix: null, $suffix: null)
+ * @param $base {number} - Base value.
+ * @param $ratio {number} - Ratio value.
+ * @param $preserve {number} - Preserve value.
+ * @param $i {number} - Index value.
+ * @param $prefix {string} - Prefix value.
+ * @param $suffix {string} - Suffix value.
+ */
+@function _get-value($base, $ratio, $preserve, $i, $prefix: null, $suffix: null) {
+	@if ($preserve >= $i) {
+		@return _number-slice(_get-calc-value($base, $ratio, $preserve, $i, $prefix), $unit : 'rem');
+	} @else if ($preserve + 1 == $i) {
+		@return _get-calc-value($base, $ratio, $preserve, $i, $prefix);
+	} @else {
+		@return calc(var(--#{$prefix}#{$suffix}) * var(--#{$prefix}ratio));
+	}
+}

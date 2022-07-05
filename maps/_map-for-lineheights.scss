@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
 $map-for-lineheights : (
-		'f-lineheight-1' : $f-lineheight-1,
-		'f-lineheight-2' : $f-lineheight-2,
-		'f-lineheight-3' : $f-lineheight-3,
-		'f-lineheight-4' : $f-lineheight-4,
-		'f-lineheight-5' : $f-lineheight-5,
-		'f-lineheight-6' : $f-lineheight-6,
-		'f-lineheight-7' : $f-lineheight-7,
-		'f-lineheight-8' : $f-lineheight-8,
-		'f-lineheight-9' : $f-lineheight-9,
-) !default
+		'f-lineheight-1' : 0.95,
+		'f-lineheight-2' : 1,
+		'f-lineheight-3' : 1.1,
+		'f-lineheight-4' : 1.25,
+		'f-lineheight-5' : 1.375,
+		'f-lineheight-6' : 1.5,
+		'f-lineheight-7' : 1.6,
+		'f-lineheight-8' : 1.7,
+		'f-lineheight-9' : 2,
+) !default;

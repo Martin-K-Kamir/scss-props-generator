@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+@function _validate-ratio($ratio) {
+	@return if(map.has-key($map-for-ratios, $ratio), map.get($map-for-ratios, $ratio), $ratio);
+}

@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+@mixin _variable-shell($prefix, $suffix: null, $value, $suffix-is: true) {
+	--#{$prefix}#{$suffix} : #{$value};
+}

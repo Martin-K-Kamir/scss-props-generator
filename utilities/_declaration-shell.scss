@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+@mixin _declaration-shell($prefix, $suffix, $value, $selector: 'font-size') {
+	@if $selector == 'none' {
+		--#{$prefix} : var(--#{$prefix}#{$suffix});
+	} @else {
+		#{$selector} : var(--#{$prefix}#{$suffix});
+	}
+}

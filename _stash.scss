@@ -1,313 +1,75 @@
 /*
-	//$TYPES_MAX_LIMIT : 40;
-	//$TYPES_MIN_LIMIT : 3;
-	//@if ($length > $TYPES_MAX_LIMIT) {
-	//	@error "The maximum number of length is 40. Use smaller number than #{$length}.";
-	//} @else if ($length < $TYPES_MIN_LIMIT) {
-	//	@error "The minimum number of length is 3. Use larger number than #{$length}.";
-	//} @else if ($preserve > $length) {
-	//	@error "The preserve number is larger than the number of length. Use smaller number than #{$length}.";
-	//}
- */
-
-$config : (
-		'utility-classes' : true,
-		'modular-scaling' : (
-				'base' : null,
-				'ratio' : null,
-				'length' : null,
-				'preserve' : 0,
+$config-ultimate : (
+		'font-scales' : (
+				'src' : $list-f,
+				'break-at' : 'max',
+				'breakpoints': (
+						'pc-xs' : $list-fmin,
+						'tablet-max' : $list-fminer,
+						'phone-max' : $list-fminest,
+				),
+				'prefix' : 'text-',
 		),
-		'custom-scaling' : (
-				'custom-values' : $map-ff,
-				'scale' : 100%,
+		'flow-scales' : (
+				'base' : 1rem,
+				'ratio' : 'major-second',
+				'length' : 10,
 		),
-		'naming-convention' : (
-				'prefix' : 'f-size',
-				'prefix-class' : null,
-				'prefix-variable' : null,
-				'suffix' : 'numeric',
-				'suffix-class' : null,
-				'suffix-variable' : null,
-		)
+		'fluid-fonts' : (
+			// config
+		),
+		'fluid-spaces' : (
+			// config
+		),
+	//'colors-scale' : ('map'),
+		'colors-scale' : (
+				'scale' : (20%, 40%, 80%),
+				'primary' : crimson,
+				'secondary' : (
+						'default' : #555555,
+						'lighter' : #555555,
+						'light' : #555555,
+						'dark' : #555555,
+						'darker' : #555555,
+				),
+				'tertiary' : ('list'),
+				'text' : #000000,
+				'surface' : #ffffff,
+				'btn-primary' : #333333,
+				'btn-secondary' : crimson,
+				'socials' :('facebook', 'twitter', 'instagram', 'pinterest', 'youtube', 'linkedin'),
+			//'state' : ('map'),
+			//'state' : true,
+				'state' : (
+						'error' : #333333,
+						'warning' : #333333,
+						'success' : #333333,
+				),
+		),
+		'properties' : ($map-for-letterspacings, $map-for-shadows,),
+		'line-height' : (
+				'src' : ('list'),
+				'prefix' : 'line-height-',
+				'suffix' : 'roman',
+		),
 );
+*/
+
+@mixin generate-fluid-fonts($config) {
+	// do something
+}
 
 
-@mixin generator($config: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $custom-values: null, $scale: 100%, $prefix: 'f-size-', $suffix: 'numeric', $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
-
-	@if ($config != null) {
-		$base                 : map.get($config, 'modular-scaling', 'base');
-		$ratio                : map.get($config, 'modular-scaling', 'ratio');
-		$length               : map.get($config, 'modular-scaling', 'length');
-		$preserve             : if(map.get($config, 'modular-scaling', 'preserve') != null, map.get($config, 'modular-scaling', 'preserve'), 0);
-		$utility-classes      : if(map.get($config, 'utility-classes') != null, map.get($config, 'utility-classes'), true);
-
-		$custom-values        : map.get($config, 'custom-scaling', 'custom-values');
-		$custom-values-length : list.length($custom-values);
-		$breakpoint-condition : map.get($config, 'custom-scaling', 'breakpoint-condition');
-		$breakpoints          : map.get($config, 'custom-scaling', 'breakpoints');
-		$scale                : if(map.get($config, 'custom-scaling', 'scale') != null, map.get($config, 'custom-scaling', 'scale'), 100%);
-
-		$prefix               : if(map.get($config, 'naming-convention', 'prefix') != null, map.get($config, 'naming-convention', 'prefix'), 'f-size-');
-		$prefix-class         : map.get($config, 'naming-convention', 'prefix-class');
-		$prefix-variable      : map.get($config, 'naming-convention', 'prefix-variable');
-		$suffix               : if(map.get($config, 'naming-convention', 'suffix') != null, map.get($config, 'naming-convention', 'suffix'), 'numeric');
-		$suffix-class         : map.get($config, 'naming-convention', 'suffix-class');
-		$suffix-variable      : map.get($config, 'naming-convention', 'suffix-variable');
-	}
-
-	$custom-values-length      : list.length($custom-values);
-	$prefix-specified-class    : $prefix-class;
-	$prefix-specified-variable : $prefix-variable;
-	$suffix-specified-class    : $suffix-class;
-	$suffix-specified-variable : $suffix-variable;
-	$variable-prefix           : _set-name($prefix, $prefix-specified-variable); // Variable prefix based on called `$prefix` or `$prefix-variable` parameters. `$prefix-variable` have bigger priority than `$prefix`.
-
-	////////////////////////////////////////
-	// Checks if `$custom-values` is list.
-	// List gives better options of easy/fast modification than map, because we can fast generate the prefix name or suffix, but it has own limitation.
-	// By using list it's possible use custom values. Which gives more control of values rather than generated scalable values.
-	@if (meta.type-of($custom-values) == list) {
-		@for $i from 1 through list.length($custom-values) {
-			$value           : _scale-number(list.nth($custom-values, $i), $scale); // Value of current `$i` in loop from list of custom values. The value is scaled based on `$scale` value. As default `$scale` is set to 100%.
-			$hard-suffix     : $value;
-			$variable-suffix : __set-suffix($suffix, $suffix-specified-variable, $custom-values-length, $i); // Variable suffix based on called `$suffix` or `$suffix-variable` parameters. `$suffix-variable` have bigger priority than `$suffix`.
-
-			// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$prefix-variable`, `$suffix-variable` and `$value`.
-			@include __variable-body($variable-prefix, $variable-suffix, $value);
-
-			@if ($utility-classes) {
-				$class-prefix : _set-name($prefix, $prefix-specified-class); // Class prefix based on called `$prefix` or `$prefix-class` parameters. `$prefix-class` have bigger priority than `$prefix`.
-				$class-suffix : __set-suffix($suffix, $suffix-specified-class, $custom-values-length, $i); // Class suffix based on called `$suffix` or `$suffix-class` parameters. `$suffix-class` have bigger priority than `$suffix`.
-
-				// !IMPORTANT! - The actual class which is outputted. The class is outputted based on `$prefix-class` and `$suffix-class`.
-				@at-root .#{_class($class-prefix, $class-suffix)} {
-
-					// !IMPORTANT! - The actual declaration line which is outputted. The declaration is outputted based on `$prefix-class` and `$suffix-class`.
-					@include __declaration-body($variable-prefix, $variable-suffix);
-				}
-			}
-		}
+@mixin generate-fluid-spaces($config) {
+	// do something
+}
 
 
-		@if ($config != null and map.has-key($config,'custom-scaling', 'breakpoint-condition')) {
-			$breakpoint-condition : map.get($config, 'custom-scaling', 'breakpoint-condition');
-			$breakpoints          : map.get($config, 'custom-scaling', 'breakpoints');
-			$breakpoints-length   : list.length($breakpoints);
+@mixin generate-colors($config) {
+	// do something
+}
 
 
-			@for $x from 1 through list.length($breakpoints) {
-				$breakpoint-key         : list.nth(list.nth($breakpoints, $x), 1);
-				$breakpoint-list        : list.nth(list.nth($breakpoints, $x), 2);
-				$breakpoint-list-length : list.length($breakpoint-list);
-
-				@include breakpoint($breakpoint-condition, $breakpoint-key) {
-
-					$x    : $custom-values-length;
-					$y    : 1;
-					$diff : $custom-values-length - $breakpoint-list-length + 1;
-					@debug $diff;
-					@while $diff <= $x {
-
-						$value           : _scale-number(list.nth($breakpoint-list, $y), $scale); // Value of current `$i` in loop from list of custom values. The value is scaled based on `$scale` value. As default `$scale` is set to 100%.
-						$hard-suffix     : $value;
-						$variable-suffix : __set-suffix($suffix, $suffix-specified-variable, $custom-values-length, $diff); // Variable suffix based on called `$suffix` or `$suffix-variable` parameters. `$suffix-variable` have bigger priority than `$suffix`.
-
-						// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$prefix-variable`, `$suffix-variable` and `$value`.
-						@include __variable-body($variable-prefix, $variable-suffix, $value);
-						$diff            : $diff + 1;
-						$y               : $y + 1;
-					}
-				}
-			}
-
-		}
-
-
-		////////////////////////////////////////
-		// Checks if `$custom-values` is map.
-		// Map gives more global usage. Means the same map can be used in different places throughout the code.
-		// Map is easier to use than list, because it's not that abstracted away unlike list or generating scalable values.
-		// The modification of map is unlimited, but changing values in map can be more repetitive and time consuming. List or generated scalable values have faster way of modification.
-		// Like list by using map it's possible use custom values. Which gives more control of values rather than generated scalable
-	} @else if (meta.type-of($custom-values) == map) {
-		$map                      : $custom-values;
-
-		@if (map.has-key($map, 'breakpoint-condition')) {
-			$breakpoint-condition : map.get($map, 'breakpoint-condition');
-			$map                  : map.remove($map, 'breakpoint-condition');
-
-			@if ($breakpoint-condition == 'min' or $breakpoint-condition == 'max') {
-				@each $breakpoint, $map-values in $map {
-					@if ($breakpoint == 'default') {
-						@each $key, $value in $map-values {
-							@if (meta.type-of($key) != string) {
-								@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
-							} @else if (string.length($key) < 1) {
-								@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
-							} @else if (meta.type-of($value) != number and meta.type-of($value) != string) {
-								@error 'Invalid type: Outputted values must be type of number OR STRING FIX ERRORS YOU LAZZY SHIT.';
-							}
-
-							$value    : _scale-number($value, $scale);
-
-							--#{$key} : #{$value};
-
-							@if (utility-classes) {
-								// !IMPORTANT! - The actual class which is outputted. The class is outputted based on `$key`.
-								@at-root .#{$key} {
-									// !IMPORTANT! - The actual declaration line which is outputted. The declaration is outputted based on `$key`.
-									font-size : var(--#{$key});
-								}
-							}
-						}
-					} @else {
-						@include breakpoint($breakpoint-condition, $breakpoint) {
-							@each $key, $value in $map-values {
-
-								@if (meta.type-of($key) != string) {
-									@error 'Invalid type: Parameter `$custom-values` at mixin NECO, must be a map with keys of type string.';
-								} @else if (string.length($key) < 1) {
-									@error 'Invalid length: Parameter `$custom-values` at mixin NECO, must be a map with keys of length greater than 0.';
-								} @else if (meta.type-of($value) != number and meta.type-of($value) != string) {
-									@error 'Invalid type: Outputted values must be type of number OR STRING FIX ERRORS YOU LAZZY SHIT.';
-								}
-
-								$value    : _scale-number($value, $scale);
-
-								--#{$key} : #{$value};
-							}
-						}
-					}
-
-				}
-			} @else {
-				@error 'Invalid key value: `breakpoint-condition` must be either `min` or `max` not `#{$breakpoint-condition}`.';
-			}
-
-		} @else {
-
-			@each $key, $value in $map {
-				$value    : _scale-number($value, $scale); // Value of current `$key` in each loop from map of custom values. The value is scaled based on `$scale` value. As default `$scale` is set to 100%.
-
-				//!IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$key` and `$value`.
-				--#{$key} : #{$value};
-
-				@if (utility-classes) {
-					// !IMPORTANT! - The actual class which is outputted. The class is outputted based on `$key`.
-					@at-root .#{$key} {
-						// !IMPORTANT! - The actual declaration line which is outputted. The declaration is outputted based on `$key`.
-						font-size : var(--#{$key});
-					}
-				}
-			}
-
-			@if ($config != null and map.has-key($config,'custom-scaling', 'breakpoint-condition')) {
-				$breakpoint-condition : map.get($config, 'custom-scaling', 'breakpoint-condition');
-				$breakpoints          : map.get($config, 'custom-scaling', 'breakpoints');
-
-				@each $breakpoint-key, $breakpoint-map in $breakpoints {
-					@include breakpoint($breakpoint-condition, $breakpoint-key) {
-						@each $key, $value in $breakpoint-map {
-							$value    : _scale-number($value, $scale); // Value of current `$key` in each loop from map of custom values. The value is scaled based on `$breakpoint-value` value. As default `$breakpoint-value` is set to 100%.
-
-							//!IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$key` and `$value`.
-							--#{$key} : #{$value};
-						}
-					}
-				}
-			}
-		}
-
-
-		////////////////////////////////////////
-		// Generates scalable values.
-		// Values are generated based on `$base`, `$ratio` and `$length` values.
-		// Generating modular type scale is the fastest way of creating scalable sizes.
-		// Easy to control with two properties, which is --base and --ratio css properties that can be modified any time and all the values will adjust to that.
-		// By using `$preserve` parameter we can prevent the first values in type scale won't adjust. Good usage is for the smaller values like 0.5rem - 2rem that we don't want to adjust.
-		//
-	} @else {
-		--#{$variable-prefix}base : #{$base}; // The base value, which is the first value in type scale and all the next values are generated from this value.
-
-		// Checks if `$ratio` is string.
-		//`$ratio` parameter can be number or string
-		@if (meta.type-of($ratio) == string) {
-			$ratio  : map.get($map-for-ratios, $ratio); // If `$ratio` is string, then check in the `$map-for-ratios`, which ratio to use.
-			--ratio : #{$ratio}; // Outputs the ratio number value.
-		} @else {
-			--ratio : #{$ratio}; // Else just output the `$ratio` based on the parameter.
-		}
-
-		// Loop over the `$length` parameter and generate from that number the scalable values.
-		@for $i from 1 through $length {
-			$hard-suffix     : 'none'; // Hard suffix is disabled. In my opinion with scalable values wouldn't be good idea to have hard suffix values.
-			$variable-suffix : __set-suffix($suffix, $suffix-specified-variable, $length, $i); // Variable suffix based on called `$suffix` or `$suffix-variable` parameters. `$suffix-variable` have bigger priority than `$suffix`.
-
-			// Checks if there will be any value preserved.
-			@if ($preserve == 0) {
-
-				// At first iteration in the loop
-				@if ($i == 1) {
-					// !IMPORTANT -  The actual value which is outputted. Calculating the `$base` value with `$ratio`.
-					$value                  : calc(var(--#{$variable-prefix}base) * var(--ratio));
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-
-					// In next iterations
-				} @else {
-					$variable-suffix-before : __set-suffix($suffix, $suffix-specified-variable, $length, $i - 1); // Variable suffix from the previous iteration. So we can chain all the values and generate the scalable values.
-
-					// !IMPORTANT -  The actual value which is outputted. Calculating the previous variable value with `$ratio`.
-					$value                  : calc(var(--#{$variable-prefix}#{$variable-suffix-before}) * var(--ratio));
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-				}
-
-				// If utility classes are true do as mentioned above.
-				@if ($utility-classes) {
-					$class-prefix : _set-name($prefix, $prefix-specified-class);
-					$class-suffix : __set-suffix($suffix, $suffix-specified-class, $length, $i);
-
-					@at-root .#{_class($class-prefix, $class-suffix)} {
-						@include __declaration-body($variable-prefix, $variable-suffix);
-					}
-				}
-
-				// Else if there are any values which has to be preserved.
-			} @else {
-
-				// At first iteration in the loop
-				@if ($i == 1) {
-					// !IMPORTANT -  The actual value which is outputted. By using `_get-value` function.
-					$value                  : _get-value($base, $ratio, $preserve, $i, $variable-prefix);
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-
-					// In next iterations
-				} @else {
-					$variable-suffix-before : __set-suffix($suffix, $suffix-specified-variable, $length, $i - 1); // Variable suffix from the previous iteration. So we can chain all the values and generate the scalable values.
-
-					// !IMPORTANT -  The actual value which is outputted. By using `_get-value` function.
-					$value                  : _get-value($base, $ratio, $preserve, $i, $variable-prefix, $variable-suffix-before);
-
-					// !IMPORTANT! - The actual variable which is outputted. The variable is outputted based on `$variable-prefix`, variable-suffix` and `$value`.
-					@include __variable-body($variable-prefix, $variable-suffix, $value);
-				}
-
-				// If utility classes are true do as mentioned above.
-				@if ($utility-classes) {
-					$class-prefix : _set-name($prefix, $prefix-specified-class);
-					$class-suffix : __set-suffix($suffix, $suffix-specified-class, $length, $i);
-
-					@at-root .#{_class($class-prefix, $class-suffix)} {
-						@include __declaration-body($variable-prefix, $variable-suffix);
-					}
-				}
-			}
-		}
-	}
+@mixin generate-properties($config) {
+	// do something
 }

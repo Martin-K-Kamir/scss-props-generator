@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+/**
+ * Process config map or parameters into one main config map, which will be disturbed to other functions to
+ * generate scalable css properties, based on given parameters/config.
+ *
+ * NOTE: This function is a building block for the generated scalable system functionality.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _process-config-parameters($config: null, $key: null, $selector: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: null, $suffix: null, $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
+
+	// Make shallow copy config map from parameters.
+	$_config : (
+			'key': $key,
+			'selector' : $selector,
+			'base' : $base,
+			'ratio' : $ratio,
+			'length' : $length,
+			'preserve' : $preserve,
+			'utility-classes' : $utility-classes,
+			'src' : $src,
+			'scale' : $scale,
+			'prefix' : $prefix,
+			'suffix' : $suffix,
+			'prefix-class' : $prefix-class,
+			'prefix-variable' : $prefix-variable,
+			'suffix-class' : $suffix-class,
+			'suffix-variable' : $suffix-variable,
+	);
+
+	// If config parameter is used validate it and merge it into shallow copy config map.
+	@if $config != null {
+		$_config : map.deep-merge($_config, _validate-config($config, $key));
+	}
+
+	// Validate config map and after init generating the css properties.
+	@include _validate-config-parameters($_config);
+	@include _type-scale-generator($_config)
+}

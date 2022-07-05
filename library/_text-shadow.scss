@@ -40,7 +40,7 @@
 		@if $direction == 'top' {
 			@if $fill == true {
 				// The __clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : 0 -#{$increase} $blur $color;
 					$value    : append($value, $shadow, comma);
@@ -51,7 +51,7 @@
 			}
 		} @else if $direction == 'top-left' {
 			@if $fill == true {
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : -#{$increase} -#{$increase} $blur $color;
 					$value    : append($value, $shadow, comma);
@@ -62,7 +62,7 @@
 			}
 		} @else if $direction == 'top-right' {
 			@if $fill == true {
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : #{$increase} -#{$increase} $blur $color;
 					$value    : append($value, $shadow, comma);
@@ -73,7 +73,7 @@
 			}
 		} @else if $direction == 'bottom' {
 			@if $fill == true {
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : 0 #{$increase} $blur $color;
 					$value    : append($value, $shadow, comma);
@@ -84,7 +84,7 @@
 			}
 		} @else if $direction == 'bottom-left' {
 			@if $fill == true {
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : -#{$increase} #{$increase} $blur $color;
 					$value    : append($value, $shadow, comma);
@@ -95,7 +95,7 @@
 			}
 		} @else if $direction == 'bottom-right' {
 			@if $fill == true {
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : #{$increase} #{$increase} $blur $color;
 					$value    : append($value, $shadow, comma);
@@ -106,7 +106,7 @@
 			}
 		} @else if $direction == 'left' {
 			@if $fill == true {
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : -#{$increase} 0 $blur $color;
 					$value    : append($value, $shadow, comma);
@@ -117,7 +117,7 @@
 			}
 		} @else if $direction == 'right' {
 			@if $fill == true {
-				@for $i from 1 through __clearUnit($size) {
+				@for $i from 1 through _clear-unit($size) {
 					$increase : $i * 1 + $sizeUnit;
 					$shadow   : #{$increase} 0 $blur $color;
 					$value    : append($value, $shadow, comma);

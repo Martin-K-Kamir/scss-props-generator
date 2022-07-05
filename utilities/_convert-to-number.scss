@@ -1,4 +1,6 @@
-@function __convert-to-number($value) {
+@charset "UTF-8";
+
+@function _convert-to-number($value) {
 
 	@if type-of($value) == 'number' {
 		@return $value;
