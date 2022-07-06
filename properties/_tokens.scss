@@ -1,104 +1,40 @@
 @import './color-palette';
 
-////////////////// ////// //////////////////
-////////////////// COLORS //////////////////
-////////////////// ////// //////////////////
-$clr-primary-lighter        : 0;
-$clr-primary-light          : 0;
-$clr-primary                : 0;
-$clr-primary-dark           : 0;
-$clr-primary-darker         : 0;
+$clr-info             : $clr-blue-7;
+$clr-error            : $clr-red-8;
+$clr-notification     : $clr-orange-9;
+$clr-warning          : $clr-yellow-7;
+$clr-success          : $clr-green-8;
 
-$clr-secondary-lighter      : 0;
-$clr-secondary-light        : 0;
-$clr-secondary              : 0;
-$clr-secondary-dark         : 0;
-$clr-secondary-darker       : 0;
+$clr-facebook-blue    : hsl(220, 46%, 48%);
+$clr-facebook-gray    : hsl(221, 9%, 57%);
+$clr-facebook-black   : hsl(0, 0%, 0%);
 
-$clr-tertiary-lighter       : 0;
-$clr-tertiary-light         : 0;
-$clr-tertiary               : 0;
-$clr-tertiary-dark          : 0;
-$clr-tertiary-darker        : 0;
+$clr-twitter-blue     : hsl(203, 89%, 53%);
+$clr-twitter-black    : hsl(210, 13%, 9%);
+$clr-twitter-gray     : hsl(207, 14%, 46%);
+$clr-twitter-silver   : hsl(205, 16%, 71%);
 
-$clr-text-lighter           : 0;
-$clr-text-light             : 0;
-$clr-text                   : 0;
-$clr-text-dark              : 0;
-$clr-text-darker            : 0;
+$clr-instagram-blue   : hsl(230, 77%, 58%);
+$clr-instagram-purple : hsl(276, 51%, 47%);
+$clr-instagram-pink   : hsl(326, 57%, 48%);
+$clr-instagram-red    : hsl(0, 98%, 55%);
+$clr-instagram-orange : hsl(20, 92%, 59%);
+$clr-instagram-yellow : hsl(35, 97%, 63%);
 
-$clr-title-lighter          : 0;
-$clr-title-light            : 0;
-$clr-title                  : 0;
-$clr-title-dark             : 0;
-$clr-title-darker           : 0;
+$clr-youtube-red      : hsl(0, 100%, 50%);
+$clr-youtube-black    : hsl(0, 0%, 16%);
 
-$clr-surface-lighter        : 0;
-$clr-surface-light          : 0;
-$clr-surface                : 0;
-$clr-surface-dark           : 0;
-$clr-surface-darker         : 0;
+$clr-github-gray      : hsl(0, 0%, 20%);
+$clr-github-white     : hsl(0, 0%, 98%);
+$clr-github-silver    : hsl(0, 0%, 96%);
+$clr-github-blue      : hsl(214, 50%, 50%);
+$clr-github-purple    : hsl(264, 28%, 45%);
 
-$clr-btn-primary            : 0;
-$clr-btn-hover-primary      : 0;
-$clr-btn-active-primary     : 0;
-$clr-btn-disabled-primary   : 0;
+$clr-google-blue      : hsl(217, 89%, 61%);
+$clr-google-red       : hsl(5, 69%, 54%);
+$clr-google-yellow    : hsl(44, 100%, 48%);
+$clr-google-green     : hsl(151, 83%, 34%);
 
-$clr-btn-secondary          : 0;
-$clr-btn-hover-secondary    : 0;
-$clr-btn-active-secondary   : 0;
-$clr-btn-disabled-secondary : 0;
-
-$clr-btn-tertiary           : 0;
-$clr-btn-hover-tertiary     : 0;
-$clr-btn-active-tertiary    : 0;
-$clr-btn-disabled-tertiary  : 0;
-
-$clr-info                   : $clr-blue-7;
-$clr-error                  : $clr-red-8;
-$clr-notification           : $clr-orange-9;
-$clr-warning                : $clr-yellow-7;
-$clr-success                : $clr-green-8;
-
-$clr-facebook-blue          : hsl(220, 46%, 48%);
-$clr-facebook-gray          : hsl(221, 9%, 57%);
-$clr-facebook-black         : hsl(0, 0%, 0%);
-
-$clr-twitter-blue           : hsl(203, 89%, 53%);
-$clr-twitter-black          : hsl(210, 13%, 9%);
-$clr-twitter-gray           : hsl(207, 14%, 46%);
-$clr-twitter-silver         : hsl(205, 16%, 71%);
-
-$clr-instagram-blue         : hsl(230, 77%, 58%);
-$clr-instagram-purple       : hsl(276, 51%, 47%);
-$clr-instagram-pink         : hsl(326, 57%, 48%);
-$clr-instagram-red          : hsl(0, 98%, 55%);
-$clr-instagram-orange       : hsl(20, 92%, 59%);
-$clr-instagram-yellow       : hsl(35, 97%, 63%);
-
-$clr-youtube-red            : hsl(0, 100%, 50%);
-$clr-youtube-black          : hsl(0, 0%, 16%);
-
-$clr-github-gray            : hsl(0, 0%, 20%);
-$clr-github-white           : hsl(0, 0%, 98%);
-$clr-github-silver          : hsl(0, 0%, 96%);
-$clr-github-blue            : hsl(214, 50%, 50%);
-$clr-github-purple          : hsl(264, 28%, 45%);
-
-$clr-google-blue            : hsl(217, 89%, 61%);
-$clr-google-red             : hsl(5, 69%, 54%);
-$clr-google-yellow          : hsl(44, 100%, 48%);
-$clr-google-green           : hsl(151, 83%, 34%);
-
-$clr-linkedin-blue          : hsl(201, 100%, 35%);
-$clr-linkedin-white         : hsl(0, 0%, 100%);
-
-////////////////// ////////// //////////////////
-////////////////// TYPOGRAPHY //////////////////
-////////////////// ////////// //////////////////
-$f-family-primary           : sans-serif;
-$f-family-secondary         : serif;
-
-////////////////// ///// //////////////////
-////////////////// SIZES //////////////////
-////////////////// ///// //////////////////
+$clr-linkedin-blue    : hsl(201, 100%, 35%);
+$clr-linkedin-white   : hsl(0, 0%, 100%);

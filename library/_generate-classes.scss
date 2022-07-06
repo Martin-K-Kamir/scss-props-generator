@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+@mixin generate-classes($params...) {
+	$selector   : null;
+	$predefined : null;
+
+	@if $params == (config,) {
+		$predefined : _map-deep-get($config, 'classes', 'predefined');
+		$params     : _map-deep-get($config, 'classes', 'src');
+	}
+
+	@if $params == (predefined,) or $predefined {
+		$params : ($map-for-font-weights, $map-for-letter-spacings, $map-for-line-heights, $map-for-shadows);
+	}
+
+	@each $param in $params {
+		$map : $param;
+
+		@if map.has-key($map, 'selector') {
+			$selector : map.get($map, 'selector');
+			$map      : map.remove($map, 'selector');
+		}
+
+		@if map.has-key($map, 'shadow-color') {
+			$map : map.remove($map, 'shadow-color');
+		}
+
+		@if map.has-key($map, 'shadow-strength') {
+			$map : map.remove($map, 'shadow-strength');
+		}
+
+		@each $key, $value in $map {
+			@at-root .#{$key} {
+				#{$selector} : var(--#{$key});
+			}
+		}
+	}
+}

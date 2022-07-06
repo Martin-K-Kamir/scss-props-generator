@@ -1,75 +1,99 @@
-/*
+$list-1          : null;
+$list-2          : null;
+$list-3          : null;
+$list-4          : null;
+$map             : null;
+
 $config-ultimate : (
-		'font-scales' : (
-				'src' : $list-f,
+		'fonts' : (
+				'src' : $list-1,
 				'break-at' : 'max',
 				'breakpoints': (
-						'pc-xs' : $list-fmin,
-						'tablet-max' : $list-fminer,
-						'phone-max' : $list-fminest,
+						'pc-xs' : $list-2,
+						'tablet-max' : $list-3,
+						'phone-max' : $list-4,
 				),
-				'prefix' : 'text-',
 		),
-		'flow-scales' : (
+		'spaces' : (
 				'base' : 1rem,
 				'ratio' : 'major-second',
 				'length' : 10,
 		),
-		'fluid-fonts' : (
-			// config
-		),
-		'fluid-spaces' : (
-			// config
-		),
-	//'colors-scale' : ('map'),
-		'colors-scale' : (
-				'scale' : (20%, 40%, 80%),
-				'primary' : crimson,
-				'secondary' : (
-						'default' : #555555,
-						'lighter' : #555555,
-						'light' : #555555,
-						'dark' : #555555,
-						'darker' : #555555,
-				),
-				'tertiary' : ('list'),
-				'text' : #000000,
-				'surface' : #ffffff,
-				'btn-primary' : #333333,
-				'btn-secondary' : crimson,
-				'socials' :('facebook', 'twitter', 'instagram', 'pinterest', 'youtube', 'linkedin'),
-			//'state' : ('map'),
-			//'state' : true,
-				'state' : (
-						'error' : #333333,
-						'warning' : #333333,
-						'success' : #333333,
-				),
-		),
-		'properties' : ($map-for-letterspacings, $map-for-shadows,),
-		'line-height' : (
-				'src' : ('list'),
-				'prefix' : 'line-height-',
+		'colors' : (
+				'lightness' : 100%,
+				'hsl' : true,
+				'scale' : (20%, 40%, 80%, 100%),
+				'src' : ('primary' : red, 'secondary' : blue, 'tertiary' : green, 'text' : gray, 'surface' : white, 'btn-primary' : 'secondary'),
+				'src' : $map,
+				'src' : 'predefined',
+				'socials' : ('facebook', 'twitter', 'instagram', 'pinterest', 'youtube', 'linkedin'),
+				'socials' : $map,
+				'state' : ('error' : red, 'success' : green, 'warning' : yellow, 'info' : blue),
+				'state' : $map,
 				'suffix' : 'roman',
+				'dark-mode' : (
+						'lightness' : 50%,
+						'src' : ('primary' : red, 'secondary' : blue, 'tertiary' : green, 'text' : gray, 'surface' : white, 'btn-primary' : 'secondary'),
+						'src' : 'predefined',
+				)
 		),
+		'properties' : (
+				'src' : ($map-for-font-weights, $map-for-letter-spacings),
+		),
+		'classes' : (
+				'predefined' : true,
+		)
 );
-*/
 
-@mixin generate-fluid-fonts($config) {
+
+@mixin generate-colors($config: null,
+$scale: (20%, 40%, 80%, 100%),
+$src : ('primary' : red, 'secondary' : blue),
+$src : $map-for-colors,
+$socials : $map-for-colors-socials,
+$socials : ('facebook', 'twitter', 'instagram', 'pinterest', 'youtube', 'linkedin'),
+$state : $map-for-color-states,
+$suffix : 'roman',
+) {
 	// do something
 }
 
 
-@mixin generate-fluid-spaces($config) {
-	// do something
+/*
+					$map-for-font-weights,
+					$map-for-aspect-ratios,
+					$map-for-borders,
+					$map-for-content-sizes,
+					$map-for-letterspacings,
+					$map-for-lineheights,
+					$map-for-shadows,
+					$map-for-easing,
+					$map-for-animations,
+ */
+
+@mixin size($width: null, $height: null) {
+	width  : $width;
+	height : $height or $width;
 }
 
-
-@mixin generate-colors($config) {
-	// do something
+@mixin max-size($width: null, $height: null) {
+	max-width  : $width;
+	max-height : $height or $width;
 }
 
+@mixin min-size($width: null, $height: null) {
+	min-width  : $width;
+	min-height : $height or $width;
+}
 
-@mixin generate-properties($config) {
-	// do something
+@mixin flow($gap, $direction: 'block') {
+	@if ($direction == 'block') {
+		& > * + * {
+			margin-top : $gap;
+		}
+	} @else if ($direction == 'inline') {
+		& > * + * {
+			margin-left : $gap;
+		}
+	}
 }

@@ -42,66 +42,14 @@
 	@if map.has-key($config, 'space-scales') {
 		@include generate-space-scales($config);
 	}
-}
 
-/**
- * The direct mixin for generating font scales. Outputs the scalable css properties for font-size base on
- * given parameters or config.
- *
- * @author - Martin Kamír
- *
- */
-@mixin generate-font-scales(
-	$config: null,
-	$base: null,
-	$ratio: null,
-	$length: null,
-	$preserve: 0,
-	$utility-classes: true,
-	$src: null,
-	$scale: 100%,
-	$prefix: 'f-size-',
-	$suffix: 'numeric',
-	$prefix-class: null,
-	$prefix-variable: null,
-	$suffix-class: null,
-	$suffix-variable: null) {
+	@if map.has-key($config, 'classes') {
+		@include generate-classes(config);
+	}
 
-	$key      : 'font-scales'; // The key for the '_validate-config' function is to identify given parameters and merge them into the main config map.
-	$selector : 'font-size'; // The selector for creating the utility classes.
-
-	// Call the '_process-config-parameters' mixin to process the config or parameters into one main config map.
-	@include _process-config-parameters($config, $key, $selector, $base, $ratio, $length, $preserve, $utility-classes, $src, $scale, $prefix, $suffix, $prefix-class, $prefix-variable, $suffix-class, $suffix-variable);
-}
-
-/**
- * The direct mixin for generating font scales. Outputs the scalable css properties for font-size base on
- * given parameters or config.
- *
- * @author - Martin Kamír
- *
- */
-@mixin generate-space-scales(
-	$config,
-	$base: null,
-	$ratio: null,
-	$length: null,
-	$preserve: 0,
-	$utility-classes: true,
-	$src: null,
-	$scale: 100%,
-	$prefix: 'space-',
-	$suffix: 'numeric',
-	$prefix-class: null,
-	$prefix-variable: null,
-	$suffix-class: null,
-	$suffix-variable: null) {
-
-	$key      : 'space-scales'; // The key for the '_validate-config' function is to identify given parameters and merge them into the main config map.
-	$selector : 'none'; // The selector for creating the utility classes. Because the value is none. Utility classes will not have declaration property only the css property.
-
-	// Call the '_process-config-parameters' mixin to process the config or parameters into one main config map.
-	@include _process-config-parameters($config, $key, $selector, $base, $ratio, $length, $preserve, $utility-classes, $src, $scale, $prefix, $suffix, $prefix-class, $prefix-variable, $suffix-class, $suffix-variable);
+	@if map.has-key($config, 'properties') {
+		@include generate-properties(config);
+	}
 }
 
 

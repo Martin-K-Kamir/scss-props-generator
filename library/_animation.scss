@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin inline-animation($duration, $timing: null, $count: null, $mode: null, $direction: normal) {
+@mixin animation($duration, $timing: null, $count: null, $mode: null, $direction: normal) {
 	$name                     : inline-#{unique-id()};
 
 	@keyframes #{$name} {

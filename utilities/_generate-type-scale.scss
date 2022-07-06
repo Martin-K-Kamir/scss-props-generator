@@ -8,7 +8,7 @@
  * @author - Martin Kamír
  *
  */
-@mixin _type-scale-generator($config) {
+@mixin _generate-type-scale($config) {
 	// Getting all the values from the config map.
 	$key             : map.get($config, 'key');
 	$selector        : map.get($config, 'selector');
@@ -62,12 +62,12 @@
 
 		// If $base is used
 		@if $base != null {
-			$value : calc(var(--#{$prefix}base) * var(--ratio)); // In first iteration output calculation of the base value multiplied by the ratio.
+			$value : calc(var(--#{$prefix}base) * var(--#{$prefix}ratio)); // In first iteration output calculation of the base value multiplied by the ratio.
 
 			// In other iterations calculate the base value multiplied by the ratio and use the previous value.
 			@if $i > 1 {
 				$suffix-prev : _get-suffix($suffix, $length, $i - 1); // Get the suffix for the previous iteration.
-				$value       : calc(var(--#{$prefix}#{$suffix-prev}) * var(--ratio)); // Output the calculation of value which is based on $prefix and $suffix-prev multiplied by the ratio.
+				$value       : calc(var(--#{$prefix}#{$suffix-prev}) * var(--#{$prefix}ratio)); // Output the calculation of value which is based on $prefix and $suffix-prev multiplied by the ratio.
 			}
 
 			// If $preserve is used get the value by _get-value function.

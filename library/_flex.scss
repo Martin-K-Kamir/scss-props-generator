@@ -1,48 +1,38 @@
 @charset "UTF-8";
-@import '../maps/map-for-flexbox';
 
-/// Ultimate flexbox mixin
-/// @author Martin Kamír
-///
-/// @param {string / number}
-/// Mixin accepts multiple parameters.
-///
-/// `justify-center`, `justify-start`, `justify-end`, `justify-between`,
-/// `justify-around`, `justify-evenly`, `justify-unset`, `justify-initial`,
-/// `justify-revert` - Sets justify-content property.
-///
-/// `align-center`, `align-start`, `align-end`, `align-unset`, `align-initial`,
-/// `align-revert` - Sets align-content property.
-///
-/// Parameters accepts all values for flex-direction, flex-wrap property.
-///
-/// Number as parameter sets gap.
-/// TIP: To make gaps possible in older browser. Mixin needs to know their flex-direction.
-///
-/// Parameter accepts custom layout styles as `even-column`, `navbar`, `aside-left`, `aside-right`.
-/// These layouts can be modified by calling other parameters above.
-///
-/// Parameter `fluid-grid` makes flexbox fluid grid.
-/// Which can be modified by calling `col-2`, `col-3`, `col-4`, `col-5`, `col-6`, `col-8`, `col-12`
-/// As default `fluid-grid` is set to be `col-3`. Layout can be modified by calling other parameters above.
-///
+/**
+ * Flexbox mixin to shorten the flexbox properties.
+ *
+ * @author Martin Kamír
+ *
+ * @param {string / number} - Mixin accepts multiple parameters.
+ * For justify-content property, we define in mixin the following values: justify-center, justify-start, justify-end, justify-between, justify-around, justify-evenly, justify-unset, justify-initial, justify-revert.
+ * For align-items property, we define in mixin the following values: align-center, align-start, align-end, align-stretch, align-unset, align-initial, align-revert.
+ * For align-content property, we define in mixin the following values: content-center, content-start, content-end, content-stretch, content-between, content-around, content-evenly, content-unset, content-initial, content-revert.
+ * For flex-direction property, we define in mixin the following values: row, row-reverse, column, column-reverse, direction-unset, direction-initial, direction-revert.
+ * For flex-wrap property, we define in mixin the following values: wrap, wrap-reverse, nowrap, wrap-unset, wrap-initial, wrap-revert.
+ *
+ * Mixin also accepts the following special parameters:
+ * - center - to center in main axis and cross axis.
+ * - even-columns - to evenly distribute columns.
+ * - grid - to create a flexbox grid. Specifying number of columns we define these parameters: cols-2, cols-3, cols-4, cols-5, cols-6, cols-8, cols-12.
+ *
+ * To make gaps we define number in mixin parameter.
+ */
 @mixin flex($params...) {
-	// Default properties
-	$main-size     : 60%;
-	$aside-size    : 10rem;
-	$ideal-size    : 40rem;
+	// Defining variables.
 	$justify       : null;
 	$align         : null;
 	$direction     : null;
 	$wrap          : null;
 	$content       : null;
-	$gap           : 0px;
+	$gap           : 0;
 	$col-width-max : _map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-max');
 	$col-width-md  : _map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-md');
 	$col-width-sm  : _map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-sm');
 	$col-width-min : _map-deep-get($map-for-flexbox, 'grid-widths', 'col-width-min');
 
-	// Loop over the parameters to set col width properties for fluid grid based on the call. As default fluid grid is set to be cols-3.
+	// Looking for cols-* parameter. If found, we set the widths of columns.
 	@each $value in $params {
 		@if $value == 'cols-2' {
 			$col-width-max : 50%;
@@ -78,10 +68,11 @@
 		}
 	}
 
-	// Main loop. Which makes the mixin to work.
+	// The main loop to set the flexbox properties.
 	@each $value in $params {
-		// Check for string in the parameters. Based on params properties will do lookup in flexbox map to get their value.
-		@if type-of($value) == 'string' {
+
+		// If defined parameter is string. Get the value from the map if it corresponds with the value.
+		@if meta.type-of($value) == 'string' {
 			$justify   : _map-deep-get($map-for-flexbox, 'justify', $value);
 			$align     : _map-deep-get($map-for-flexbox, 'align', $value);
 			$direction : _map-deep-get($map-for-flexbox, 'directions', $value);
@@ -89,30 +80,29 @@
 			$content   : _map-deep-get($map-for-flexbox, 'content', $value);
 		}
 
-		// Check for number in the parameters. If there is number set gap value and call for __supportGap so in older browsers there will be gap aswell.
-		@if type-of($value) == 'number' {
-			$gap : $value;
-			gap  : $gap;
-			//@include __supportGap($gap, $direction); check if gap is supported, if gap is not supported use flow mixin to make gaps. Good to use for older browsers.
-		}
-
-		// Sets the values
+		// The output of the mixin.
 		justify-content : $justify;
 		align-content   : $content;
 		align-items     : $align;
 		flex-direction  : $direction;
 		flex-wrap       : $wrap;
+
+		// If defined parameter is number. Set the gap.
+		@if meta.type-of($value) == 'number' {
+			$gap : $value;
+			gap  : $gap;
+		}
 	}
 
-	// Loop If else chain for custom flex layouts
+	// The second main loop to output the special parameters.
 	@each $value in $params {
-		// Center on main axis and cross axies
 		@if $value == 'center' {
+			// Centering in main axis and cross axis.
 			justify-content : center;
 			align-items     : center;
 
-			// Even columns
 		} @else if $value == 'even-columns' {
+			// Evenly distribute columns.
 			justify-content : center;
 			flex-direction  : row;
 
@@ -120,8 +110,8 @@
 				flex-basis : 100%;
 			}
 
-			// Fluid grid system which can be modified by second parameter (col-2, col-3, col-4, etc...)
 		} @else if $value == 'grid' {
+			// Create a flexbox grid.
 			flex-wrap       : wrap;
 
 			& > * {
@@ -140,48 +130,8 @@
 					min-width : calc(#{$col-width-min} - #{$gap});
 				}
 			}
-
-			// Navbar which apply styles to the ul. To order to work the mixin have to be called in container/parent div
-		} @else if $value == 'navbar' {
-			& > ul {
-				width           : 100%;
-				align-items     : center;
-				justify-content : space-between;
-				gap             : $gap;
-			}
-		} @else if $value == 'aside-left' {
-			flex-wrap       : wrap;
-
-			& > *:nth-child(2) {
-				flex-grow  : 9999;
-				flex-basis : $main-size;
-			}
-
-			& > *:nth-child(1) {
-				flex-basis : $aside-size;
-				flex-grow  : 1;
-			}
-		} @else if $value == 'aside-right' {
-			flex-wrap       : wrap-reverse;
-
-			& > *:nth-child(1) {
-				flex-grow  : 9999;
-				flex-basis : $main-size;
-			}
-
-			& > *:nth-child(2) {
-				flex-basis : $aside-size;
-				flex-grow  : 1;
-			}
-		} @else if $value == 'fluid-columns' {
-			flex-wrap       : wrap;
-
-			& > * {
-				flex-grow : 1;
-				flex      : calc(calc(40rem - 10%) * 999)
-			}
 		}
 	}
 
-	display        : flex; //! Never delete this. Don't ask why.
+	display        : flex;
 }

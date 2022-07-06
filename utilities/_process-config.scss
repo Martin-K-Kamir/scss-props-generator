@@ -9,7 +9,7 @@
  * @author - Martin Kamír
  *
  */
-@mixin _process-config-parameters($config: null, $key: null, $selector: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: null, $suffix: null, $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
+@mixin _process-config($config: null, $key: null, $selector: null, $base: null, $ratio: null, $length: null, $preserve: 0, $utility-classes: true, $src: null, $scale: 100%, $prefix: null, $suffix: null, $prefix-class: null, $prefix-variable: null, $suffix-class: null, $suffix-variable: null) {
 
 	// Make shallow copy config map from parameters.
 	$_config : (
@@ -32,10 +32,10 @@
 
 	// If config parameter is used validate it and merge it into shallow copy config map.
 	@if $config != null {
-		$_config : map.deep-merge($_config, _validate-config($config, $key));
+		$_config : map.deep-merge($_config, _validate-config-map($config, $key));
 	}
 
 	// Validate config map and after init generating the css properties.
-	@include _validate-config-parameters($_config);
-	@include _type-scale-generator($_config)
+	@include _validate-config($_config);
+	@include _generate-type-scale($_config)
 }

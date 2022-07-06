@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
-$map-for-lineheights : (
+$map-for-line-heights : (
+		'selector' : 'line-height',
 		'f-lineheight-1' : 0.95,
 		'f-lineheight-2' : 1,
 		'f-lineheight-3' : 1.1,

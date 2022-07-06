@@ -5,96 +5,132 @@
 @use "sass:map";
 @use "sass:list";
 
-@import './lists/list-of-directions';
-@import './lists/list-of-layers';
+@import 'lists/list-of-directions';
+@import 'lists/list-of-layers';
 
-@import './properties/breakpoints';
-@import './properties/color-palette';
-@import './properties/easing';
-@import './properties/animations';
-@import './properties/tokens';
+@import 'properties/breakpoints';
+@import 'properties/color-palette';
+@import 'properties/tokens';
 
-@import './maps/map-for-animations';
-@import './maps/map-for-aspect-ratios';
-@import './maps/map-for-breakpoints';
-@import './maps/map-for-borders';
-@import './maps/map-for-flexbox';
-@import './maps/map-for-font-weights';
-@import './maps/map-for-colors';
-@import './maps/map-for-content-sizes';
-@import './maps/map-for-directions';
-@import './maps/map-for-easings';
-@import './maps/map-for-laptops';
-@import './maps/map-for-letterspacings';
-@import './maps/map-for-lineheights';
-@import './maps/map-for-pc';
-@import './maps/map-for-shadows';
-@import './maps/map-for-phones';
-@import './maps/map-for-ratios';
-@import './maps/map-for-shadows';
-@import './maps/map-for-suffixes';
-@import './maps/map-for-tablets';
+@import 'maps/map-for-animations';
+@import 'maps/map-for-aspect-ratios';
+@import 'maps/map-for-breakpoints';
+@import 'maps/map-for-borders';
+@import 'maps/map-for-flexbox';
+@import 'maps/map-for-fluid-sizes';
+@import 'maps/map-for-font-weights';
+//@import 'maps/map-for-colors';
+@import 'maps/map-for-content-sizes';
+@import 'maps/map-for-directions';
+@import 'maps/map-for-easing';
+@import 'maps/map-for-letter-spacings';
+@import 'maps/map-for-line-heights';
+@import 'maps/map-for-shadows';
+@import 'maps/map-for-radius';
+@import 'maps/map-for-ratios';
+@import 'maps/map-for-shadows';
+@import 'maps/map-for-suffixes';
 
-@import './utilities/class-shell';
-@import './utilities/clear-unit';
-@import './utilities/clear-whitespace';
-@import './utilities/convert-to-number';
-@import './utilities/create-suffix-list';
-@import './utilities/declaration-shell';
-@import './utilities/get-calc-value';
-@import './utilities/get-value';
-@import './utilities/get-name';
-@import './utilities/get-suffix';
-@import './utilities/is-color';
-@import './utilities/is-number';
-@import './utilities/is-time';
-@import './utilities/list-slice';
-@import './utilities/list-reverse';
-@import './utilities/map-deep-get';
-@import './utilities/map-deep-set';
-@import './utilities/map-keys';
-@import './utilities/null';
-@import './utilities/remove-unit';
-@import './utilities/number-slice';
-@import './utilities/number-scale';
-@import './utilities/string-replace';
-@import './utilities/to-rem';
-@import './utilities/to-list';
-@import './utilities/validate-breakpoint';
-@import './utilities/validate-config';
-@import './utilities/validate-config-keys';
-@import './utilities/validate-config-parameters';
-@import './utilities/validate-length';
-@import './utilities/validate-ratio';
-@import './utilities/variable-shell';
-@import './utilities/type-scale-generator';
-@import './utilities/process-config-parameters';
+@import 'utilities/class-shell';
+@import 'utilities/clear-unit';
+@import 'utilities/clear-whitespace';
+@import 'utilities/convert-to-number';
+@import 'utilities/create-suffix-list';
+@import 'utilities/declaration-shell';
+@import 'utilities/get-calc-value';
+@import 'utilities/get-value';
+@import 'utilities/get-name';
+@import 'utilities/get-suffix';
+@import 'utilities/is-color';
+@import 'utilities/is-number';
+@import 'utilities/is-time';
+@import 'utilities/list-slice';
+@import 'utilities/list-reverse';
+@import 'utilities/map-deep-get';
+@import 'utilities/map-deep-set';
+@import 'utilities/map-keys';
+@import 'utilities/null';
+@import 'utilities/remove-unit';
+@import 'utilities/number-slice';
+@import 'utilities/number-scale';
+@import 'utilities/string-replace';
+@import 'utilities/to-rem';
+@import 'utilities/to-list';
+@import 'utilities/validate-breakpoint';
+@import 'utilities/validate-config-map';
+@import 'utilities/validate-config-keys';
+@import 'utilities/validate-config';
+@import 'utilities/validate-length';
+@import 'utilities/validate-ratio';
+@import 'utilities/variable-shell';
+@import 'utilities/generate-type-scale';
+@import 'utilities/process-config';
 
-@import './functions/color-mixer';
-@import './functions/layer';
-@import './functions/em';
+//@import 'functions/color-mixer';
+@import 'functions/layer';
+@import 'functions/em';
 
-@import './library/absolute';
-@import './library/animation';
-@import './library/breakpoint-landscape';
-@import './library/breakpoint';
-@import './library/except';
-@import './library/fixed';
-@import './library/flex';
-@import './library/hide';
-@import './library/laptop';
-@import './library/loadify';
-@import './library/flow';
-@import './library/only';
-@import './library/pc';
-@import './library/phone';
-@import './library/remove';
-@import './library/screen-agent';
-@import './library/size';
-@import './library/stack';
-@import './library/tablet';
-@import './library/text-shadow';
-@import './library/text-stroke';
-@import './library/generator';
+@import 'library/absolute';
+@import 'library/breakpoint-landscape';
+@import 'library/breakpoint';
+@import 'library/except';
+@import 'library/fixed';
+@import 'library/flex';
+@import 'library/hide';
+@import 'library/animation';
+@import 'library/loadify';
+@import 'library/only';
+@import 'library/remove';
+@import 'library/screen-agent';
+@import 'library/stack';
+@import 'library/text-shadow';
+@import 'library/text-stroke';
+@import 'library/generate-font-scales';
+@import 'library/generate-space-scales';
+@import 'library/generate-classes';
+@import 'library/generate-properties';
+@import 'library/generator';
 
+
+$config : (
+		'properties' : (
+			//'predefined' : true,
+				'src' : ($map-for-font-weights, $map-for-letter-spacings),
+		),
+		'classes' : (
+				'predefined' : true,
+			//'src' : ($map-for-font-weights, $map-for-letter-spacings),
+		)
+);
+
+
+:root {
+	//@include generate-font-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
+	//@include generate-space-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
+	//
+	//
+	//@include generate-properties(
+	//				$map-for-font-weights,
+	//				$map-for-aspect-ratios,
+	//				$map-for-borders,
+	//				$map-for-content-sizes,
+	//				$map-for-letter-spacings,
+	//				$map-for-line-heights,
+	//				$map-for-shadows,
+	//				$map-for-easing,
+	//				$map-for-animations,
+	//);
+
+	//@include generate-classes(
+	//				$map-for-font-weights,
+	//				$map-for-letterspacings,
+	//				$map-for-lineheights,
+	//				$map-for-shadows,
+	//);
+
+	//@include generate-classes(predefined);
+	@include generate-classes(config);
+	@include generate-properties(config);
+	//@include generate-classes($map-for-font-weights);
+}
 

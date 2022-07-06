@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+@mixin generate-properties($params...) {
+	$predefined : null;
+
+	@if $params == (config,) {
+		$predefined : _map-deep-get($config, 'properties', 'predefined');
+		$params     : _map-deep-get($config, 'properties', 'src');
+	}
+
+	@if $params == (predefined,) or $predefined {
+		$params : (
+				$map-for-easing,
+				$map-for-animations,
+				$map-for-aspect-ratios,
+				$map-for-borders,
+				$map-for-radius,
+				$map-for-content-sizes,
+				$map-for-font-weights,
+				$map-for-letter-spacings,
+				$map-for-line-heights,
+				$map-for-shadows
+		);
+	}
+
+	@each $param in $params {
+		$map : $param;
+
+		@if map.has-key($map, 'selector') {
+			$map : map.remove($map, 'selector');
+		}
+
+		@each $key, $value in $map {
+			--#{$key} : #{$value};
+		}
+	}
+}

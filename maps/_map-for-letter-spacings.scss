@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
-$map-for-letterspacings : (
+$map-for-letter-spacings : (
+		'selector' : 'letter-spacing',
 		'f-letterspacing-0' : -0.05em,
 		'f-letterspacing-1' : 0.025em,
 		'f-letterspacing-2' : 0.05em,
