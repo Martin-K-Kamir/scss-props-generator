@@ -7,6 +7,10 @@
 
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';
+@import 'lists/list-of-font-sizes';
+@import 'lists/list-of-fluid-font-sizes';
+@import 'lists/list-of-space-sizes';
+@import 'lists/list-of-fluid-space-sizes';
 
 @import 'properties/breakpoints';
 @import 'properties/color-palette';
@@ -52,9 +56,9 @@
 @import 'utilities/null';
 @import 'utilities/remove-unit';
 @import 'utilities/number-slice';
+@import 'utilities/number-round';
 @import 'utilities/number-scale';
 @import 'utilities/string-replace';
-@import 'utilities/to-rem';
 @import 'utilities/to-list';
 @import 'utilities/validate-breakpoint';
 @import 'utilities/validate-config-map';
@@ -68,6 +72,7 @@
 
 //@import 'functions/color-mixer';
 @import 'functions/layer';
+@import 'functions/clamped';
 @import 'functions/em';
 
 @import 'library/absolute';
@@ -82,15 +87,14 @@
 @import 'library/only';
 @import 'library/remove';
 @import 'library/screen-agent';
-@import 'library/stack';
 @import 'library/text-shadow';
 @import 'library/text-stroke';
+@import 'library/generate-fluid-font-scales';
 @import 'library/generate-font-scales';
 @import 'library/generate-space-scales';
 @import 'library/generate-classes';
 @import 'library/generate-properties';
 @import 'library/generator';
-
 
 $config : (
 		'properties' : (
@@ -103,10 +107,10 @@ $config : (
 		)
 );
 
-
 :root {
-	//@include generate-font-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
-	//@include generate-space-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
+	@include generate-font-scales($base : 1rem, $ratio : 'minor-second', $length : 10, $preserve: 5);
+	@include generate-space-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
+	@include generate-fluid-font-scales($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
 	//
 	//
 	//@include generate-properties(
@@ -129,8 +133,20 @@ $config : (
 	//);
 
 	//@include generate-classes(predefined);
-	@include generate-classes(config);
-	@include generate-properties(config);
+	//@include generate-classes(config);
+	//@include generate-properties(config);
 	//@include generate-classes($map-for-font-weights);
+}
+
+.foooo {
+	font-size : clamped(1.6rem, 3rem);
+
+	@include breakpoint(max, pc-min) {
+		color: red !important;
+	}
+
+	@include breakpoint(max, phone-max) {
+		color: blue !important;
+	}
 }
 

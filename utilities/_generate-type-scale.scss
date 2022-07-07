@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+@function clap($value) {
+	@debug  #{$value};
+	  @return #{$value};
+}
 /**
  * Generates css properties of given parameters in config.
  *
@@ -27,6 +31,8 @@
 	$suffix          : map.get($config, 'suffix');
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
+
+
 
 	// Sets all variables to be used in the mixin.
 	$src-length      : list.length($src);
@@ -151,9 +157,15 @@
 		}
 	}
 
-	// Generate stack classes if key is 'space-scales' and utility-classes are set to true.
-	@if $key == 'space-scales' and $utility-classes == true {
-		@include stack($prefix);
+	// Generate stack classes if key is 'spaces' and utility-classes are set to true.
+	@if $key == 'spaces' and $utility-classes == true {
+		@at-root .stack {
+			display : grid;
+			gap     : var(--#{if($prefix != null, $prefix, 'space')});;
+		}
+		@at-root .stack > * {
+			margin : 0;
+		}
 	}
 }
 

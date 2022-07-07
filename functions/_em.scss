@@ -1,8 +1,9 @@
 @use 'sass:math';
 
-$browser-context : 16;
+$agent-size : 16;
+$author-size : 10;
 
-@function em($pixels, $context: $browser-context) {
+@function em($pixels, $context: $agent-size) {
 	@if (unitless($pixels)) {
 		$pixels : $pixels * 1px;
 	}

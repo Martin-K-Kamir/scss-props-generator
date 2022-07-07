@@ -1,13 +1,34 @@
 @charset "UTF-8";
 
+/**
+ * Mixin to generate css properties(variables) from a map.
+ *
+ * NOTE: This mixin is also used in the 'generator' mixin.
+ * NOTE: This mixin is similar to the 'generate-classes' mixin, but it generates utility classes instead of css properties.
+ *
+ * @author - Martin Kamír
+ *
+ * @param $params {map/string} - Parameter accepts multiple maps to generate css properties from or a string such as 'predefined'
+ * to generate predefined css properties or accepts 'config' to generate css properties from the config map.
+ *
+ * Example of config:
+ * $config : ( - Name of the map must be always 'config'
+ *  	'properties' : ( - Important key from this key the 'generator' mixin will know call this mixin.
+ *  		'predefined' : {boolean} - If true, predefined css properties will be generated.
+ *  		'src' : {list} - List of maps to generate css properties from.
+ *  	),
+ * );
+ */
 @mixin generate-properties($params...) {
 	$predefined : null;
 
+	// Check for config. The string '(config,)' must look like this, because of arglist from $params...
 	@if $params == (config,) {
 		$predefined : _map-deep-get($config, 'properties', 'predefined');
 		$params     : _map-deep-get($config, 'properties', 'src');
 	}
 
+	// If the $params is a string 'predefined' or $predefined is true from config, generate predefined css properties.
 	@if $params == (predefined,) or $predefined {
 		$params : (
 				$map-for-easing,
@@ -23,9 +44,11 @@
 		);
 	}
 
+	// Main loop to output css properties.
 	@each $param in $params {
 		$map : $param;
 
+		// Check if the map has a key 'selector'. If so remove that key.
 		@if map.has-key($map, 'selector') {
 			$map : map.remove($map, 'selector');
 		}

@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+@function _convert-to-rem($px) {
+	$default-font-size : 10px;
+
+	$rems : math.div($px, $default-font-size) * 1rem;
+	@return $rems;
+}

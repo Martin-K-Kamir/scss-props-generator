@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
 /**
- * Returns either 1. calculated number or 2. calculation method with scaled ratio affected by current index($i) in the loop or 2. calculation method.
+ * Returns either 1. calculated number or 2. calculation method with scaled ratio affected by current index($i) 2. calculation method.
  *
- * NOTE: This function is a building block for the generated scalable system functionality when $preserve parameter is used.
+ * NOTE: This function is a building block for the generated type scale functionality.
  *
  * @author - Martin Kamír
  *
@@ -21,7 +21,7 @@
  */
 @function _get-value($base, $ratio, $preserve, $i, $prefix: null, $suffix: null) {
 	@if ($preserve >= $i) {
-		@return _number-slice(_get-calc-value($base, $ratio, $preserve, $i, $prefix), $unit : 'rem');
+		@return _number-round(_get-calc-value($base, $ratio, $preserve, $i, $prefix), 2);
 	} @else if ($preserve + 1 == $i) {
 		@return _get-calc-value($base, $ratio, $preserve, $i, $prefix);
 	} @else {

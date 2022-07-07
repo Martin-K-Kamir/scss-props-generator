@@ -1,8 +1,9 @@
 @charset "UTF-8";
+@import '../properties/breakpoints';
 
 $map-for-breakpoints : (
 		'ultrawide-max ': $ultrawide-max,
-		'ultrawide-md': $ultrawide-max,
+		'ultrawide-md': $ultrawide-md,
 		'ultrawide-min ': $ultrawide-min,
 		'pc-max': $pc-max,
 		'pc-xl': $pc-xl,

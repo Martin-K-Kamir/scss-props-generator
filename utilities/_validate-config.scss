@@ -27,6 +27,8 @@
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
 
+	@debug meta.type-of($base);
+
 	// Preventing $base, $ratio, $length and $preserve to be used together with $src and $scale.
 	// The reason behind this is we don't want generate ratio scaled values with custom values from map or list.
 	@if ($base != null or $ratio != null or $length != null or $preserve != 0) and
@@ -35,7 +37,7 @@
 	}
 
 	// Prevent parameters to have incorrect type values i.g $base parameter being a color type or $utility-classes parameter being string type and so on...
-	@if (meta.type-of($base) != 'null' and meta.type-of($base) != number) or
+	@if (meta.type-of($base) != 'null' and meta.type-of($base) != number and meta.type-of($base) != calculation) or
 		 (meta.type-of($ratio) != 'null' and meta.type-of($ratio) != string and meta.type-of($ratio) != number) or
 		 (meta.type-of($length) != 'null' and meta.type-of($length) != number) or
 		 (meta.type-of($utility-classes) != bool) or
@@ -53,12 +55,12 @@
 	}
 
 	// Prevent $base and $scale values to be below 0.
-	@if (meta.type-of($base) != 'null' and $base < 0) or ($scale < 0) {
+	@if (meta.type-of($base) != calculation and (meta.type-of($base) != 'null' and $base < 0)) or ($scale < 0) {
 		@error "Invalid value: 'base', 'length', 'scale' must be greater than or equal to 0.";
 	}
 
 	// Prevent $base value to be unitless number.
-	@if meta.type-of($base) != 'null' and math.is-unitless($base) {
+	@if meta.type-of($base) != calculation and (meta.type-of($base) != 'null' and math.is-unitless($base)) {
 		@error "Invalid value: 'base' must be a number with a unit.";
 	}
 

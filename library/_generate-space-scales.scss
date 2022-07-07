@@ -1,10 +1,26 @@
 @charset "UTF-8";
 
 /**
- * The direct mixin for generating font scales. Outputs the scalable css properties for font-size base on
- * given parameters or config.
+ * Mixin for generating spaces type scales.
+ *
+ * NOTE: This mixin is also used in the 'generator' mixin.
+ * NOTE: This mixin is similar to the 'generate-space-scales' mixin, but it generates font-size css properties instead of space css properties.
  *
  * @author - Martin Kamír
+ *
+ * @param $config {map} - Config map uses same parameters as below, but can be defined 'breakpoints' and 'break-at' keys to generate breakpoints.
+ * @param $base {number} - The base value. Number must be with unit.
+ * @param $ratio {number / string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
+ * @param $length {number} - The length of the scale. Number must be with unit.
+ * @param $preserve : {number} - The number of how many css properties will be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
+ * @param $prefix : {string} - Defines the name of css property and utility classes.
+ * @param $prefix-class : {string} - Defines the name of utility classes.
+ * @param $prefix-variable : {string} - Defines the name of css property.
+ * @param $suffix : {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
+ * @param $suffix-class : {string} - Defines the name of utility classes.
+ * @param $suffix-variable : {string} - Defines the name of css property.
+ * @param $src : {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
+ * @param $scale : {number} - Scale the values from src. Number must use percentage unit.
  *
  */
 @mixin generate-space-scales(
@@ -23,7 +39,7 @@
 	$suffix-class: null,
 	$suffix-variable: null) {
 
-	$key      : 'space-scales'; // The key for the '_validate-config' function is to identify given parameters and merge them into the main config map.
+	$key      : 'spaces'; // The key for the '_validate-config' function is to identify given parameters and merge them into the main config map.
 	$selector : 'none'; // The selector for creating the utility classes. Because the value is none. Utility classes will not have declaration property only the css property.
 
 	// Call the '_process-config-parameters' mixin to process the config or parameters into one main config map.

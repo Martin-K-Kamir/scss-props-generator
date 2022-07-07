@@ -1,0 +1,49 @@
+@charset "UTF-8";
+@import '../utilities/convert-to-rem';
+@import '../utilities/number-round';
+@import '../maps/map-for-breakpoints';
+
+
+
+@function clamped($min-value, $max-value, $min-breakpoint: map.get($map-for-breakpoints, "phone-max"), $max-breakpoint: map.get($map-for-breakpoints, "pc-min")) {
+	$value-unit: null;
+	$breakpoint-unit: null;
+
+	@if meta.type-of($min-value) != number or meta.type-of($max-value) != number or meta.type-of($min-breakpoint) != number or meta.type-of($max-breakpoint) != number {
+		@error "Invalid type: parameters $min-value, $max-value, $min-breakpoint and $max-breakpoint must be numbers.";
+	}
+
+	@if math.is-unitless($min-value) or math.is-unitless($max-value) or math.is-unitless($min-breakpoint) or math.is-unitless($max-breakpoint) {
+		@error "Invalid type: parameters $min-value, $max-value, $min-breakpoint and $max-breakpoint must be numbers with units.";
+	}
+
+	@if math.unit($min-value) == math.unit($max-value) {
+		$value-unit : math.unit($min-value);
+	} @else {
+		@error "Invalid unit: parameters $min-value and $max-value must have the same unit.";
+	}
+
+	@if math.unit($min-breakpoint) == math.unit($max-breakpoint) {
+		$breakpoint-unit : math.unit($min-breakpoint);
+	} @else {
+		@error "Invalid unit: parameters $min-breakpoint and $max-breakpoint must have the same unit.";
+	}
+
+	$min-value : _convert-to-number(_string-replace($min-value, $value-unit));
+	$max-value : _convert-to-number(_string-replace($max-value, $value-unit));
+	$min-breakpoint : _convert-to-number(_string-replace($min-breakpoint, $breakpoint-unit));
+	$max-breakpoint : _convert-to-number(_string-replace($max-breakpoint, $breakpoint-unit));
+
+	@if $breakpoint-unit == em {
+		$min-breakpoint : $min-breakpoint * $agent-size;
+		$max-breakpoint : $max-breakpoint * $agent-size;
+	} @else if $breakpoint-unit == rem {
+		$min-breakpoint : $min-breakpoint * $author-size;
+		$max-breakpoint : $max-breakpoint * $author-size;
+	}
+
+	$slope : math.div($max-value - $min-value, $max-breakpoint - $min-breakpoint);
+	$slope-vw : _number-round($slope * 1000, 2);
+	$intercept-rems : _number-round($min-value - $slope * $min-breakpoint, 2);
+	@return clamp(#{$min-value}#{$value-unit}, #{$slope-vw}vw + #{$intercept-rems}#{$value-unit}, #{$max-value}#{$value-unit});
+}

@@ -6,27 +6,30 @@
  * We can use the direct mixins such as 'generate-font-scales' or 'generate-space-sizes'.
  *
  * Example of config map:
- *
  * $config: (
- *  font-scales' : ( - From this key the _generate-font-scales mixin will be called with given values.
+ *  fonts' : ( - From this key the _generate-font-scales mixin will be called with given values.
  *  	'base' : {number} - The base value. Number must be with unit.
  *  	'ratio' : {number / string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
  *  	'length' : {number} - The length of the generated css properties. Number must be with no unit.
- *  	'preserve' : {number} - The number of how many css properties to be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
+ *  	'preserve' : {number} - The number of how many css properties will be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
  *  	'prefix' : {string} - Defines the name of css property and utility classes.
  *  	'prefix-class' : {string} - Defines the name of utility classes.
  *  	'prefix-variable' : {string} - Defines the name of css property.
  *  	'suffix' : {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
  *  	'suffix-class' : {string} - Defines the name of utility classes.
  *  	'suffix-variable' : {string} - Defines the name of css property.
- *  	'src' : {arglist, list, map} - Defining the source of custom values from list, map or arglist. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
+ *  	'src' : {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
  *  	'scale' : {number} - Scale the values from src. Number must use percentage unit.
  *  	'break-at' : {string} - Defines the min-width or max-width of the breakpoint by calling 'min' or 'max'.
  *  	'breakpoints' : {map}  - Defines the breakpoints and their values. Key is the breakpoint name from $map-for-breakpoints and value is the value of the breakpoint.
  *  	),
- *  space-scales' : ( - From this key the _generate-space-scales mixin will be called with given values.
- *  	Using the same parameters as in font-scales.
+ *  spaces' : ( - From this key the _generate-space-scales mixin will be called with given values.
+ *  	Using the same parameters as in fonts.
  *  	),
+ *  'properties' : ( - From this key the _generate-properties mixin will be called with given values.
+ *  	'predefined' : {boolean} - If true, predefined css properties will be generated.
+ *  	'src' : {list} - List of maps to generate css properties from.
+ *  ),
  *
  * @author - Martin Kamír
  *
