@@ -5,14 +5,14 @@
  * which sets how many values will be preserved(can't be changed with ratio or base css properties) by getting the already calculated number. When $pre(preservation) reaches the set maximum value
  * calculation method will be returned. Calculation of how much ratio will scale the base number is based on the current index($i) in the loop. So in every loop interval, the ratio will be increased by 1.
  *
- * NOTE: This function is a building block for the generated scalable system functionality when $preserve parameter is used.
+ * NOTE: This function is a building block for the generated types scale functionality.
  *
  * @author - Martin Kamír
  *
  * @example
- * _get-calc-value(1rem, 2, 5, 2, f-size) => 16rem
- * _get-calc-value(1rem, 2, 5, 6, f-size) => calc(var(--f-size-base) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio))
- * @overload _get-calc-value($b, $r, $pre, $i, $p)
+ * _decide-calc-method(1rem, 2, 5, 2, f-size) => 16rem
+ * _decide-calc-method(1rem, 2, 5, 6, f-size) => calc(var(--f-size-base) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio) * var(--f-size-ratio))
+ * @overload _decide-calc-method($b, $r, $pre, $i, $p)
  * @param $b {number} - Base value.
  * @param $r {number} - Ratio value.
  * @param $pre {number} - Preserve value.
@@ -20,7 +20,7 @@
  * @param $p {string} - Prefix value.
  * @return calculated number or calculation method.
  */
-@function _get-calc-value($b, $r, $pre, $i, $p) {
+@function _decide-calc-method($b, $r, $pre, $i, $p) {
 	@if ($i == 1) {
 		@if ($pre >= 1) {
 			@return $b * $r;

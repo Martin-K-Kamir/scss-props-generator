@@ -1,13 +1,13 @@
 @charset "UTF-8";
+@import '../utilities/convert-to-number';
 @import '../utilities/convert-to-rem';
 @import '../utilities/number-round';
 @import '../maps/map-for-breakpoints';
 
 
-
-@function clamped($min-value, $max-value, $min-breakpoint: map.get($map-for-breakpoints, "phone-max"), $max-breakpoint: map.get($map-for-breakpoints, "pc-min")) {
-	$value-unit: null;
-	$breakpoint-unit: null;
+@function clamped($min-value, $max-value, $min-breakpoint: map.get($map-for-breakpoints, "screen-xs"), $max-breakpoint: map.get($map-for-breakpoints, "screen-xl")) {
+	$value-unit : null;
+	$breakpoint-unit : null;
 
 	@if meta.type-of($min-value) != number or meta.type-of($max-value) != number or meta.type-of($min-breakpoint) != number or meta.type-of($max-breakpoint) != number {
 		@error "Invalid type: parameters $min-value, $max-value, $min-breakpoint and $max-breakpoint must be numbers.";

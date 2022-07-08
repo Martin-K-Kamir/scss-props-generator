@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
-@mixin _declaration-shell($prefix, $suffix, $value, $selector: 'font-size') {
-	@if $selector == 'none' {
-		--#{$prefix} : var(--#{$prefix}#{$suffix});
+@mixin _declaration-shell($prefix, $suffix, $value, $selector, $key) {
+	@if $selector == 'none' and ($key == 'fluid-space-types' or $key == 'space-types') {
+		--space      : var(--#{$prefix}#{$suffix});
 	} @else {
 		#{$selector} : var(--#{$prefix}#{$suffix});
 	}

@@ -97,3 +97,14 @@ $suffix : 'roman',
 		}
 	}
 }
+
+// Generate stack classes if key is 'spaces' and utility-classes are set to true.
+@if ($key == 'space-types' or $key == 'fluid-space-types') and $utility-classes == true {
+	@at-root .stack {
+		display : grid;
+		gap     : var(--space, var(--#{$prefix}base));
+	}
+	@at-root .stack > * {
+		margin : 0;
+	}
+}

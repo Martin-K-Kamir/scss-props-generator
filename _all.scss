@@ -5,16 +5,16 @@
 @use "sass:map";
 @use "sass:list";
 
+@import 'functions/layer';
+@import 'functions/clamped';
+@import 'functions/em';
+
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';
 @import 'lists/list-of-font-sizes';
-@import 'lists/list-of-fluid-font-sizes';
+@import 'lists/list-of-fluid-fonts';
 @import 'lists/list-of-space-sizes';
-@import 'lists/list-of-fluid-space-sizes';
-
-@import 'properties/breakpoints';
-@import 'properties/color-palette';
-@import 'properties/tokens';
+@import 'lists/list-of-fluid-spaces';
 
 @import 'maps/map-for-animations';
 @import 'maps/map-for-aspect-ratios';
@@ -23,7 +23,6 @@
 @import 'maps/map-for-flexbox';
 @import 'maps/map-for-fluid-sizes';
 @import 'maps/map-for-font-weights';
-//@import 'maps/map-for-colors';
 @import 'maps/map-for-content-sizes';
 @import 'maps/map-for-directions';
 @import 'maps/map-for-easing';
@@ -41,7 +40,7 @@
 @import 'utilities/convert-to-number';
 @import 'utilities/create-suffix-list';
 @import 'utilities/declaration-shell';
-@import 'utilities/get-calc-value';
+@import 'utilities/decide-calc-method';
 @import 'utilities/get-value';
 @import 'utilities/get-name';
 @import 'utilities/get-suffix';
@@ -67,13 +66,8 @@
 @import 'utilities/validate-length';
 @import 'utilities/validate-ratio';
 @import 'utilities/variable-shell';
-@import 'utilities/generate-type-scale';
+@import 'utilities/generate-types-scale';
 @import 'utilities/process-config';
-
-//@import 'functions/color-mixer';
-@import 'functions/layer';
-@import 'functions/clamped';
-@import 'functions/em';
 
 @import 'library/absolute';
 @import 'library/breakpoint-landscape';
@@ -89,14 +83,25 @@
 @import 'library/screen-agent';
 @import 'library/text-shadow';
 @import 'library/text-stroke';
-@import 'library/generate-fluid-font-scales';
-@import 'library/generate-font-scales';
-@import 'library/generate-space-scales';
+@import 'library/generate-fluid-font-types';
+@import 'library/generate-fluid-space-types';
+@import 'library/generate-font-types';
+@import 'library/generate-space-types';
 @import 'library/generate-classes';
 @import 'library/generate-properties';
 @import 'library/generator';
 
 $config : (
+		'fluid-font-types' : (
+			//'base' : clamp(1.6rem, 1.89vw + 0.58rem, 3rem),
+				'base' : clamped(1.6rem, 3rem),
+				'ratio' : 'minor-second',
+				'length' : 10,
+				'suffix' : 'nato',
+				'breakpoints' : (
+						'tablet-min' : ('base' : clamped(1rem, 2rem)),
+				)
+		),
 		'properties' : (
 			//'predefined' : true,
 				'src' : ($map-for-font-weights, $map-for-letter-spacings),
@@ -107,10 +112,24 @@ $config : (
 		)
 );
 
+@mixin generate-colors($config: null, $src: null, $scale: null, $hsl: true, $lightness: 100%, $utility-classes: true, $socials: null, $state: null, $suffix: 'numeric') {
+	// 1. generate colors from full map of colors
+	// 2. generate colors from map with each defined color and generate scaled versions of it and add suffix
+	// 3. hsl functionality
+	// 4. $lightness functionality
+	// 5. $state and $socials generating
+	// 6. $dark-mode functionality
+
+}
+
 :root {
-	@include generate-font-scales($base : 1rem, $ratio : 'minor-second', $length : 10, $preserve: 5);
-	@include generate-space-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
-	@include generate-fluid-font-scales($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
+	//@include generate-font-scales($base : 3rem, $ratio : 'minor-second', $length : 10);
+	//@include generate-fluid-font-types($config);
+	//@include generate-fluid-font-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
+	@include generate-fluid-space-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
+	//@include generate-fluid-font-scales($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
+	//@include generate-fluid-font-scales($src : $list-of-fluid-fonts);
+	//@include generate-space-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
 	//
 	//
 	//@include generate-properties(
@@ -136,17 +155,5 @@ $config : (
 	//@include generate-classes(config);
 	//@include generate-properties(config);
 	//@include generate-classes($map-for-font-weights);
-}
-
-.foooo {
-	font-size : clamped(1.6rem, 3rem);
-
-	@include breakpoint(max, pc-min) {
-		color: red !important;
-	}
-
-	@include breakpoint(max, phone-max) {
-		color: blue !important;
-	}
 }
 

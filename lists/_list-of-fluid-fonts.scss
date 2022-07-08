@@ -1,0 +1,13 @@
+@charset "UTF-8";
+@import '../functions/clamped';
+
+
+$list-of-fluid-fonts : (
+		clamped(1rem, 2rem),
+		clamped(1.5rem, 2.5rem),
+		clamped(2rem, 3rem),
+		clamped(2.5rem, 3.5rem),
+		clamped(4rem, 5rem),
+		clamped(5rem, 6rem),
+		clamped(6rem, 7rem),
+) !default;

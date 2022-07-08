@@ -21,9 +21,9 @@
  */
 @function _get-value($base, $ratio, $preserve, $i, $prefix: null, $suffix: null) {
 	@if ($preserve >= $i) {
-		@return _number-round(_get-calc-value($base, $ratio, $preserve, $i, $prefix), 2);
+		@return _number-round(_decide-calc-method($base, $ratio, $preserve, $i, $prefix), 2);
 	} @else if ($preserve + 1 == $i) {
-		@return _get-calc-value($base, $ratio, $preserve, $i, $prefix);
+		@return _decide-calc-method($base, $ratio, $preserve, $i, $prefix);
 	} @else {
 		@return calc(var(--#{$prefix}#{$suffix}) * var(--#{$prefix}ratio));
 	}

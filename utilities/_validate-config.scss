@@ -11,6 +11,7 @@
 @mixin _validate-config($config) {
 
 	// Get config keys
+	$key             : map.get($config, 'key');
 	$base            : map.get($config, 'base');
 	$ratio           : map.get($config, 'ratio');
 	$length          : map.get($config, 'length');
@@ -26,8 +27,6 @@
 	$suffix          : map.get($config, 'suffix');
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
-
-	@debug meta.type-of($base);
 
 	// Preventing $base, $ratio, $length and $preserve to be used together with $src and $scale.
 	// The reason behind this is we don't want generate ratio scaled values with custom values from map or list.
@@ -101,9 +100,9 @@
 		@error "Invalid value: 'break-at' must be 'min' or 'max'.";
 	}
 
-	// Making sure $breakpoint parameter is always used with $break-at parameter.
-	@if ($breakpoints != null and $break-at == null) {
-		@error "Invalid usage: 'breakpoints' parameter must be used with 'break-at' parameter.";
+	// Warn if $preserve or $scale will be used im
+	@if ($key == 'fluid-space-types' or $key == 'fluid-font-types') and ($preserve != 0 or $scale != 100%) {
+		@warn "Invalid set of parameters: 'preserve' and 'scale' are not applicable to 'fluid-space-types' and 'fluid-font-types' respectively.";
 	}
 
 	// Validate the config keys.

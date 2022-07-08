@@ -23,6 +23,9 @@
 	@if (meta.type-of($number) == string) {
 		@return $number;
 	}
+	@if (meta.type-of($number) == calculation) {
+		@return $number;
+	}
 
 	$scale : _remove-unit($scale, '%');
 	@return math.div($number, 100) * $scale

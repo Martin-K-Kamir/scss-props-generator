@@ -1,18 +1,15 @@
 @charset "UTF-8";
+@import '../functions/clamped';
 
-@function clap($value) {
-	@debug  #{$value};
-	  @return #{$value};
-}
 /**
  * Generates css properties of given parameters in config.
  *
- * NOTE: This function is main building block for the generated scalable system functionality, which controls generating the css properties.
+ * NOTE: This function is main building block for the generated types scale functionality, which controls generating the css properties.
  *
  * @author - Martin Kamír
  *
  */
-@mixin _generate-type-scale($config) {
+@mixin _generate-types-scale($config) {
 	// Getting all the values from the config map.
 	$key             : map.get($config, 'key');
 	$selector        : map.get($config, 'selector');
@@ -31,8 +28,6 @@
 	$suffix          : map.get($config, 'suffix');
 	$suffix-class    : map.get($config, 'suffix-class');
 	$suffix-variable : map.get($config, 'suffix-variable');
-
-
 
 	// Sets all variables to be used in the mixin.
 	$src-length      : list.length($src);
@@ -104,13 +99,13 @@
 		// If utility-classes are set to true generate the utility classes based on the prefix, suffix, value and selector.
 		@if ($utility-classes) {
 			@at-root .#{_class-shell(if($src-type == map, $_prefix, _get-name($prefix, $prefix-class)), _get-suffix(if($src-type == map, $_suffix, _get-name($suffix, $suffix-class)), $src-length, $i))} {
-				@include _declaration-shell($_prefix, $_suffix, $value, $selector);
+				@include _declaration-shell($_prefix, $_suffix, $value, $selector, $key);
 			}
 		}
 	}
 
 	// If $break-at is used generate breakpoints with css properties.
-	@if ($break-at != null) {
+	@if ($breakpoints != null) {
 		@for $i from 1 through list.length($breakpoints) {
 			$breakpoint : list.nth(list.nth($breakpoints, $i), 1); // Get the breakpoint value.
 			$src        : list.nth(list.nth($breakpoints, $i), 2); // Get the src value.
@@ -144,6 +139,12 @@
 							$_suffix : 'ratio'; // Use string 'ratio' as the suffix.
 							$value   : _validate-ratio(list.nth($src, $x)); // Validate the ratio and get the value.
 						}
+
+						// If the key is base
+						@if $_prefix == 'base' {
+							$_prefix : $prefix; // Use the prefix instead of the key.
+							$_suffix : 'base'; // Use string 'base' as the suffix.
+						}
 					}
 
 					// The actual css property which is outputted in the breakpoint.
@@ -154,17 +155,6 @@
 					$x       : $x + 1;
 				}
 			}
-		}
-	}
-
-	// Generate stack classes if key is 'spaces' and utility-classes are set to true.
-	@if $key == 'spaces' and $utility-classes == true {
-		@at-root .stack {
-			display : grid;
-			gap     : var(--#{if($prefix != null, $prefix, 'space')});;
-		}
-		@at-root .stack > * {
-			margin : 0;
 		}
 	}
 }

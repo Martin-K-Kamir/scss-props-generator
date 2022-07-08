@@ -28,6 +28,7 @@
 			'prefix-variable' : $prefix-variable,
 			'suffix-class' : $suffix-class,
 			'suffix-variable' : $suffix-variable,
+			'break-at' : 'max',
 	);
 
 	// If config parameter is used validate it and merge it into shallow copy config map.
@@ -37,5 +38,5 @@
 
 	// Validate config map and after init generating the css properties.
 	@include _validate-config($_config);
-	@include _generate-type-scale($_config)
+	@include _generate-types-scale($_config)
 }
