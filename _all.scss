@@ -19,6 +19,7 @@
 @import 'maps/map-for-animations';
 @import 'maps/map-for-aspect-ratios';
 @import 'maps/map-for-breakpoints';
+@import 'maps/map-for-colors';
 @import 'maps/map-for-borders';
 @import 'maps/map-for-flexbox';
 @import 'maps/map-for-fluid-sizes';
@@ -113,6 +114,15 @@ $config : (
 );
 
 @mixin generate-colors($config: null, $src: null, $scale: null, $hsl: true, $lightness: 100%, $utility-classes: true, $socials: null, $state: null, $suffix: 'numeric') {
+	$map : null;
+
+	@each $key, $value in $src {
+		$map : map-deep-set($map, $key, $value);
+	}
+
+	@debug $map;
+
+
 	// 1. generate colors from full map of colors
 	// 2. generate colors from map with each defined color and generate scaled versions of it and add suffix
 	// 3. hsl functionality
@@ -123,6 +133,7 @@ $config : (
 }
 
 :root {
+	@include generate-colors($src : $map-for-colors);
 	//@include generate-font-scales($base : 3rem, $ratio : 'minor-second', $length : 10);
 	//@include generate-fluid-font-types($config);
 	//@include generate-fluid-font-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
