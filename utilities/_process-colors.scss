@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+@mixin _process-colors($config) {
+	$src               : map.get($config, 'src');
+	$src-scheme        : map.get($config, 'src-scheme');
+	$tints             : map.get($config, 'tints');
+	$shades            : map.get($config, 'shades');
+	$hsl               : map.get($config, 'hsl');
+	$prefix-text       : map.get($config, 'prefix-text');
+	$prefix-background : map.get($config, 'prefix-background');
+	$suffix            : map.get($config, 'suffix');
+	$utility-classes   : map.get($config, 'utility-classes');
+	$preferred-scheme  : map.get($config, 'preferred-scheme');
+
+	$dark-scheme       : false;
+	$map               : $src;
+
+	@for $i from 1 through if($src-scheme == null, 1, 2) {
+		@if length($src) == 1 {
+			@if $src-scheme != null and $i > length($map) {
+				$map         : $src-scheme;
+				$dark-scheme : true;
+			}
+		} @else {
+			@if $src-scheme != null and $i >= length($map) {
+				$map         : $src-scheme;
+				$dark-scheme : true;
+			}
+		}
+
+		@if $dark-scheme == false {
+			@include _generate-colors($config, $map, true);
+		} @else {
+			@media (prefers-color-scheme : #{$preferred-scheme}) {
+				@include _generate-colors($config, $map, false);
+			}
+		}
+	}
+}

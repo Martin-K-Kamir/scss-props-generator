@@ -9,6 +9,7 @@
 @import 'functions/layer';
 @import 'functions/clamped';
 @import 'functions/em';
+@import 'functions/get-hsl';
 
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';
@@ -42,6 +43,8 @@
 @import 'utilities/convert-to-number';
 @import 'utilities/create-suffix-list';
 @import 'utilities/declaration-shell';
+@import 'utilities/generate-color-utilities';
+@import 'utilities/generate-colors';
 @import 'utilities/decide-calc-method';
 @import 'utilities/get-value';
 @import 'utilities/get-name';
@@ -69,6 +72,7 @@
 @import 'utilities/validate-ratio';
 @import 'utilities/variable-shell';
 @import 'utilities/generate-types-scale';
+@import 'utilities/process-colors';
 @import 'utilities/process-config';
 
 @import 'library/absolute';
@@ -85,6 +89,7 @@
 @import 'library/screen-agent';
 @import 'library/text-shadow';
 @import 'library/text-stroke';
+@import 'library/generate-color-types';
 @import 'library/generate-fluid-font-types';
 @import 'library/generate-fluid-space-types';
 @import 'library/generate-font-types';
@@ -120,6 +125,9 @@ $config          : (
 						'tablet-min' : ('base' : clamped(1rem, 2rem)),
 				)
 		),
+		'color-types' : (
+				'src' : $map-colors,
+		),
 		'properties' : (
 			//'predefined' : true,
 				'src' : ($map-for-font-weights, $map-for-letter-spacings),
@@ -130,180 +138,12 @@ $config          : (
 		)
 );
 
-@function get-hsl($value, $hsl: true) {
-	$hue : math.round(color.hue($value));
-	$saturation : math.round(color.saturation($value));
-	$lightness : math.round(color.lightness($value));
-
-	@if $hsl {
-		@return hsl($hue, $saturation, $lightness);
-	} @else {
-		@return '#{$hue, $saturation, $lightness}';
-	}
-}
-
-@mixin _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $suffix, $value) {
-	@if $utility-classes and $is-allowed {
-		@at-root .#{$prefix-text}#{$key}#{$suffix} {
-			@include _declaration-shell($key, $suffix, $value, 'color');
-		}
-
-		@at-root .#{$prefix-background}#{$key}#{$suffix} {
-			@include _declaration-shell($key, $suffix, $value, 'background-color');
-		}
-	}
-}
-
-@mixin _generate-colors($config, $is-allowed, $value, $key) {
-	$suffix            : 'numeric';
-	$tints             : (80%, 40%);
-	$shades            : (40%, 80%);
-	$hsl               : true;
-	$utility-classes   : true;
-	$prefix-text       : 'text-';
-	$prefix-background : 'surface-';
-
-	////////////////
-	$_suffix           : '';
-	$colors-list       : ();
-
-	@if $suffix != 'color-adjectives' {
-		@if $tints != null {
-			@for $x from 1 through length($tints) {
-				$_value      : get-hsl(mix(white, $value, list.nth($tints, $x)), $hsl);
-				$colors-list : list.append($colors-list, $_value);
-			}
-		}
-
-		$_value      : get-hsl($value, $hsl);
-		$colors-list : list.append($colors-list, $_value);
-
-		@if $shades != null {
-			@for $x from 1 through length($shades) {
-				$_value      : get-hsl(mix(black, $value, list.nth($shades, $x)), $hsl);
-				$colors-list : list.append($colors-list, $_value);
-			}
-		}
-
-		@for $x from 1 through length($colors-list) {
-			$_suffix : '-#{_get-suffix($suffix, length($colors-list), $x)}';
-			$value   : list.nth($colors-list, $x);
-
-			@include _variable-shell($key, $_suffix, $value);
-			@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
-		}
-	}
-
-	@if $suffix == 'color-adjectives' {
-		@if $tints != null {
-			@for $x from 1 through length($tints) {
-				$_value  : get-hsl(mix(white, $value, list.nth($tints, $x)), $hsl);
-				$_suffix : '-#{_get-suffix($suffix, length($tints), $x, 'lighter-values')}';
-
-				@include _variable-shell($key, $_suffix, $_value);
-				@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
-			}
-		}
-
-		$_value  : get-hsl($value, $hsl);
-		$_suffix : '';
-
-		@include _variable-shell($key, $_suffix, $_value);
-		@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
-
-		@if $shades != null {
-			@for $x from 1 through length($shades) {
-				$_value  : get-hsl(mix(black, $value, list.nth($shades, $x)), $hsl);
-				$_suffix : '-#{_get-suffix($suffix, length($shades), $x, 'darker-values')}';
-
-				@include _variable-shell($key, $_suffix, $_value);
-				@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
-			}
-		}
-	}
-
-	@if $suffix == null {
-		@include _variable-shell($key, $_suffix, $value);
-		@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
-	}
-
-	$colors-list       : ();
-}
-
-
-@mixin _preprocess-colors($config: null, $src: null, $src-dark: null, $shades: null, $tints: null, $hsl: true, $utility-classes: true, $prefix-text: 'text-', $prefix-background: 'surface-', $suffix: 'numeric') {
-	$generate-dark-scheme : false;
-	$map                  : $src;
-	$colors-list          : ();
-
-	@for $i from 1 through if($src-dark == null, 1, 2) {
-		@if length($src) == 1 {
-			@if $src-dark != null and $i > length($map) {
-				$map                  : $src-dark;
-				$generate-dark-scheme : true;
-			}
-		} @else {
-			@if $src-dark != null and $i >= length($map) {
-				$map                  : $src-dark;
-				$generate-dark-scheme : true;
-			}
-		}
-
-
-		@if $generate-dark-scheme == false {
-			@each $key, $value in $map {
-				@include _generate-colors(null, true, $value, $key);
-			}
-		} @else {
-			@media (prefers-color-scheme : dark) {
-				@each $key, $value in $map {
-					@include _generate-colors(null, false, $value, $key);
-				}
-			}
-		}
-	}
-}
-
-@mixin _generate-color-types($config: null, $src: null, $src-dark: null, $tints: null, $shades: null, $hsl: true, $utility-classes: true, $prefix-text: 'text-', $prefix-background: 'surface-', $suffix: 'numeric') {
-	$_config : (
-			'src' : $src,
-			'src-dark' : $src-dark,
-			'tints' : $tints,
-			'shades' : $shades,
-			'hsl' : $hsl,
-			'utility-classes' : $utility-classes,
-			'prefix-text' : $prefix-text,
-			'prefix-background' : $prefix-background,
-			'suffix' : $suffix,
-	);
-
-	$key     : 'color-types';
-
-	@if $config != null {
-		$_config : map.deep-merge($_config, _validate-config-map($config, $key));
-	}
-
-	@include _validate-config($_config);
-}
-
-
-$config          : (
-		'color-types' : (
-				'src' : $map-colors,
-				'src-dark' : $map-colors-dark,
-				'tints' : (80%, 40%),
-				'shades' : (40%, 80%),
-				'suffix' : 'numeric',
-		)
-);
-
-
 :root {
-	@include _generate-color-types($config);
-	//@include _generate-color-types($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
-	//@include _preprocess-colors($src : $map-for-colors, $src-dark : $map-for-dark);
-	@include _preprocess-colors($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
-	//@include _preprocess-colors($src : $map-colors, $tints : (40%), $shades : (80%), $suffix : 'color-adjectives');
+	@include generate-color-types($config);
+	//@include generate-color-types($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
+	//@include _process-colors($src : $map-for-colors, $src-dark : $map-for-dark);
+	//@include _process-colors($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
+	//@include _process-colors($src : $map-colors, $tints : (40%), $shades : (80%), $suffix : 'color-adjectives');
 	//@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5, $suffix : 'size-x-minmax');
 	//@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5);
 	//@include generate-fluid-font-types($config);

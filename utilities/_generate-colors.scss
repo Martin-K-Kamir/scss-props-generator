@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+@mixin _generate-colors($config, $map, $utility-classes) {
+	$tints             : map.get($config, 'tints');
+	$shades            : map.get($config, 'shades');
+	$hsl               : map.get($config, 'hsl');
+	$prefix-text       : map.get($config, 'prefix-text');
+	$prefix-background : map.get($config, 'prefix-background');
+	$suffix            : map.get($config, 'suffix');
+
+	$_suffix           : '';
+	$colors-list       : ();
+
+	@each $key, $value in $map {
+		@if $suffix != null and $suffix != 'color-adjectives' {
+			@if $tints != null {
+				@for $x from 1 through length($tints) {
+					$_value      : get-hsl(mix(white, $value, list.nth($tints, $x)), $hsl);
+					$colors-list : list.append($colors-list, $_value);
+				}
+			}
+
+			$_value      : get-hsl($value, $hsl);
+			$colors-list : list.append($colors-list, $_value);
+
+			@if $shades != null {
+				@for $x from 1 through length($shades) {
+					$_value      : get-hsl(mix(black, $value, list.nth($shades, $x)), $hsl);
+					$colors-list : list.append($colors-list, $_value);
+				}
+			}
+
+			@for $x from 1 through length($colors-list) {
+				$_suffix : '-#{_get-suffix($suffix, length($colors-list), $x)}';
+				$value   : list.nth($colors-list, $x);
+
+				@include _variable-shell($key, $_suffix, $value);
+				@include _generate-color-utilities($utility-classes, $prefix-text, $prefix-background, $key, $_suffix, $value);
+			}
+		}
+
+		@if $suffix == 'color-adjectives' {
+			@if $tints != null {
+				@for $x from 1 through length($tints) {
+					$_value  : get-hsl(mix(white, $value, list.nth($tints, $x)), $hsl);
+					$_suffix : '-#{_get-suffix($suffix, length($tints), $x, 'lighter-values')}';
+
+					@include _variable-shell($key, $_suffix, $_value);
+					@include _generate-color-utilities($utility-classes, $prefix-text, $prefix-background, $key, $_suffix, $value);
+				}
+			}
+
+			$_value  : get-hsl($value, $hsl);
+			$_suffix : '';
+
+			@include _variable-shell($key, $_suffix, $_value);
+			@include _generate-color-utilities($utility-classes, $prefix-text, $prefix-background, $key, $_suffix, $value);
+
+			@if $shades != null {
+				@for $x from 1 through length($shades) {
+					$_value  : get-hsl(mix(black, $value, list.nth($shades, $x)), $hsl);
+					$_suffix : '-#{_get-suffix($suffix, length($shades), $x, 'darker-values')}';
+
+					@include _variable-shell($key, $_suffix, $_value);
+					@include _generate-color-utilities($utility-classes, $prefix-text, $prefix-background, $key, $_suffix, $value);
+				}
+			}
+		}
+
+		@if $suffix == null {
+			@include _variable-shell($key, $_suffix, $value);
+			@include _generate-color-utilities($utility-classes, $prefix-text, $prefix-background, $key, $_suffix, $value);
+		}
+
+		$colors-list : ();
+	}
+}

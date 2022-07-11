@@ -8,9 +8,20 @@
  * @author - Martin Kamír
  *
  */
-@mixin _validate-config-keys($map) {
-	$valid-keys : ('key', 'selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
+
+
+@mixin _validate-config-keys($map, $key) {
+	$map-key    : $key;
+	$valid-keys : ();
 	$keys       : ();
+
+	@if $map-key == 'color-types' {
+		$valid-keys : ('key', 'src', 'src-scheme', 'tints', 'shades', 'hsl', 'utility-classes', 'prefix-text', 'prefix-background', 'suffix', 'preferred-scheme');
+	} @else if ($map-key == 'fluid-font-types' or $map-key == 'fluid-space-types' or $map-key == 'font-types' or $map-key == 'space-types') {
+		$valid-keys : ('key', 'selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
+	} @else {
+		@error 'Invalid key in config map: key must be one of the following: color-types, fluid-font-types, fluid-space-types, font-types, space-types';
+	}
 
 	@each $key, $value in $map {
 		$keys : list.append($keys, $key);
@@ -32,9 +43,8 @@
 	}
 
 
-	// Loop over keys list and check if all keys are valid.
+	// Loop over keys lists and check if all keys are valid.
 	@for $i from 1 through list.length($keys) {
-
 		@for $x from 1 through list.length($valid-keys) {
 			@if list.index($valid-keys, list.nth($keys, $i)) == null {
 				@error "Invalid parameter '#{list.nth($keys, $i)}': parameters must be one of these: #{$valid-keys}.";

@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+/**
+ * Mixin for generating color types.
+ *
+ * @author - Martin Kamír
+ *
+ * @param $config {map} - Config map uses same parameters as below.
+ * @param $src {map} - The source values of colors.
+ * @param $src-scheme {map} - The source values of colors for preferred color scheme.
+ * @param $tints {list} - Defining the values for tints of colors as percentages. Based on the source values at $src/$src-scheme the color tints will be produced of given values.
+
+ * @param $prefix {string} - Defines the name of css property and utility classes.
+ * @param $prefix-class {string} - Defines the name of utility classes.
+ * @param $prefix-variable {string} - Defines the name of css property.
+ * @param $suffix {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
+ * @param $suffix-class {string} - Defines the name of utility classes.
+ * @param $suffix-variable {string} - Defines the name of css property.
+ * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
+ *
+ */
+@mixin generate-color-types($config: null, $src: null, $src-scheme: null, $tints: null, $shades: null, $hsl: true, $utility-classes: true, $prefix-text: 'text-', $prefix-background: 'surface-', $suffix: null, $preferred-scheme: 'dark') {
+	$_config : (
+			'key' : 'color-types',
+			'src' : $src,
+			'src-scheme' : $src-scheme,
+			'tints' : $tints,
+			'shades' : $shades,
+			'hsl' : $hsl,
+			'utility-classes' : $utility-classes,
+			'prefix-text' : $prefix-text,
+			'prefix-background' : $prefix-background,
+			'suffix' : $suffix,
+			'preferred-scheme' : $preferred-scheme,
+	);
+
+	@if $config != null {
+		$_config : map.deep-merge($_config, _validate-config-map($config, map.get($_config, 'key')));
+	}
+
+	@include _validate-config($_config);
+	@include _process-colors($_config);
+}
