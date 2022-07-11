@@ -34,12 +34,12 @@ $map-for-suffixes : (
 		'primary': (
 				'primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'
 		),
-		'size' : (
-				'higher-values' : (
-						'big', 'large', 'huge', 'giant', 'mega'
+		'color-adjectives' : (
+				'darker-values' : (
+						'dark', 'darker', 'darkest'
 				),
-				'lower-values': (
-						'medium', 'small', 'tiny', 'micro', 'atomic'
+				'lighter-values': (
+						'light', 'lighter', 'lighest'
 				),
 		),
 		'size-minmax' : (
@@ -82,7 +82,7 @@ $map-for-suffixes : (
 						'm', 's', 'xs', 'xxs', 'xxxs', 'xxxxs', 'xxxxxs', 'xxxxxxs', 'min'
 				),
 		),
-		'size-gradation' : (
+		'size-adjectives' : (
 				'higher-values' : (
 						'big', 'bigger', 'biggest', 'large', 'larger', 'largest', 'huge', 'giant', 'mega'
 				),
@@ -90,7 +90,7 @@ $map-for-suffixes : (
 						'medium', 'small', 'smaller', 'smallest', 'tiny', 'tinier', 'tiniest', 'micro', 'atomic'
 				),
 		),
-		'size-gradation-minmax' : (
+		'size-adjectives-minmax' : (
 				'higher-values' : (
 						'big', 'bigger', 'biggest', 'large', 'larger', 'largest', 'huge', 'giant', 'mega', 'max'
 				),

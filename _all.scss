@@ -4,6 +4,7 @@
 @use "sass:math";
 @use "sass:map";
 @use "sass:list";
+@use "sass:color";
 
 @import 'functions/layer';
 @import 'functions/clamped';
@@ -92,7 +93,7 @@
 @import 'library/generate-properties';
 @import 'library/generator';
 
-$config : (
+$config          : (
 		'fluid-font-types' : (
 			//'base' : clamp(1.6rem, 1.89vw + 0.58rem, 3rem),
 				'base' : clamped(1.6rem, 3rem),
@@ -113,31 +114,92 @@ $config : (
 		)
 );
 
-@mixin generate-colors($config: null, $src: null, $scale: null, $hsl: true, $lightness: 100%, $utility-classes: true, $socials: null, $state: null, $suffix: 'numeric') {
-	$map : null;
+@function get-hsl($value, $hsl: true) {
+	$hue : math.round(color.hue($value));
+	$saturation : math.round(color.saturation($value));
+	$lightness : math.round(color.lightness($value));
 
-	@each $key, $value in $src {
-		$map : map-deep-set($map, $key, $value);
+	@if $hsl {
+		@return hsl($hue, $saturation, $lightness);
+	} @else {
+		@return '#{$hue, $saturation, $lightness}';
 	}
-
-	@debug $map;
-
-
-	// 1. generate colors from full map of colors
-	// 2. generate colors from map with each defined color and generate scaled versions of it and add suffix
-	// 3. hsl functionality
-	// 4. $lightness functionality
-	// 5. $state and $socials generating
-	// 6. $dark-mode functionality
-
 }
 
+@function get-color($white-or-black, $value, $tint-or-shade, $y, $hsl) {
+	@return get-hsl(mix($white-or-black, $value, list.nth($tint-or-shade, $y)), $hsl);
+}
+
+@mixin generate-colors($config: null, $src: null, $src-dark: null, $shades: null, $tints: null, $hsl: true, $utility-classes: true, $prefix-text: 'text-', $prefix-background: 'surface-', $suffix: 'numeric') {
+	$generate-dark-scheme : false;
+	$map                  : $src;
+	$length               : length($map);
+	$keys                 : map-keys($map);
+	$values               : map-values($map);
+
+	$list                 : ();
+
+	@for $i from 1 through if($src-dark == null, 1, 2) {
+		@if $src-dark != null and $i == $length {
+			$map                  : $src-dark;
+			$generate-dark-scheme : true;
+		}
+
+		@if $generate-dark-scheme == false {
+			@for $x from 1 through $length {
+				$value : list.nth($values, $x);
+				$key   : list.nth($keys, $x);
+
+				@for $y from 1 through length($tints) {
+					//$_value : get-hsl(mix(white, $value, list.nth($tints, $y)), $hsl);
+					$_value : get-color(white, $value, $tints, $y, $hsl);
+					$list   : list.append($list, $_value);
+					@debug $list;
+				}
+
+				@include _variable-shell($key, '', $value);
+
+			}
+		} @else {
+			@media (prefers-color-scheme : dark) {
+				@each $key, $value in $map {
+					@include _variable-shell($key, '', $value);
+				}
+			}
+		}
+	}
+}
+
+.foooo {
+	color : hsl(351, 62%, 88%);
+	color : hsl(350, 61%, 63%);
+	color : hsl(207, 51%, 90%);
+	color : hsl(207, 52%, 69%);
+}
+
+$map-colors      : ('primary': hsl(350, 100%, 38%), 'secondary': hsl(207, 56%, 48%));
+$map-colors-dark : ('primary': hsl(350, 100%, 26%), 'secondary': hsl(207, 100%, 17%));
+$map-for-dark    : (
+		'primary-1' : hsl(350, 100%, 21%),
+		'primary-2' : hsl(350, 100%, 28%),
+		'primary-3' : hsl(350, 100%, 22%),
+		'secondary-1' : hsl(206, 100%, 19%),
+		'secondary-2' : hsl(205, 100%, 15%),
+		'secondary-3' : hsl(218, 100%, 9%),
+		'neutral-1' : hsl(0, 0%, 27%),
+		'neutral-2' : hsl(0, 0%, 15%),
+		'neutral-3' : hsl(0, 0%, 5%),
+);
+
 :root {
-	@include generate-colors($src : $map-for-colors);
-	//@include generate-font-scales($base : 3rem, $ratio : 'minor-second', $length : 10);
+	//@include generate-colors($src : $map-for-colors, $src-dark : $map-for-dark);
+	@include generate-colors($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (80%));
+	//@include generate-colors($src : $map-colors, $tints : (40%), $shades : (80%), $suffix : 'color-adjectives');
+	//@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5, $suffix : 'size-x-minmax');
+	@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5);
 	//@include generate-fluid-font-types($config);
 	//@include generate-fluid-font-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
-	@include generate-fluid-space-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
+	//@include generate-fluid-space-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
 	//@include generate-fluid-font-scales($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
 	//@include generate-fluid-font-scales($src : $list-of-fluid-fonts);
 	//@include generate-space-scales($base : 1rem, $ratio : 'minor-second', $length : 10);

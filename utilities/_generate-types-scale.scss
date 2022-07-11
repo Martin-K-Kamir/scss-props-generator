@@ -40,6 +40,7 @@
 	$keys            : null;
 	$suffix-prev     : null;
 	$value           : null;
+	$length          : if($length != null, $length, $src-length);
 
 	// If base is used generate the base and ratio css properties with a given prefix.
 	@if $base != null {
@@ -55,8 +56,7 @@
 	}
 
 	// Main loop for generating the css properties.
-	@for $i from 1 through if($length != null, $length, $src-length) {
-
+	@for $i from 1 through $length {
 		// Shallow copies of $suffix and $prefix variables.
 		$_prefix : _get-name($prefix, $prefix-variable); // Get the prefix name.
 		$_suffix : _get-suffix($suffix, $length, $i); // Get the suffix for the current iteration.
@@ -90,15 +90,19 @@
 		// If $src is a map
 		@if $src-type == map {
 			$_prefix : list.nth($keys, $i); // Get the key from the list at the current iteration.
-			$_suffix : ''; // Since the map is used the suffix is empty, because the key is used as the prefix and suffix.
+			$_suffix : ''; // Because the map is used the suffix is empty. The key is used as the prefix and suffix.
 		}
+
 
 		// The actual css property which is outputted.
 		@include _variable-shell($_prefix, $_suffix, $value);
 
-		// If utility-classes are set to true generate the utility classes based on the prefix, suffix, value and selector.
-		@if ($utility-classes) {
-			@at-root .#{_class-shell(if($src-type == map, $_prefix, _get-name($prefix, $prefix-class)), _get-suffix(if($src-type == map, $_suffix, _get-name($suffix, $suffix-class)), $src-length, $i))} {
+		//If utility-classes are set to true generate the utility classes based on the prefix, suffix, value and selector.
+		@if $utility-classes {
+			$class-prefix : if($src-type == map, $_prefix, _get-name($prefix, $prefix-class));
+			$class-suffix : if($src-type == map, $_suffix, _get-suffix(_get-name($suffix, $suffix-class), $length, $i));
+
+			@at-root .#{_class-shell($class-prefix, $class-suffix)} {
 				@include _declaration-shell($_prefix, $_suffix, $value, $selector, $key);
 			}
 		}

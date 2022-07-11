@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin _declaration-shell($prefix, $suffix, $value, $selector, $key) {
+@mixin _declaration-shell($prefix, $suffix, $value, $selector, $key: null) {
 	@if $selector == 'none' and ($key == 'fluid-space-types' or $key == 'space-types') {
 		--space      : var(--#{$prefix}#{$suffix});
 	} @else {

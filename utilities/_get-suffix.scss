@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+
 /**
  * Returns string of suffix based on current $i in the loop.
  *
@@ -22,7 +23,7 @@
  * @param $i {number} - The current index in loop.
  * @return string - The suffix.
  */
-@function _get-suffix($suffix: 'numeric', $length,  $i) {
+@function _get-suffix($suffix: 'numeric', $length,  $i, $map-to-get: null) {
 	@if ($suffix == 'numeric') {
 		@return $i; // Returns the current number based on the index.
 
@@ -35,19 +36,19 @@
 	} @else if (list.index(('roman', 'greek', 'military', 'planets', 'nato', 'alphabet', 'alphabet-upper', 'primary'), $suffix)) {
 		@return list.nth(map.get($map-for-suffixes, $suffix), $i); // Returns value from premade list based on current $i.
 
-	} @else if (list.index(('size', 'size-minmax', 'size-shorted', 'size-shorted-minmax', 'size-x', 'size-x-minmax', 'size-gradation', 'size-gradation-minmax', 'size-and-number', 'size-and-number-minmax', 'size-and-x', 'size-and-x-minmax'), $suffix)) {
+	} @else if (list.index(('size', 'size-minmax', 'size-shorted', 'size-shorted-minmax', 'size-x', 'size-x-minmax', 'size-adjectives', 'size-adjectives-minmax', 'size-and-number', 'size-and-number-minmax', 'size-and-x', 'size-and-x-minmax'), $suffix)) {
 
 		// Map which holds corresponding suffixes of sizes.
+		//@debug $length;
 		$map-of-suffixes : (
-				'size' : _create-suffix-list($suffix, $length),
 				'size' : _create-suffix-list($suffix, $length),
 				'size-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
 				'size-shorted' : _create-suffix-list($suffix, $length),
 				'size-shorted-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
 				'size-x' : _create-suffix-list($suffix, $length),
 				'size-x-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
-				'size-gradation' : _create-suffix-list($suffix, $length),
-				'size-gradation-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
+				'size-adjectives' : _create-suffix-list($suffix, $length),
+				'size-adjectives-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
 				'size-and-number' : _create-suffix-list($suffix, $length),
 				'size-and-number-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
 				'size-and-x' : _create-suffix-list($suffix, $length),
@@ -60,6 +61,14 @@
 				@return list.nth($list-of-suffixes, $i); // Returns value from premade list based on current $i.
 			}
 		}
+	} @else if (list.index(('color-adjectives', 'color-adjectives-minmax'), $suffix)) {
+		$list-of-suffixes : _list-slice(map.get($map-for-suffixes, $suffix, $map-to-get), 1, $length);
+
+		@if $map-to-get == 'lighter-values' {
+			$list-of-suffixes : _list-reverse($list-of-suffixes);
+		}
+
+		@return list.nth($list-of-suffixes, $i);
 	} @else {
 		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{_map-keys($map-for-suffixes)}';
 	}

@@ -43,5 +43,6 @@
 	// Concatenate the lower and higher list.
 	// The lower list values will be at the beginning of the outputted list. The lower list has to be reversed, because the last values, which represents the smallest values would be at middle of the outputted list if not reversed (i.g: small, smaller, smallest, medium, big, bigger, etc...).
 	// The higher list will be at the end of the list.
+
 	@return list.join(_list-reverse($lower-list), $higher-list);
 }
