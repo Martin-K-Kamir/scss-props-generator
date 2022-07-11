@@ -4,7 +4,6 @@
 @import '../utilities/number-round';
 @import '../maps/map-for-breakpoints';
 
-
 @function clamped($min-value, $max-value, $min-breakpoint: map.get($map-for-breakpoints, "screen-xs"), $max-breakpoint: map.get($map-for-breakpoints, "screen-xl")) {
 	$value-unit : null;
 	$breakpoint-unit : null;

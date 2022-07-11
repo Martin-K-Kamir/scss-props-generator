@@ -93,6 +93,22 @@
 @import 'library/generate-properties';
 @import 'library/generator';
 
+$map-colors      : ('primary': hsl(350, 100%, 38%), 'secondary': hsl(207, 56%, 48%));
+//$map-colors      : ('primary': hsl(350, 100%, 38%));
+//$map-colors-dark : ('primary': hsl(350, 100%, 26%));
+$map-colors-dark : ('primary': hsl(350, 100%, 26%), 'secondary': hsl(207, 100%, 17%));
+$map-for-dark    : (
+		'primary-1' : hsl(350, 100%, 21%),
+		'primary-2' : hsl(350, 100%, 28%),
+		'primary-3' : hsl(350, 100%, 22%),
+		'secondary-1' : hsl(206, 100%, 19%),
+		'secondary-2' : hsl(205, 100%, 15%),
+		'secondary-3' : hsl(218, 100%, 9%),
+		'neutral-1' : hsl(0, 0%, 27%),
+		'neutral-2' : hsl(0, 0%, 15%),
+		'neutral-3' : hsl(0, 0%, 5%),
+);
+
 $config          : (
 		'fluid-font-types' : (
 			//'base' : clamp(1.6rem, 1.89vw + 0.58rem, 3rem),
@@ -126,77 +142,170 @@ $config          : (
 	}
 }
 
-@function get-color($white-or-black, $value, $tint-or-shade, $y, $hsl) {
-	@return get-hsl(mix($white-or-black, $value, list.nth($tint-or-shade, $y)), $hsl);
-}
-
-@mixin generate-colors($config: null, $src: null, $src-dark: null, $shades: null, $tints: null, $hsl: true, $utility-classes: true, $prefix-text: 'text-', $prefix-background: 'surface-', $suffix: 'numeric') {
-	$generate-dark-scheme : false;
-	$map                  : $src;
-	$length               : length($map);
-	$keys                 : map-keys($map);
-	$values               : map-values($map);
-
-	$list                 : ();
-
-	@for $i from 1 through if($src-dark == null, 1, 2) {
-		@if $src-dark != null and $i == $length {
-			$map                  : $src-dark;
-			$generate-dark-scheme : true;
+@mixin _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $suffix, $value) {
+	@if $utility-classes and $is-allowed {
+		@at-root .#{$prefix-text}#{$key}#{$suffix} {
+			@include _declaration-shell($key, $suffix, $value, 'color');
 		}
 
+		@at-root .#{$prefix-background}#{$key}#{$suffix} {
+			@include _declaration-shell($key, $suffix, $value, 'background-color');
+		}
+	}
+}
+
+@mixin _generate-colors($config, $is-allowed, $value, $key) {
+	$suffix            : 'numeric';
+	$tints             : (80%, 40%);
+	$shades            : (40%, 80%);
+	$hsl               : true;
+	$utility-classes   : true;
+	$prefix-text       : 'text-';
+	$prefix-background : 'surface-';
+
+	////////////////
+	$_suffix           : '';
+	$colors-list       : ();
+
+	@if $suffix != 'color-adjectives' {
+		@if $tints != null {
+			@for $x from 1 through length($tints) {
+				$_value      : get-hsl(mix(white, $value, list.nth($tints, $x)), $hsl);
+				$colors-list : list.append($colors-list, $_value);
+			}
+		}
+
+		$_value      : get-hsl($value, $hsl);
+		$colors-list : list.append($colors-list, $_value);
+
+		@if $shades != null {
+			@for $x from 1 through length($shades) {
+				$_value      : get-hsl(mix(black, $value, list.nth($shades, $x)), $hsl);
+				$colors-list : list.append($colors-list, $_value);
+			}
+		}
+
+		@for $x from 1 through length($colors-list) {
+			$_suffix : '-#{_get-suffix($suffix, length($colors-list), $x)}';
+			$value   : list.nth($colors-list, $x);
+
+			@include _variable-shell($key, $_suffix, $value);
+			@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
+		}
+	}
+
+	@if $suffix == 'color-adjectives' {
+		@if $tints != null {
+			@for $x from 1 through length($tints) {
+				$_value  : get-hsl(mix(white, $value, list.nth($tints, $x)), $hsl);
+				$_suffix : '-#{_get-suffix($suffix, length($tints), $x, 'lighter-values')}';
+
+				@include _variable-shell($key, $_suffix, $_value);
+				@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
+			}
+		}
+
+		$_value  : get-hsl($value, $hsl);
+		$_suffix : '';
+
+		@include _variable-shell($key, $_suffix, $_value);
+		@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
+
+		@if $shades != null {
+			@for $x from 1 through length($shades) {
+				$_value  : get-hsl(mix(black, $value, list.nth($shades, $x)), $hsl);
+				$_suffix : '-#{_get-suffix($suffix, length($shades), $x, 'darker-values')}';
+
+				@include _variable-shell($key, $_suffix, $_value);
+				@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
+			}
+		}
+	}
+
+	@if $suffix == null {
+		@include _variable-shell($key, $_suffix, $value);
+		@include _generate-color-utilities($utility-classes, $is-allowed, $prefix-text, $prefix-background, $key, $_suffix, $value);
+	}
+
+	$colors-list       : ();
+}
+
+
+@mixin _preprocess-colors($config: null, $src: null, $src-dark: null, $shades: null, $tints: null, $hsl: true, $utility-classes: true, $prefix-text: 'text-', $prefix-background: 'surface-', $suffix: 'numeric') {
+	$generate-dark-scheme : false;
+	$map                  : $src;
+	$colors-list          : ();
+
+	@for $i from 1 through if($src-dark == null, 1, 2) {
+		@if length($src) == 1 {
+			@if $src-dark != null and $i > length($map) {
+				$map                  : $src-dark;
+				$generate-dark-scheme : true;
+			}
+		} @else {
+			@if $src-dark != null and $i >= length($map) {
+				$map                  : $src-dark;
+				$generate-dark-scheme : true;
+			}
+		}
+
+
 		@if $generate-dark-scheme == false {
-			@for $x from 1 through $length {
-				$value : list.nth($values, $x);
-				$key   : list.nth($keys, $x);
-
-				@for $y from 1 through length($tints) {
-					//$_value : get-hsl(mix(white, $value, list.nth($tints, $y)), $hsl);
-					$_value : get-color(white, $value, $tints, $y, $hsl);
-					$list   : list.append($list, $_value);
-					@debug $list;
-				}
-
-				@include _variable-shell($key, '', $value);
-
+			@each $key, $value in $map {
+				@include _generate-colors(null, true, $value, $key);
 			}
 		} @else {
 			@media (prefers-color-scheme : dark) {
 				@each $key, $value in $map {
-					@include _variable-shell($key, '', $value);
+					@include _generate-colors(null, false, $value, $key);
 				}
 			}
 		}
 	}
 }
 
-.foooo {
-	color : hsl(351, 62%, 88%);
-	color : hsl(350, 61%, 63%);
-	color : hsl(207, 51%, 90%);
-	color : hsl(207, 52%, 69%);
+@mixin _generate-color-types($config: null, $src: null, $src-dark: null, $tints: null, $shades: null, $hsl: true, $utility-classes: true, $prefix-text: 'text-', $prefix-background: 'surface-', $suffix: 'numeric') {
+	$_config : (
+			'src' : $src,
+			'src-dark' : $src-dark,
+			'tints' : $tints,
+			'shades' : $shades,
+			'hsl' : $hsl,
+			'utility-classes' : $utility-classes,
+			'prefix-text' : $prefix-text,
+			'prefix-background' : $prefix-background,
+			'suffix' : $suffix,
+	);
+
+	$key     : 'color-types';
+
+	@if $config != null {
+		$_config : map.deep-merge($_config, _validate-config-map($config, $key));
+	}
+
+	@include _validate-config($_config);
 }
 
-$map-colors      : ('primary': hsl(350, 100%, 38%), 'secondary': hsl(207, 56%, 48%));
-$map-colors-dark : ('primary': hsl(350, 100%, 26%), 'secondary': hsl(207, 100%, 17%));
-$map-for-dark    : (
-		'primary-1' : hsl(350, 100%, 21%),
-		'primary-2' : hsl(350, 100%, 28%),
-		'primary-3' : hsl(350, 100%, 22%),
-		'secondary-1' : hsl(206, 100%, 19%),
-		'secondary-2' : hsl(205, 100%, 15%),
-		'secondary-3' : hsl(218, 100%, 9%),
-		'neutral-1' : hsl(0, 0%, 27%),
-		'neutral-2' : hsl(0, 0%, 15%),
-		'neutral-3' : hsl(0, 0%, 5%),
+
+$config          : (
+		'color-types' : (
+				'src' : $map-colors,
+				'src-dark' : $map-colors-dark,
+				'tints' : (80%, 40%),
+				'shades' : (40%, 80%),
+				'suffix' : 'numeric',
+		)
 );
 
+
 :root {
-	//@include generate-colors($src : $map-for-colors, $src-dark : $map-for-dark);
-	@include generate-colors($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (80%));
-	//@include generate-colors($src : $map-colors, $tints : (40%), $shades : (80%), $suffix : 'color-adjectives');
+	@include _generate-color-types($config);
+	//@include _generate-color-types($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
+	//@include _preprocess-colors($src : $map-for-colors, $src-dark : $map-for-dark);
+	@include _preprocess-colors($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
+	//@include _preprocess-colors($src : $map-colors, $tints : (40%), $shades : (80%), $suffix : 'color-adjectives');
 	//@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5, $suffix : 'size-x-minmax');
-	@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5);
+	//@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5);
 	//@include generate-fluid-font-types($config);
 	//@include generate-fluid-font-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
 	//@include generate-fluid-space-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);

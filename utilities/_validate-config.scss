@@ -15,7 +15,7 @@
 	$base            : map.get($config, 'base');
 	$ratio           : map.get($config, 'ratio');
 	$length          : map.get($config, 'length');
-	$preserve        : map.get($config, 'preserve');
+	$preserve        : if(map.get($config, 'preserve') == null, 0, map.get($config, 'preserve') );
 	$utility-classes : map.get($config, 'utility-classes');
 	$src             : map.get($config, 'src');
 	$break-at        : map.get($config, 'break-at');
@@ -36,62 +36,62 @@
 	}
 
 	// Prevent parameters to have incorrect type values i.g $base parameter being a color type or $utility-classes parameter being string type and so on...
-	@if (meta.type-of($base) != 'null' and meta.type-of($base) != number and meta.type-of($base) != calculation) or
-		 (meta.type-of($ratio) != 'null' and meta.type-of($ratio) != string and meta.type-of($ratio) != number) or
-		 (meta.type-of($length) != 'null' and meta.type-of($length) != number) or
-		 (meta.type-of($utility-classes) != bool) or
-		 (meta.type-of($src) != 'null' and meta.type-of($src) != map and meta.type-of($src) != list and meta.type-of($src) != arglist and meta.type-of($src) != number) or
-		 (meta.type-of($break-at) != 'null' and meta.type-of($break-at) != string) or
-		 (meta.type-of($breakpoints) != 'null' and meta.type-of($breakpoints) != map) or
-		 (meta.type-of($scale) != number) or
-		 (meta.type-of($prefix) != string) or
-		 (meta.type-of($prefix-class) != 'null' and meta.type-of($prefix-class) != string) or
-		 (meta.type-of($prefix-variable) != 'null' and meta.type-of($prefix-variable) != string) or
-		 (meta.type-of($suffix) != string and meta.type-of($suffix) != list) or
-		 (meta.type-of($suffix-class) != 'null' and meta.type-of($suffix-class) != string and meta.type-of($suffix-class) != list) or
-		 (meta.type-of($suffix-variable) != 'null' and meta.type-of($suffix-variable) != string and meta.type-of($suffix-variable) != list) {
+	@if (type-of($base) != 'null' and type-of($base) != number and type-of($base) != calculation) or
+		 (type-of($ratio) != 'null' and type-of($ratio) != string and type-of($ratio) != number) or
+		 (type-of($length) != 'null' and type-of($length) != number) or
+		 (type-of($utility-classes) != bool) or
+		 (type-of($src) != 'null' and type-of($src) != map and type-of($src) != list and type-of($src) != arglist and type-of($src) != number) or
+		 (type-of($break-at) != 'null' and type-of($break-at) != string) or
+		 (type-of($breakpoints) != 'null' and type-of($breakpoints) != map) or
+		 (type-of($scale) != 'null' and type-of($scale) != number) or
+		 (type-of($prefix) != 'null' and type-of($prefix) != string) or
+		 (type-of($prefix-class) != 'null' and type-of($prefix-class) != string) or
+		 (type-of($prefix-variable) != 'null' and type-of($prefix-variable) != string) or
+		 (type-of($suffix) != 'null' and type-of($suffix) != string and type-of($suffix) != list) or
+		 (type-of($suffix-class) != 'null' and type-of($suffix-class) != string and type-of($suffix-class) != list) or
+		 (type-of($suffix-variable) != 'null' and type-of($suffix-variable) != string and type-of($suffix-variable) != list) {
 		@error 'Invalid type value: check if values hold the corresponding type.';
 	}
 
 	// Prevent $base and $scale values to be below 0.
-	@if (meta.type-of($base) != calculation and (meta.type-of($base) != 'null' and $base < 0)) or ($scale < 0) {
+	@if (type-of($base) != calculation and (type-of($base) != 'null' and $base < 0)) or (type-of($scale) != 'null' and $scale < 0) {
 		@error "Invalid value: 'base', 'length', 'scale' must be greater than or equal to 0.";
 	}
 
 	// Prevent $base value to be unitless number.
-	@if meta.type-of($base) != calculation and (meta.type-of($base) != 'null' and math.is-unitless($base)) {
+	@if type-of($base) != calculation and (type-of($base) != 'null' and math.is-unitless($base)) {
 		@error "Invalid value: 'base' must be a number with a unit.";
 	}
 
 	// Prevent $ratio, $length and $preserve values to be number with unit.
-	@if (meta.type-of($ratio) != string and meta.type-of($ratio) != 'null' and math.is-unitless($ratio) != true) or
+	@if (type-of($ratio) != string and type-of($ratio) != 'null' and math.is-unitless($ratio) != true) or
 		(math.is-unitless($preserve) != true) or
-		(meta.type-of($ratio) != 'null' and math.is-unitless($length) != true) {
+		(type-of($ratio) != 'null' and math.is-unitless($length) != true) {
 		@error "Invalid value: 'ratio', 'preserve', 'length' must be a number with no unit.";
 	}
 
 	// Prevent $preserve and $length values to be decimal numbers.
-	@if math.round($preserve) != $preserve or (meta.type-of($ratio) != 'null' and math.round($length) != $length) {
+	@if math.round($preserve) != $preserve or (type-of($ratio) != 'null' and math.round($length) != $length) {
 		@error "Invalid value: 'preserve', 'length' must be an integer.";
 	}
 
 	// If $ratio is type of string check for the corresponding ratio type.
-	@if (meta.type-of($ratio) != number) and meta.type-of($ratio) != 'null' and map.has-key($map-for-ratios, $ratio) != true {
+	@if (type-of($ratio) != number) and type-of($ratio) != 'null' and map.has-key($map-for-ratios, $ratio) != true {
 		@error "Invalid value: 'ratio' must be one of #{_map-keys($map-for-ratios)}.";
 	}
 
 	// Prevent $preserve value being greater than $length.
-	@if meta.type-of($ratio) != 'null' and ($preserve > $length) {
+	@if type-of($ratio) != 'null' and ($preserve > $length) {
 		@error "Invalid value: 'preserve' must be less than or equal to 'length'.";
 	}
 
 	// Prevent $length value being greater than 40 or less than 1.
-	@if (meta.type-of($ratio) != 'null') and ($length > 40 or $length < 1) {
+	@if (type-of($ratio) != 'null') and ($length > 40 or $length < 1) {
 		@error "Invalid value: 'length' must be between 1 and 40.";
 	};
 
 	// Prevent $scale value to have a different unit than percentage.
-	@if (math.unit($scale) != '%') {
+	@if (type-of($scale) != number and (type-of($scale) != 'null' and math.unit($scale) != '%') ) {
 		@error "Invalid value: 'scale' must be a percentage.";
 	}
 

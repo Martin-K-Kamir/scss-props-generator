@@ -12,9 +12,8 @@
 	$valid-keys : ('key', 'selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
 	$keys       : ();
 
-	// Loop over map.
 	@each $key, $value in $map {
-		$keys : list.append($keys, $key); // Append key to list.
+		$keys : list.append($keys, $key);
 
 		// Check if value is a map.
 		@if meta.type-of($value) == map {
@@ -32,10 +31,14 @@
 		}
 	}
 
+
 	// Loop over keys list and check if all keys are valid.
 	@for $i from 1 through list.length($keys) {
-		@if (list.nth($valid-keys, $i) != list.nth($keys, $i)) {
-			@error "Invalid parameter '#{list.nth($keys, $i)}': parameters must be one of these: #{$valid-keys}.";
+
+		@for $x from 1 through list.length($valid-keys) {
+			@if list.index($valid-keys, list.nth($keys, $i)) == null {
+				@error "Invalid parameter '#{list.nth($keys, $i)}': parameters must be one of these: #{$valid-keys}.";
+			};
 		}
 	}
 }
