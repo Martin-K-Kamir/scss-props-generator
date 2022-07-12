@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+/**
+ * Mixin outputs a css custom property.
+ *
+ * @author - Martin Kamír
+ *
+ */
 @mixin _variable-shell($prefix, $suffix: null, $value) {
 	--#{$prefix}#{$suffix} : #{$value};
 }
+

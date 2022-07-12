@@ -1,21 +1,14 @@
 @charset "UTF-8";
-@use "sass:string";
-@use "sass:meta";
 @use "sass:math";
 @use "sass:map";
-@use "sass:list";
-@use "sass:color";
 
-@import 'functions/layer';
-@import 'functions/clamped';
-@import 'functions/em';
-@import 'functions/get-hsl';
+@import 'config';
 
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';
 @import 'lists/list-of-font-sizes';
-@import 'lists/list-of-fluid-fonts';
 @import 'lists/list-of-space-sizes';
+@import 'lists/list-of-fluid-fonts';
 @import 'lists/list-of-fluid-spaces';
 
 @import 'maps/map-for-animations';
@@ -74,7 +67,11 @@
 @import 'utilities/generate-types-scale';
 @import 'utilities/process-colors';
 @import 'utilities/process-config';
+@import 'utilities/em';
+@import 'utilities/get-hsl';
 
+@import 'library/layer';
+@import 'library/clamped';
 @import 'library/absolute';
 @import 'library/breakpoint-landscape';
 @import 'library/breakpoint';
@@ -127,6 +124,7 @@ $config          : (
 		),
 		'color-types' : (
 				'src' : $map-colors,
+				'src-scheme' : $map-colors-dark,
 		),
 		'properties' : (
 			//'predefined' : true,
@@ -138,44 +136,13 @@ $config          : (
 		)
 );
 
+
+.fooooo {
+	font-size : clamped(1rem, 3rem);
+}
+
+
 :root {
 	@include generate-color-types($config);
-	//@include generate-color-types($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
-	//@include _process-colors($src : $map-for-colors, $src-dark : $map-for-dark);
-	//@include _process-colors($src : $map-colors, $src-dark : $map-colors-dark, $tints : (80%, 40%), $shades : (40%, 80%), $suffix : 'numeric');
-	//@include _process-colors($src : $map-colors, $tints : (40%), $shades : (80%), $suffix : 'color-adjectives');
-	//@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5, $suffix : 'size-x-minmax');
-	//@include generate-font-types($base : 3rem, $ratio : 'minor-second', $length : 5);
-	//@include generate-fluid-font-types($config);
-	//@include generate-fluid-font-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
-	//@include generate-fluid-space-types($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
-	//@include generate-fluid-font-scales($base : clamp(1.6rem, 1.89vw + 0.58rem, 3rem), $ratio : 'minor-second', $length : 10);
-	//@include generate-fluid-font-scales($src : $list-of-fluid-fonts);
-	//@include generate-space-scales($base : 1rem, $ratio : 'minor-second', $length : 10);
-	//
-	//
-	//@include generate-properties(
-	//				$map-for-font-weights,
-	//				$map-for-aspect-ratios,
-	//				$map-for-borders,
-	//				$map-for-content-sizes,
-	//				$map-for-letter-spacings,
-	//				$map-for-line-heights,
-	//				$map-for-shadows,
-	//				$map-for-easing,
-	//				$map-for-animations,
-	//);
-
-	//@include generate-classes(
-	//				$map-for-font-weights,
-	//				$map-for-letterspacings,
-	//				$map-for-lineheights,
-	//				$map-for-shadows,
-	//);
-
-	//@include generate-classes(predefined);
-	//@include generate-classes(config);
-	//@include generate-properties(config);
-	//@include generate-classes($map-for-font-weights);
 }
 

@@ -1,8 +1,12 @@
 @charset "UTF-8";
 
-@function _convert-to-rem($px) {
+/**
+ * Function to convert pixel values to rem values.
+ *
+ */
+@function _convert-to-tem($px) {
 	$default-font-size : 10px;
-
 	$rems : math.div($px, $default-font-size) * 1rem;
+
 	@return $rems;
 }

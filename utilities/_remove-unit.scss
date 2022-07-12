@@ -7,7 +7,7 @@
  *
  * @example
  * _remove-unit(1rem) => 1;
- * _remove-unit(5em, 'em') => 5;
+ * _remove-unit(5em, '_em') => 5;
  * _remove-unit(15%, '%') => 15;
  * @overload _remove-unit($number, $unit)
  * @param $number {number} - Number to remove unit from.
@@ -19,4 +19,5 @@
 	$number : _convert-to-number($removed-unit);
 	@return $number;
 }
+
 

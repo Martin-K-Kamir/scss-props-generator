@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin to add stroke to a text element.
+ *
+ * @author - https://docs.gerillass.com/docs/text-stroke/
+ */
 @mixin text-stroke(
 	$fallback-color: black,
 	$color: transparent,

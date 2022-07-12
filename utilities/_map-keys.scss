@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+/**
+ * Function returns a list of keys from map.
+ *
+ */
 @function _map-keys($map) {
 	$keys : ();
 

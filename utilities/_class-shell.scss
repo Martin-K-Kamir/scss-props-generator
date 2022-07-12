@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+/**
+ * Function returns a class selector based on $prefix and $suffix.
+ *
+ * @author - Martin Kamír
+ *
+ */
 @function _class-shell($prefix, $suffix) {
 	@return #{$prefix}#{$suffix};
 }

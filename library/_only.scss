@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin to filter elements that match based on their position among a group of siblings and apply your style rules to only those elements.
+ *
+ * @author - https://docs.gerillass.com/docs/only/
+ */
 @mixin only($params...) {
 	@if length($params) == 0 {
 		@error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";

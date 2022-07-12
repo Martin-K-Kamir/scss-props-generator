@@ -40,3 +40,4 @@
 	@include _validate-config($_config);
 	@include _generate-types-scale($_config)
 }
+

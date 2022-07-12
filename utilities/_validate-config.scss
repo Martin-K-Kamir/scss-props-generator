@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /**
- * Validate config
+ * Validates config
  *
  * NOTE: This function is helper function for _process-config function.
  *
@@ -11,29 +11,29 @@
 @mixin _validate-config($config) {
 
 	// Get config keys
-	$key               : map.get($config, 'key');
-	$base              : map.get($config, 'base');
-	$ratio             : map.get($config, 'ratio');
-	$length            : map.get($config, 'length');
-	$preserve          : if(map.get($config, 'preserve') == null, 0, map.get($config, 'preserve'));
-	$utility-classes   : map.get($config, 'utility-classes');
-	$src               : map.get($config, 'src');
-	$src-scheme        : map.get($config, 'src-scheme');
-	$break-at          : map.get($config, 'break-at');
-	$breakpoints       : map.get($config, 'breakpoints');
-	$scale             : map.get($config, 'scale');
-	$prefix            : map.get($config, 'prefix');
-	$prefix-class      : map.get($config, 'prefix-class');
-	$prefix-variable   : map.get($config, 'prefix-variable');
-	$prefix-text       : map.get($config, 'prefix-text');
-	$prefix-background : map.get($config, 'prefix-background');
-	$suffix            : map.get($config, 'suffix');
-	$suffix-class      : map.get($config, 'suffix-class');
-	$suffix-variable   : map.get($config, 'suffix-variable');
-	$hsl               : map.get($config, 'hsl');
-	$tints             : map.get($config, 'tints');
-	$shades            : map.get($config, 'shades');
-	$preferred-scheme  : map.get($config, 'preferred-scheme');
+	$key               : map-get($config, 'key');
+	$base              : map-get($config, 'base');
+	$ratio             : map-get($config, 'ratio');
+	$length            : map-get($config, 'length');
+	$preserve          : if(map-get($config, 'preserve') == null, 0, map-get($config, 'preserve'));
+	$utility-classes   : map-get($config, 'utility-classes');
+	$src               : map-get($config, 'src');
+	$src-scheme        : map-get($config, 'src-scheme');
+	$break-at          : map-get($config, 'break-at');
+	$breakpoints       : map-get($config, 'breakpoints');
+	$scale             : map-get($config, 'scale');
+	$prefix            : map-get($config, 'prefix');
+	$prefix-class      : map-get($config, 'prefix-class');
+	$prefix-variable   : map-get($config, 'prefix-variable');
+	$prefix-text       : map-get($config, 'prefix-text');
+	$prefix-background : map-get($config, 'prefix-background');
+	$suffix            : map-get($config, 'suffix');
+	$suffix-class      : map-get($config, 'suffix-class');
+	$suffix-variable   : map-get($config, 'suffix-variable');
+	$hsl-formatting    : map-get($config, 'hsl-formatting');
+	$tints             : map-get($config, 'tints');
+	$shades            : map-get($config, 'shades');
+	$preferred-scheme  : map-get($config, 'preferred-scheme');
 
 
 	// Preventing $base, $ratio, $length and $preserve to be used together with $src and $scale.
@@ -54,7 +54,7 @@
 		 (type-of($breakpoints) != 'null' and type-of($breakpoints) != map) or
 		 (type-of($scale) != 'null' and type-of($scale) != number) or
 		 (type-of($tints) != 'null' and type-of($tints) != list) or
-		 (type-of($hsl) != bool) or
+		 (type-of($hsl-formatting) != string) or
 		 (type-of($preferred-scheme) != string) or
 		 (type-of($shades) != 'null' and type-of($shades) != list) or
 		 (type-of($prefix) != 'null' and type-of($prefix) != string) or
@@ -74,24 +74,24 @@
 	}
 
 	// Prevent $base value to be unitless number.
-	@if type-of($base) != calculation and (type-of($base) != 'null' and math.is-unitless($base)) {
+	@if type-of($base) != calculation and (type-of($base) != 'null' and unitless($base)) {
 		@error "Invalid value: 'base' must be a number with a unit.";
 	}
 
 	// Prevent $ratio, $length and $preserve values to be number with unit.
-	@if (type-of($ratio) != string and type-of($ratio) != 'null' and math.is-unitless($ratio) != true) or
-		(math.is-unitless($preserve) != true) or
-		(type-of($ratio) != 'null' and math.is-unitless($length) != true) {
+	@if (type-of($ratio) != string and type-of($ratio) != 'null' and unitless($ratio) != true) or
+		(unitless($preserve) != true) or
+		(type-of($ratio) != 'null' and unitless($length) != true) {
 		@error "Invalid value: 'ratio', 'preserve', 'length' must be a number with no unit.";
 	}
 
 	// Prevent $preserve and $length values to be decimal numbers.
-	@if math.round($preserve) != $preserve or (type-of($ratio) != 'null' and math.round($length) != $length) {
+	@if round($preserve) != $preserve or (type-of($ratio) != 'null' and round($length) != $length) {
 		@error "Invalid value: 'preserve', 'length' must be an integer.";
 	}
 
 	// If $ratio is type of string check for the corresponding ratio type.
-	@if (type-of($ratio) != number) and type-of($ratio) != 'null' and map.has-key($map-for-ratios, $ratio) != true {
+	@if (type-of($ratio) != number) and type-of($ratio) != 'null' and map-has-key($map-for-ratios, $ratio) != true {
 		@error "Invalid value: 'ratio' must be one of #{_map-keys($map-for-ratios)}.";
 	}
 
@@ -106,7 +106,7 @@
 	};
 
 	// Prevent $scale value to have a different unit than percentage.
-	@if (type-of($scale) != number and (type-of($scale) != 'null' and math.unit($scale) != '%')) {
+	@if (type-of($scale) != number and (type-of($scale) != 'null' and unit($scale) != '%')) {
 		@error "Invalid value: 'scale' must be a percentage.";
 	}
 
@@ -123,6 +123,11 @@
 	// Prevent $preferred-scheme value to be different than 'dark' or 'light'.
 	@if ($preferred-scheme != 'dark' and $preferred-scheme != 'light') {
 		@error "Invalid value: 'preferred-scheme' must be 'dark' or 'light'.";
+	}
+
+	// Prevent $hsl-formatting value to be different than 'function' or 'numbers'.
+	@if ($hsl-formatting != 'function' and $hsl-formatting != 'numbers') {
+		@error "Invalid value: 'hsl-formatting' must be 'function' or 'numbers'.";
 	}
 
 	// Validate the config keys.

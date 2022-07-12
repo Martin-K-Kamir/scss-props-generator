@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+/**
+ * Function validates a ratio string key.
+ *
+ * @author - Martin Kamír
+ *
+ */
 @function _validate-ratio($ratio) {
-	@return if(map.has-key($map-for-ratios, $ratio), map.get($map-for-ratios, $ratio), $ratio);
+	@return if(map-has-key($map-for-ratios, $ratio), map-get($map-for-ratios, $ratio), $ratio);
 }

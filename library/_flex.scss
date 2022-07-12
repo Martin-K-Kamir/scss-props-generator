@@ -20,6 +20,7 @@
  * To make gaps we define number in mixin parameter.
  */
 @mixin flex($params...) {
+
 	// Defining variables.
 	$justify       : null;
 	$align         : null;
@@ -88,7 +89,7 @@
 		flex-wrap       : $wrap;
 
 		// If defined parameter is number. Set the gap.
-		@if meta.type-of($value) == 'number' {
+		@if type-of($value) == 'number' {
 			$gap : $value;
 			gap  : $gap;
 		}
@@ -118,15 +119,16 @@
 				flex      : 1;
 				min-width : calc(#{$col-width-max} - #{$gap});
 
-				@media (max-width : $tablet-lg) {
+
+				@include breakpoint(max, tablet-lg) {
 					min-width : calc(#{$col-width-md} - #{$gap});
 				}
 
-				@media (max-width : $tablet-min) {
+				@include breakpoint(max, tablet-min) {
 					min-width : calc(#{$col-width-sm} - #{$gap});
 				}
 
-				@media (max-width : $phone-sm) {
+				@include breakpoint(max, phone-sm) {
 					min-width : calc(#{$col-width-min} - #{$gap});
 				}
 			}

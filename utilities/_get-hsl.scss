@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+/**
+ * Returns a color with hsl format as function or plain numbers.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _get-hsl(#333) => hsl(0, 0%, 20%)
+ * _get-hsl(#333, 'numbers') => 0, 0%, 20%
+ * @overload _get-hsl($value, $hsl: true)
+ * @param $value {color} - Color value.
+ * @param $hsl {string} - Defines if the output should be in hsl format as 'function' or 'numbers'.
+ * @return hsl formatted color.
+ */
+@function _get-hsl($value, $hsl: true) {
+	$hue : round(hue($value));
+	$saturation : round(saturation($value));
+	$lightness : round(lightness($value));
+
+	@if $hsl == 'function' {
+		@return hsl($hue, $saturation, $lightness);
+	} @else if $hsl == 'numbers' {
+		@return '#{$hue, $saturation, $lightness}';
+	}
+}

@@ -1,21 +1,22 @@
 @charset "UTF-8";
 
+/**
+ * Mixin for processing the color parameters.
+ *
+ * @author - Martin Kamír
+ *
+ */
 @mixin _process-colors($config) {
-	$src               : map.get($config, 'src');
-	$src-scheme        : map.get($config, 'src-scheme');
-	$tints             : map.get($config, 'tints');
-	$shades            : map.get($config, 'shades');
-	$hsl               : map.get($config, 'hsl');
-	$prefix-text       : map.get($config, 'prefix-text');
-	$prefix-background : map.get($config, 'prefix-background');
-	$suffix            : map.get($config, 'suffix');
-	$utility-classes   : map.get($config, 'utility-classes');
-	$preferred-scheme  : map.get($config, 'preferred-scheme');
-
+	$src               : map-get($config, 'src');
+	$src-scheme        : map-get($config, 'src-scheme');
+	$preferred-scheme  : map-get($config, 'preferred-scheme');
 	$dark-scheme       : false;
 	$map               : $src;
 
+	// The main loop for processing and outputting the colors.
 	@for $i from 1 through if($src-scheme == null, 1, 2) {
+
+		// Switching the map to the preferred color scheme.
 		@if length($src) == 1 {
 			@if $src-scheme != null and $i > length($map) {
 				$map         : $src-scheme;
@@ -28,6 +29,7 @@
 			}
 		}
 
+		// Generating the color properties to the root and at media preferred color scheme.
 		@if $dark-scheme == false {
 			@include _generate-colors($config, $map, true);
 		} @else {

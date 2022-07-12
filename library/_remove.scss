@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin to set the display CSS property of an element to none, and it combines it with CSS media queries to show or hide an element in the document flow based on the various device widths.
+ *
+ * @author - https://docs.gerillass.com/docs/remove/
+ */
 @mixin remove($params...) {
 	@if length($params) == 0 {
 		display : none;

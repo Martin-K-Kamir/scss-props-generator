@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin for nested inline animation.
+ *
+ * @author - https://sass-lang.com/documentation/interpolation#in-sassscript
+ */
 @mixin animation($duration, $timing: null, $count: null, $mode: null, $direction: normal) {
 	$name                     : inline-#{unique-id()};
 

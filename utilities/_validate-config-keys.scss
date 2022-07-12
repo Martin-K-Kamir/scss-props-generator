@@ -8,15 +8,13 @@
  * @author - Martin Kamír
  *
  */
-
-
 @mixin _validate-config-keys($map, $key) {
 	$map-key    : $key;
 	$valid-keys : ();
 	$keys       : ();
 
 	@if $map-key == 'color-types' {
-		$valid-keys : ('key', 'src', 'src-scheme', 'tints', 'shades', 'hsl', 'utility-classes', 'prefix-text', 'prefix-background', 'suffix', 'preferred-scheme');
+		$valid-keys : ('key', 'src', 'src-scheme', 'tints', 'shades', 'hsl-formatting', 'utility-classes', 'prefix-text', 'prefix-background', 'suffix', 'preferred-scheme');
 	} @else if ($map-key == 'fluid-font-types' or $map-key == 'fluid-space-types' or $map-key == 'font-types' or $map-key == 'space-types') {
 		$valid-keys : ('key', 'selector', 'base', 'ratio', 'length', 'preserve', 'utility-classes', 'src', 'scale', 'prefix', 'suffix', 'prefix-class', 'prefix-variable', 'suffix-class', 'suffix-variable', 'break-at', 'breakpoints');
 	} @else {
@@ -24,19 +22,19 @@
 	}
 
 	@each $key, $value in $map {
-		$keys : list.append($keys, $key);
+		$keys : append($keys, $key);
 
 		// Check if value is a map.
-		@if meta.type-of($value) == map {
+		@if type-of($value) == map {
 			$map : map.deep-remove($map, $value); // Remove nested map.
-			$map : map.merge($map, $value); // Merge removed map to current scope in main map.
+			$map : map-merge($map, $value); // Merge removed map to current scope in main map.
 		}
 
 		// Loop over new map and check if keys are string and at least 1 character long.
 		@each $key, $value in $map {
-			@if meta.type-of($key) != string {
+			@if type-of($key) != string {
 				@error "Invalid key '#{$key}': all keys must be a string in the map.";
-			} @else if string.length($key) < 1 {
+			} @else if length($key) < 1 {
 				@error "Invalid key length: all keys must be at least 1 character in the map.";
 			}
 		}
@@ -44,10 +42,10 @@
 
 
 	// Loop over keys lists and check if all keys are valid.
-	@for $i from 1 through list.length($keys) {
-		@for $x from 1 through list.length($valid-keys) {
-			@if list.index($valid-keys, list.nth($keys, $i)) == null {
-				@error "Invalid parameter '#{list.nth($keys, $i)}': parameters must be one of these: #{$valid-keys}.";
+	@for $i from 1 through length($keys) {
+		@for $x from 1 through length($valid-keys) {
+			@if index($valid-keys, nth($keys, $i)) == null {
+				@error "Invalid parameter '#{nth($keys, $i)}': parameters must be one of these: #{$valid-keys}.";
 			};
 		}
 	}

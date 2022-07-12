@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin to target elements based on the various screen resolutions.
+ *
+ * @author - https://docs.gerillass.com/docs/screen-agent/
+ */
 @mixin screen-agent($resolution) {
 	@if $resolution == '1x' {
 		@media (min-resolution : 96dpi) {

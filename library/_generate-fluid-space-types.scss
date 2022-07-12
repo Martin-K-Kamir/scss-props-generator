@@ -9,6 +9,7 @@
  * @param $base {calculation} - The base value. Calculation must be clamp().
  * @param $ratio {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
  * @param $length {number} - The length of the scale. Number must be with unit.
+ * @param $utility-classes {boolean} - Defines if the utility classes should be generated.
  * @param $prefix {string} - Defines the name of css property and utility classes.
  * @param $prefix-class {string} - Defines the name of utility classes.
  * @param $prefix-variable {string} - Defines the name of css property.

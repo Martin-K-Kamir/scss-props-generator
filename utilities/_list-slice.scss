@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+/**
+ * Function returns sliced list.
+ *
+ */
 @function _list-slice($list, $start: 1, $end: length($list)) {
 	$result : null;
 

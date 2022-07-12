@@ -39,19 +39,19 @@
 		$map : $param;
 
 		// Check if the map has a key 'selector'. If so add the selector value to the $selector variable and remove it from the map.
-		@if map.has-key($map, 'selector') {
-			$selector : map.get($map, 'selector');
-			$map      : map.remove($map, 'selector');
+		@if map-has-key($map, 'selector') {
+			$selector : map-get($map, 'selector');
+			$map      : map-remove($map, 'selector');
 		}
 
 		// Remove the 'shadow-color' key from the map.
-		@if map.has-key($map, 'shadow-color') {
-			$map : map.remove($map, 'shadow-color');
+		@if map-has-key($map, 'shadow-color') {
+			$map : map-remove($map, 'shadow-color');
 		}
 
 		// Remove the 'shadow-strength' key from the map.
-		@if map.has-key($map, 'shadow-strength') {
-			$map : map.remove($map, 'shadow-strength');
+		@if map-has-key($map, 'shadow-strength') {
+			$map : map-remove($map, 'shadow-strength');
 		}
 
 		@each $key, $value in $map {

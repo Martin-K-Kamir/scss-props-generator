@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+/**
+ * Function returns more specified string.
+ *
+ * @author - Martin Kamír
+ *
+ */
 @function _get-name($name, $specified-name) {
 	@if ($specified-name != null) {
 		@return $specified-name;

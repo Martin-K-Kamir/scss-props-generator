@@ -20,15 +20,15 @@
 @function _create-suffix-list($suffix, $length, $minmax: false) {
 
 	// Get higher and lower suffixes list from the map.
-	$lower-values : map.get($map-for-suffixes, $suffix, lower-values);
-	$higher-values : map.get($map-for-suffixes, $suffix, higher-values);
+	$lower-values : map-get($map-for-suffixes, $suffix, lower-values);
+	$higher-values : map-get($map-for-suffixes, $suffix, higher-values);
 
 	// Get the minimum and maximum index by:
 	// 1. Getting the length of the list.
 	// 2. Dividing the length of the list by half.
 	// 3. For the minimum index ceil the number up to the next integer. For the maximum index floor the number down to the next integer.
-	$min-index : math.ceil(math.div($length, 2));
-	$max-index : math.floor(math.div($length, 2));
+	$min-index : ceil(math.div($length, 2));
+	$max-index : floor(math.div($length, 2));
 
 	// Slice the list to get the minimum and maximum values.
 	$lower-list : _list-slice($lower-values, $end : $min-index);
@@ -36,13 +36,12 @@
 
 	// If $minmax parameter is set to true, add min and max suffixes to the list.
 	@if ($minmax == true) {
-		$lower-list : list.set-nth($lower-list, -1, 'min');
-		$higher-list : list.set-nth($higher-list, -1, 'max');
+		$lower-list : set-nth($lower-list, -1, 'min');
+		$higher-list : set-nth($higher-list, -1, 'max');
 	}
 
 	// Concatenate the lower and higher list.
 	// The lower list values will be at the beginning of the outputted list. The lower list has to be reversed, because the last values, which represents the smallest values would be at middle of the outputted list if not reversed (i.g: small, smaller, smallest, medium, big, bigger, etc...).
 	// The higher list will be at the end of the list.
-
-	@return list.join(_list-reverse($lower-list), $higher-list);
+	@return join(_list-reverse($lower-list), $higher-list);
 }

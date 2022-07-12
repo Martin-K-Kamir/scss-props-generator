@@ -2,16 +2,17 @@
 
 /**
  * Main generator mixin, which can call other mixins and output various types of css properties based on the config.
- * Mixin only accepts one parameter, which is the config map. In case of using parameters instead of config,
- * We can use the direct mixins such as 'generate-font-scales' or 'generate-space-sizes'.
  *
- * Parameters for config:
+ * @author - Martin Kamír
+ *
+ * Example of config:
  * $config: (
- *  font-types' : ( - From this key the _generate-font-types mixin will be called with given values.
+ *  font-types' : ( - From this key the generate-font-types mixin will be called with given values from config map.
  *  	'base' {number} - The base value. Number must be with unit.
  *  	'ratio' {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
  *  	'length' {number} - The length of the generated css properties. Number must be with no unit.
  *  	'preserve' {number} - The number of how many css properties will be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
+ *  	'utility-classes' {boolean} - Defines if the utility classes should be generated.
  *  	'prefix' {string} - Defines the name of css property and utility classes.
  *  	'prefix-class' {string} - Defines the name of utility classes.
  *  	'prefix-variable' {string} - Defines the name of css property.
@@ -23,66 +24,63 @@
  *  	'break-at' {string} - Defines the min-width or max-width of the breakpoint by calling 'min' or 'max'.
  *  	'breakpoints' {map}  - Defines the breakpoints and their values. Key is the breakpoint value from $map-for-breakpoints and value is the value in that breakpoint. The value can be a list of values, map of values or (ratio: number) or (base: number).
  *  	),
- *  'space-types' : ( - From this key the _generate-space-types mixin will be called with given values.
+ *  'space-types' : ( - From this key the generate-space-types mixin will be called with given values from config map.
  *  	Using the same parameters as in font-types.
  *  	),
- *  fluid-font-types' : ( - From this key the _generate-fluid-font-types mixin will be called with given values.
- *  	'base' {calculation} - The base value. Calculation must be clamp().
- *  	'ratio' - as above.
- *  	'length' - as above.
- *  	'preserve' - NOT ALLOWED.
- *  	'prefix' - as above.
- *  	'prefix-class'- as above.
- *  	'prefix-variable' - as above.
- *  	'suffix' {string} - as above.
- *  	'suffix-class' {string} - as above.
- *  	'suffix-variable' {string} - as above.
- *  	'src' {list, map} - as above.
- *  	'scale' - NOT ALLOWED.
- *  	'break-at' {string} - as above.
- *  	'breakpoints' {map}  - as above.
+ *  fluid-font-types' : ( - From this key the generate-color-types mixin will be called with given values from config map.
+ *  	Using the same parameters as in font-types, but parameters 'scale' and 'preserve' are not allowed.
  *  	),
- *  'fluid-space-types' : ( - From this key the _generate-space-types mixin will be called with given values.
- *  	Using the same parameters as in fluid-font-types.
+ *  'fluid-space-types' : ( - From this key the generate-space-types mixin will be called with given values from config map.
+ *  	Using the same parameters as in font-types, but parameters 'scale' and 'preserve' are not allowed.
  *  	),
- *  'classes' : ( - From this key the _generate-classes mixin will be called with given values.
+ *  color-types' : ( - From this key the generate-color-types mixin will be called with given values from config map.
+ *  	'config' {map} - Config map uses same parameters as below.
+ *  	'src' {map} - The source values of colors.
+ *  	'src-scheme' {map} - The source values of colors for preferred color scheme.
+ *  	'tints' {list} - Defining the values for tints of colors as percentages. Based on the source values at $src/$src-scheme the color tints will be produced of given values.
+ *  	'shades' {list} - Same as $tints but for shades.
+ *  	'hsl-formatting' {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
+ *  	'utility-classes' {boolean} - Defines if the utility classes should be generated.
+ *  	'prefix-text' {string} - Defines the name of utility classes for the color property.
+ *  	'prefix-background' {string} - Defines the name of utility classes for the background property.
+ *  	'suffix {string}' - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
+ *  	'preferred-scheme' {string} - Defines the preferred color scheme at media query for 'dark' and 'light'.
+ *  	),
+ *  'classes' : ( - From this key the generate-classes mixin will be called with given values from config map.
  *  	'predefined' : {boolean} - If true, predefined css properties will be generated.
  *  	'src' : {list} - List of maps to generate css properties from.
  *  ),
- *  'properties' : ( - From this key the _generate-properties mixin will be called with given values.
+ *  'properties' : ( - From this key the generate-properties mixin will be called with given values from config map.
  *  	Using the same parameters as in classes.
  *  ),
- *
- * @author - Martin Kamír
- *
  */
 @mixin generator($config) {
 
-	@if map.has-key($config, 'font-types') {
+	@if map-has-key($config, 'font-types') {
 		@include generate-font-types($config);
 	}
 
-	@if map.has-key($config, 'space-types') {
+	@if map-has-key($config, 'space-types') {
 		@include generate-space-types($config);
 	}
 
-	@if map.has-key($config, 'fluid-font-types') {
+	@if map-has-key($config, 'fluid-font-types') {
 		@include generate-fluid-font-types($config);
 	}
 
-	@if map.has-key($config, 'fluid-space-types') {
+	@if map-has-key($config, 'fluid-space-types') {
 		@include generate-fluid-space-types($config);
 	}
 
-	@if map.has-key($config, 'color-types') {
+	@if map-has-key($config, 'color-types') {
 		@include generate-color-types($config);
 	}
 
-	@if map.has-key($config, 'classes') {
+	@if map-has-key($config, 'classes') {
 		@include generate-classes(config);
 	}
 
-	@if map.has-key($config, 'properties') {
+	@if map-has-key($config, 'properties') {
 		@include generate-properties(config);
 	}
 }

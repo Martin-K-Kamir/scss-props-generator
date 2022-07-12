@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-
 /**
  * Returns string of suffix based on current $i in the loop.
  *
@@ -30,13 +29,13 @@
 	} @else if ($suffix == 'numeric-hundreds') {
 		@return $i + '00'; // Returns the current number based on the index and adds '00' to the end.
 
-	} @else if (meta.type-of($suffix) == 'list') {
-		@return list.nth($suffix, $i); // Returns value from custom list based on current $i.
+	} @else if (type-of($suffix) == 'list') {
+		@return nth($suffix, $i); // Returns value from custom list based on current $i.
 
-	} @else if (list.index(('roman', 'greek', 'military', 'planets', 'nato', 'alphabet', 'alphabet-upper', 'primary'), $suffix)) {
-		@return list.nth(map.get($map-for-suffixes, $suffix), $i); // Returns value from premade list based on current $i.
+	} @else if (index(('roman', 'greek', 'military', 'planets', 'nato', 'alphabet', 'alphabet-upper', 'primary'), $suffix)) {
+		@return nth(map-get($map-for-suffixes, $suffix), $i); // Returns value from premade list based on current $i.
 
-	} @else if (list.index(('size', 'size-minmax', 'size-shorted', 'size-shorted-minmax', 'size-x', 'size-x-minmax', 'size-adjectives', 'size-adjectives-minmax', 'size-and-number', 'size-and-number-minmax', 'size-and-x', 'size-and-x-minmax'), $suffix)) {
+	} @else if (index(('size', 'size-minmax', 'size-shorted', 'size-shorted-minmax', 'size-x', 'size-x-minmax', 'size-adjectives', 'size-adjectives-minmax', 'size-and-number', 'size-and-number-minmax', 'size-and-x', 'size-and-x-minmax'), $suffix)) {
 
 		// Map which holds corresponding suffixes of sizes.
 		//@debug $length;
@@ -58,17 +57,17 @@
 		// Loop over the map and check if $suffix corresponding with $key
 		@each $key, $list-of-suffixes in $map-of-suffixes {
 			@if ($suffix == $key) {
-				@return list.nth($list-of-suffixes, $i); // Returns value from premade list based on current $i.
+				@return nth($list-of-suffixes, $i); // Returns value from premade list based on current $i.
 			}
 		}
-	} @else if (list.index(('color-adjectives', 'color-adjectives-minmax'), $suffix)) {
-		$list-of-suffixes : _list-slice(map.get($map-for-suffixes, $suffix, $map-to-get), 1, $length);
+	} @else if ($suffix == 'color-adjectives') {
+		$list-of-suffixes : _list-slice(map-get($map-for-suffixes, $suffix, $map-to-get), 1, $length);
 
 		@if $map-to-get == 'lighter-values' {
 			$list-of-suffixes : _list-reverse($list-of-suffixes);
 		}
 
-		@return list.nth($list-of-suffixes, $i);
+		@return nth($list-of-suffixes, $i);
 	} @else {
 		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{_map-keys($map-for-suffixes)}';
 	}

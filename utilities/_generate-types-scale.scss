@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import '../functions/clamped';
 
 /**
  * Generates css properties of given parameters in config.
@@ -10,28 +9,30 @@
  *
  */
 @mixin _generate-types-scale($config) {
+
 	// Getting all the values from the config map.
-	$key             : map.get($config, 'key');
-	$selector        : map.get($config, 'selector');
-	$base            : map.get($config, 'base');
-	$ratio           : map.get($config, 'ratio');
-	$length          : map.get($config, 'length');
-	$preserve        : map.get($config, 'preserve');
-	$utility-classes : map.get($config, 'utility-classes');
-	$src             : map.get($config, 'src');
-	$break-at        : map.get($config, 'break-at');
-	$breakpoints     : map.get($config, 'breakpoints');
-	$scale           : map.get($config, 'scale');
-	$prefix          : map.get($config, 'prefix');
-	$prefix-class    : map.get($config, 'prefix-class');
-	$prefix-variable : map.get($config, 'prefix-variable');
-	$suffix          : map.get($config, 'suffix');
-	$suffix-class    : map.get($config, 'suffix-class');
-	$suffix-variable : map.get($config, 'suffix-variable');
+	$key             : map-get($config, 'key');
+	$selector        : map-get($config, 'selector');
+	$base            : map-get($config, 'base');
+	$ratio           : map-get($config, 'ratio');
+	$length          : map-get($config, 'length');
+	$preserve        : map-get($config, 'preserve');
+	$utility-classes : map-get($config, 'utility-classes');
+	$src             : map-get($config, 'src');
+	$src             : map-get($config, 'src');
+	$break-at        : map-get($config, 'break-at');
+	$breakpoints     : map-get($config, 'breakpoints');
+	$scale           : map-get($config, 'scale');
+	$prefix          : map-get($config, 'prefix');
+	$prefix-class    : map-get($config, 'prefix-class');
+	$prefix-variable : map-get($config, 'prefix-variable');
+	$suffix          : map-get($config, 'suffix');
+	$suffix-class    : map-get($config, 'suffix-class');
+	$suffix-variable : map-get($config, 'suffix-variable');
 
 	// Sets all variables to be used in the mixin.
-	$src-length      : list.length($src);
-	$src-type        : meta.type-of($src);
+	$src-length      : length($src);
+	$src-type        : type-of($src);
 	$ratio           : _validate-ratio($ratio);
 	$prefix          : _get-name($prefix, $prefix-variable);
 	$suffix          : _get-name($suffix, $suffix-variable);
@@ -52,7 +53,7 @@
 	@if $src-type == map {
 		$keys       : to-list($src, 'keys');
 		$src        : to-list($src, 'values');
-		$src-length : list.length($src);
+		$src-length : length($src);
 	}
 
 	// Main loop for generating the css properties.
@@ -84,15 +85,14 @@
 		// If $src is a list or map
 		@if $src-type == list or $src-type == map {
 			$_suffix : _get-suffix($suffix, $src-length, $i);
-			$value   : _number-scale(list.nth($src, $i), $scale); // Get the value from the list at the current iteration and scale it if used.
+			$value   : _number-scale(nth($src, $i), $scale); // Get the value from the list at the current iteration and scale it if used.
 		}
 
 		// If $src is a map
 		@if $src-type == map {
-			$_prefix : list.nth($keys, $i); // Get the key from the list at the current iteration.
+			$_prefix : nth($keys, $i); // Get the key from the list at the current iteration.
 			$_suffix : ''; // Because the map is used the suffix is empty. The key is used as the prefix and suffix.
 		}
-
 
 		// The actual css property which is outputted.
 		@include _variable-shell($_prefix, $_suffix, $value);
@@ -110,10 +110,10 @@
 
 	// If $break-at is used generate breakpoints with css properties.
 	@if ($breakpoints != null) {
-		@for $i from 1 through list.length($breakpoints) {
-			$breakpoint : list.nth(list.nth($breakpoints, $i), 1); // Get the breakpoint value.
-			$src        : list.nth(list.nth($breakpoints, $i), 2); // Get the src value.
-			$src-type   : meta.type-of(list.nth(list.nth($breakpoints, $i), 2)); // Get the src type.
+		@for $i from 1 through length($breakpoints) {
+			$breakpoint : nth(nth($breakpoints, $i), 1); // Get the breakpoint value.
+			$src        : nth(nth($breakpoints, $i), 2); // Get the src value.
+			$src-type   : type-of(nth(nth($breakpoints, $i), 2)); // Get the src type.
 
 			// If $src is a map convert keys and values to a list.
 			@if $src-type == map {
@@ -125,23 +125,23 @@
 			// The $break-at value must be one of the breakpoints in $map-for-breakpoints.
 			@include breakpoint($break-at, $breakpoint) {
 				$x : 1; // Second iteration of the loop.
-				$y : $src-length - list.length($src) + 1; // Third iteration of the loop. Which starts by getting the difference between the length of the src and the length of the main loop current iteration.
+				$y : $src-length - length($src) + 1; // Third iteration of the loop. Which starts by getting the difference between the length of the src and the length of the main loop current iteration.
 
 				@while $y <= $src-length {
 					$_prefix : _get-name($prefix, $prefix-variable); // Get the prefix name.
 					$_suffix : _get-suffix($suffix, $src-length, $y); // Get the suffix for the current iteration of $y.
-					$value   : _number-scale(list.nth($src, $x), $scale); // Get the value from the list at the current iteration of $x and scale it if used.
+					$value   : _number-scale(nth($src, $x), $scale); // Get the value from the list at the current iteration of $x and scale it if used.
 
 					// If $src is a map
 					@if $src-type == map {
-						$_prefix : list.nth($keys, $x); // Get the key from the list at the current iteration.
+						$_prefix : nth($keys, $x); // Get the key from the list at the current iteration.
 						$_suffix : ''; // Since the map is used the suffix is empty, because the key is used as the prefix and suffix.
 
 						// If the key is ratio
 						@if $_prefix == 'ratio' {
 							$_prefix : $prefix; // Use the prefix instead of the key.
 							$_suffix : 'ratio'; // Use string 'ratio' as the suffix.
-							$value   : _validate-ratio(list.nth($src, $x)); // Validate the ratio and get the value.
+							$value   : _validate-ratio(nth($src, $x)); // Validate the ratio and get the value.
 						}
 
 						// If the key is base
@@ -163,4 +163,3 @@
 	}
 }
 
-;

@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin to load a page elements with a smooth fade-in effect.
+ *
+ * @author - https://docs.gerillass.com/docs/loadify/
+ */
 @mixin loadify($params...) {
 	@if not & {
 		@if length($params) == 0 or (length($params) == 1 and nth($params, 1) == 'init') {

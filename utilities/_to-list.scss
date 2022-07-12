@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+/**
+ * Function converts map to list.
+ *
+ */
 @function to-list($value, $keep: 'both') {
 	$keep : if(index('keys' 'values', $keep), $keep, 'both');
 

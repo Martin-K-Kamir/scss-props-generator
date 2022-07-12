@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin for @media breakpoint.
+ *
+ * @author - https://docs.gerillass.com/docs/breakpoint/
+ */
 @mixin breakpoint($params...) {
 	@if length($params) == 1 {
 		$value : nth($params, 1);

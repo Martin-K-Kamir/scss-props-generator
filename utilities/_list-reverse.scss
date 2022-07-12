@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+/**
+ * Function returns reversed list.
+ *
+ */
 @function _list-reverse($list, $recursive: false) {
 	$result : ();
 

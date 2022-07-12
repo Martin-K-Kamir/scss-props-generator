@@ -49,8 +49,8 @@
 		$map : $param;
 
 		// Check if the map has a key 'selector'. If so remove that key.
-		@if map.has-key($map, 'selector') {
-			$map : map.remove($map, 'selector');
+		@if map-has-key($map, 'selector') {
+			$map : map-remove($map, 'selector');
 		}
 
 		@each $key, $value in $map {

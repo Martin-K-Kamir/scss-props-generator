@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin allows to improve web accessibility by hiding elements.
+ *
+ * @author - https://docs.gerillass.com/docs/hide/
+ */
 @mixin hide($toggle: 'hide') {
 	@if $toggle == 'hide' {
 		position    : absolute;

@@ -14,19 +14,20 @@
  * @return scaled number
  */
 @function _number-scale($number, $scale: 100%) {
-	@if (meta.type-of($scale) != number) {
+	@if (type-of($scale) != number) {
 		@error 'Invalid type value: parameter $scale must be a number.';
 	}
 	@if ($scale < 0) {
 		@error 'Invalid value: parameter $scale must be a number greater than `0`.';
 	}
-	@if (meta.type-of($number) == string) {
+	@if (type-of($number) == string) {
 		@return $number;
 	}
-	@if (meta.type-of($number) == calculation) {
+	@if (type-of($number) == calculation) {
 		@return $number;
 	}
 
 	$scale : _remove-unit($scale, '%');
 	@return math.div($number, 100) * $scale
 }
+

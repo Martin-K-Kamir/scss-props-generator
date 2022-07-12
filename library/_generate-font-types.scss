@@ -10,6 +10,7 @@
  * @param $ratio {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
  * @param $length {number} - The length of the scale. Number must be with unit.
  * @param $preserve {number} - The number of how many css properties will be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
+ * @param $utility-classes {boolean} - Defines if the utility classes should be generated.
  * @param $prefix {string} - Defines the name of css property and utility classes.
  * @param $prefix-class {string} - Defines the name of utility classes.
  * @param $prefix-variable {string} - Defines the name of css property.

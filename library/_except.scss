@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin to target elements that you do not want to apply style changes.
+ *
+ * @author - https://docs.gerillass.com/docs/except/
+ */
 @mixin except($params...) {
 	@if length($params) == 0 {
 		@error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";

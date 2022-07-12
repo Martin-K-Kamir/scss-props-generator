@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/**
+ * Mixin for @media breakpoint landscape.
+ *
+ * @author - Martin Kamír
+ */
 @mixin landscape($device: null, $height: null) {
 	@if $device == 'tablet' {
 		@media (orientation : landscape) and (min-resolution : 2x) and (max-height : 1366px) and (max-width : 1024px) and (hover : none),

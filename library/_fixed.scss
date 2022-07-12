@@ -1,12 +1,19 @@
 @charset "UTF-8";
 
+/**
+ * Mixin for fixed positioning.
+ *
+ * @author - Martin Kamír
+ *
+ * NOTE: Idea taken from: https://docs.gerillass.com/docs/center/
+ */
 @mixin fixed($mode, $value: null, $value2: null, $value3: null, $value4: null, $top: null, $right: null, $bottom: null, $left: null) {
 	position : fixed;
-
 	top      : $top;
 	right    : $right;
 	bottom   : $bottom;
 	left     : $left;
+
 	@if ($mode == 'top') {
 		top       : $value;
 	} @else if ($mode == 'top-left') {
@@ -60,5 +67,4 @@
 		left      : 50%;
 		transform : translateX(-50%);
 	}
-
 }

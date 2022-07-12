@@ -1,12 +1,16 @@
 @charset "UTF-8";
 
-
+/**
+ * Mixin outputs utility classes for color and background properties.
+ *
+ * @author - Martin Kamír
+ *
+ */
 @mixin _generate-color-utilities($utility-classes, $prefix-text, $prefix-background, $key, $suffix, $value) {
 	@if $utility-classes {
 		@at-root .#{$prefix-text}#{$key}#{$suffix} {
 			@include _declaration-shell($key, $suffix, $value, 'color');
 		}
-
 		@at-root .#{$prefix-background}#{$key}#{$suffix} {
 			@include _declaration-shell($key, $suffix, $value, 'background-color');
 		}
