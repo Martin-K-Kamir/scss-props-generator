@@ -95,23 +95,8 @@
 @import 'library/generate-properties';
 @import 'library/generator';
 
-$map-colors      : ('primary': hsl(350, 100%, 38%), 'secondary': hsl(207, 56%, 48%));
-//$map-colors      : ('primary': hsl(350, 100%, 38%));
-//$map-colors-dark : ('primary': hsl(350, 100%, 26%));
-$map-colors-dark : ('primary': hsl(350, 100%, 26%), 'secondary': hsl(207, 100%, 17%));
-$map-for-dark    : (
-		'primary-1' : hsl(350, 100%, 21%),
-		'primary-2' : hsl(350, 100%, 28%),
-		'primary-3' : hsl(350, 100%, 22%),
-		'secondary-1' : hsl(206, 100%, 19%),
-		'secondary-2' : hsl(205, 100%, 15%),
-		'secondary-3' : hsl(218, 100%, 9%),
-		'neutral-1' : hsl(0, 0%, 27%),
-		'neutral-2' : hsl(0, 0%, 15%),
-		'neutral-3' : hsl(0, 0%, 5%),
-);
 
-$config          : (
+$config : (
 		'fluid-font-types' : (
 			//'base' : clamp(1.6rem, 1.89vw + 0.58rem, 3rem),
 				'base' : clamped(1.6rem, 3rem),
@@ -123,8 +108,6 @@ $config          : (
 				)
 		),
 		'color-types' : (
-				'src' : $map-colors,
-				'src-scheme' : $map-colors-dark,
 		),
 		'properties' : (
 			//'predefined' : true,
@@ -137,12 +120,6 @@ $config          : (
 );
 
 
-.fooooo {
-	font-size : clamped(1rem, 3rem);
-}
-
-
 :root {
-	@include generate-color-types($config);
 }
 
