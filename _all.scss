@@ -2,8 +2,6 @@
 @use "sass:math";
 @use "sass:map";
 
-@import 'config';
-
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';
 @import 'lists/list-of-font-sizes';
@@ -95,31 +93,25 @@
 @import 'library/generate-properties';
 @import 'library/generator';
 
+@import 'config';
+
+.foo {
+	color : black;
+}
 
 $config : (
-		'fluid-font-types' : (
-			//'base' : clamp(1.6rem, 1.89vw + 0.58rem, 3rem),
-				'base' : clamped(1.6rem, 3rem),
-				'ratio' : 'minor-second',
-				'length' : 10,
-				'suffix' : 'nato',
-				'breakpoints' : (
-						'tablet-min' : ('base' : clamped(1rem, 2rem)),
-				)
+		'font-types' : (
+				'base' : 1rem,
+				'ratio' : 1.125,
+				'length' : 7,
 		),
 		'color-types' : (
+				'src' : $map-for-colors,
 		),
-		'properties' : (
-			//'predefined' : true,
-				'src' : ($map-for-font-weights, $map-for-letter-spacings),
-		),
-		'classes' : (
-				'predefined' : true,
-			//'src' : ($map-for-font-weights, $map-for-letter-spacings),
-		)
 );
 
 
 :root {
+	@include generator($config);
 }
 

@@ -35,7 +35,6 @@
 	$shades            : map-get($config, 'shades');
 	$preferred-scheme  : map-get($config, 'preferred-scheme');
 
-
 	// Preventing $base, $ratio, $length and $preserve to be used together with $src and $scale.
 	// The reason behind this is we don't want generate ratio scaled values with custom values from map or list.
 	@if ($base != null or $ratio != null or $length != null or $preserve != 0) and
@@ -54,14 +53,14 @@
 		 (type-of($breakpoints) != 'null' and type-of($breakpoints) != map) or
 		 (type-of($scale) != 'null' and type-of($scale) != number) or
 		 (type-of($tints) != 'null' and type-of($tints) != list) or
-		 (type-of($hsl-formatting) != string) or
-		 (type-of($preferred-scheme) != string) or
+		 (type-of($hsl-formatting) != 'null' and type-of($hsl-formatting) != string) or
+		 (type-of($preferred-scheme) != 'null' and type-of($preferred-scheme) != string) or
 		 (type-of($shades) != 'null' and type-of($shades) != list) or
 		 (type-of($prefix) != 'null' and type-of($prefix) != string) or
 		 (type-of($prefix-class) != 'null' and type-of($prefix-class) != string) or
 		 (type-of($prefix-variable) != 'null' and type-of($prefix-variable) != string) or
-		 (type-of($prefix-text) != string) or
-		 (type-of($prefix-background) != string) or
+		 (type-of($prefix-text) != 'null' and type-of($prefix-text) != string) or
+		 (type-of($prefix-background) != 'null' and type-of($prefix-background) != string) or
 		 (type-of($suffix) != 'null' and type-of($suffix) != string and type-of($suffix) != list) or
 		 (type-of($suffix-class) != 'null' and type-of($suffix-class) != string and type-of($suffix-class) != list) or
 		 (type-of($suffix-variable) != 'null' and type-of($suffix-variable) != string and type-of($suffix-variable) != list) {
@@ -121,12 +120,12 @@
 	}
 
 	// Prevent $preferred-scheme value to be different than 'dark' or 'light'.
-	@if ($preferred-scheme != 'dark' and $preferred-scheme != 'light') {
+	@if ($preferred-scheme != null) and ($preferred-scheme != 'dark' and $preferred-scheme != 'light') {
 		@error "Invalid value: 'preferred-scheme' must be 'dark' or 'light'.";
 	}
 
 	// Prevent $hsl-formatting value to be different than 'function' or 'numbers'.
-	@if ($hsl-formatting != 'function' and $hsl-formatting != 'numbers') {
+	@if ($hsl-formatting != null) and ($hsl-formatting != 'function' and $hsl-formatting != 'numbers') {
 		@error "Invalid value: 'hsl-formatting' must be 'function' or 'numbers'.";
 	}
 
