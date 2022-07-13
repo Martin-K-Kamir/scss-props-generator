@@ -94,24 +94,3 @@
 @import 'library/generator';
 
 @import 'config';
-
-.foo {
-	color : black;
-}
-
-$config : (
-		'font-types' : (
-				'base' : 1rem,
-				'ratio' : 1.125,
-				'length' : 7,
-		),
-		'color-types' : (
-				'src' : $map-for-colors,
-		),
-);
-
-
-:root {
-	@include generator($config);
-}
-
