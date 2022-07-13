@@ -105,8 +105,8 @@ $config : (
 				'ratio' : 1.125,
 				'length' : 7,
 		),
-		'color-types' : (
-				'src' : $map-for-colors,
+		'properties' : (
+				$map-for-line-heights,
 		),
 );
 
