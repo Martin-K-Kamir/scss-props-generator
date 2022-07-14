@@ -10,7 +10,7 @@
 		display : none;
 	} @else if length($params) == 1 {
 		$value  : nth($params, 1);
-		@include gls-breakpoint($value) {
+		@include breakpoint($value) {
 			display : none;
 		}
 	} @else if length($params) == 2 {
@@ -18,18 +18,18 @@
 			$mode  : nth($params, 1);
 			$value : nth($params, 2);
 			@if $mode == 'min' {
-				@include gls-breakpoint(min, $value) {
+				@include breakpoint(min, $value) {
 					display : none;
 				}
 			} @else if $mode == 'max' {
-				@include gls-breakpoint(max, $value) {
+				@include breakpoint(max, $value) {
 					display : none;
 				}
 			}
 		} @else {
 			$start : nth($params, 1);
 			$end   : nth($params, 2);
-			@include gls-breakpoint($start, $end) {
+			@include breakpoint($start, $end) {
 				display : none;
 			}
 		}

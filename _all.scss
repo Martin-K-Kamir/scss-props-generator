@@ -2,7 +2,7 @@
 @use "sass:math";
 @use "sass:map";
 
-$agent-size : 16;
+$agent-size  : 16;
 $author-size : 10;
 
 @import 'lists/list-of-directions';
@@ -98,7 +98,7 @@ $author-size : 10;
 
 @import 'config';
 
-$config : (
+$config      : (
 		'font-types' : (
 				'base' : 1rem,
 				'ratio' : 1.125,
@@ -112,5 +112,9 @@ $config : (
 
 :root {
 	@include generator($config);
+}
+
+.foo {
+	@include remove(min, tablet-sm)
 }
 
