@@ -2,6 +2,9 @@
 @use "sass:math";
 @use "sass:map";
 
+$agent-size : 16;
+$author-size : 10;
+
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';
 @import 'lists/list-of-font-sizes';
@@ -95,10 +98,6 @@
 
 @import 'config';
 
-.foo {
-	color : black;
-}
-
 $config : (
 		'font-types' : (
 				'base' : 1rem,
@@ -106,7 +105,7 @@ $config : (
 				'length' : 7,
 		),
 		'properties' : (
-				$map-for-line-heights,
+				'predefined'
 		),
 );
 

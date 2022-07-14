@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@use "sass:math" as *;
 
 /**
  * Returns scaled number.
@@ -28,6 +29,6 @@
 	}
 
 	$scale : _remove-unit($scale, '%');
-	@return math.div($number, 100) * $scale
+	@return div($number, 100) * $scale
 }
 

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../config';
+@use "sass:math";
 
 /**
  * Returns converted pixel value to _em value.

@@ -21,16 +21,13 @@
  */
 @mixin generate-classes($params...) {
 	$selector   : null;
-	$predefined : null;
 
-	// Check for config. The string '(config,)' must look like this, because of arglist from $params...
 	@if $params == (config,) {
-		$predefined : _map-deep-get($config, 'classes', 'predefined');
-		$params     : _map-deep-get($config, 'classes', 'src');
+		$params : map-get($config, 'classes');
 	}
 
 	// If the $params is a string 'predefined' or $predefined is true from config, generate predefined css properties.
-	@if $params == (predefined,) or $predefined {
+	@if $params == (predefined,) or $params == 'predefined' {
 		$params : ($map-for-font-weights, $map-for-letter-spacings, $map-for-line-heights, $map-for-shadows);
 	}
 

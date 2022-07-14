@@ -73,7 +73,7 @@
 	@each $value in $params {
 
 		// If defined parameter is string. Get the value from the map if it corresponds with the value.
-		@if meta.type-of($value) == 'string' {
+		@if type-of($value) == 'string' {
 			$justify   : _map-deep-get($map-for-flexbox, 'justify', $value);
 			$align     : _map-deep-get($map-for-flexbox, 'align', $value);
 			$direction : _map-deep-get($map-for-flexbox, 'directions', $value);
