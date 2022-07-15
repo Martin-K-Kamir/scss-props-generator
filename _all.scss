@@ -83,7 +83,7 @@ $author-size : 10;
 @import 'library/animation';
 @import 'library/loadify';
 @import 'library/only';
-@import 'library/remove';
+@import 'library/display-at';
 @import 'library/screen-agent';
 @import 'library/text-shadow';
 @import 'library/text-stroke';
@@ -97,24 +97,3 @@ $author-size : 10;
 @import 'library/generator';
 
 @import 'config';
-
-$config      : (
-		'font-types' : (
-				'base' : 1rem,
-				'ratio' : 1.125,
-				'length' : 7,
-		),
-		'properties' : (
-				'predefined'
-		),
-);
-
-
-:root {
-	@include generator($config);
-}
-
-.foo {
-	@include remove(min, tablet-sm)
-}
-

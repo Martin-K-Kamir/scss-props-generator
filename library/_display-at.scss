@@ -5,7 +5,7 @@
  *
  * @author - https://docs.gerillass.com/docs/remove/
  */
-@mixin remove($params...) {
+@mixin display-at($params...) {
 	@if length($params) == 0 {
 		display : none;
 	} @else if length($params) == 1 {
