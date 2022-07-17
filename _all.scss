@@ -2,8 +2,8 @@
 @use "sass:math";
 @use "sass:map";
 
-$agent-size  : 16;
-$author-size : 10;
+$agent-size                : 16;
+$author-size               : 10;
 
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';
@@ -97,3 +97,15 @@ $author-size : 10;
 @import 'library/generator';
 
 @import 'config';
+
+$list-of-fluid-space-sizes : (
+		clamped(1.5rem, 1.6rem),
+		clamped(2.8rem, 3.2rem),
+		clamped(12rem, 17rem),
+) !default;
+
+:root {
+	@include generate-fluid-space-types($src : $list-of-fluid-space-sizes);
+
+	@include generate-classes($map-for-measure);
+}
