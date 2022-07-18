@@ -2,8 +2,7 @@
 @use "sass:math";
 @use "sass:map";
 
-$agent-size                : 16;
-$author-size               : 10;
+@import 'tokens';
 
 @import 'lists/list-of-directions';
 @import 'lists/list-of-layers';

@@ -5,7 +5,7 @@
  * Returns converted pixel value to _em value.
  *
  */
-@function _em($pixels, $context: $agent-size) {
+@function _em($pixels, $context: $agent-default-font-size) {
 	@if (unitless($pixels)) {
 		$pixels : $pixels * 1px;
 	}

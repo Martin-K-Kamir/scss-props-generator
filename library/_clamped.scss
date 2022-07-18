@@ -51,11 +51,11 @@
 	$max-breakpoint : _convert-to-number(_string-replace($max-breakpoint, $breakpoint-unit));
 
 	@if $breakpoint-unit == em {
-		$min-breakpoint : $min-breakpoint * $agent-size;
-		$max-breakpoint : $max-breakpoint * $agent-size;
+		$min-breakpoint : $min-breakpoint * $agent-default-font-size;
+		$max-breakpoint : $max-breakpoint * $agent-default-font-size;
 	} @else if $breakpoint-unit == rem {
-		$min-breakpoint : $min-breakpoint * $author-size;
-		$max-breakpoint : $max-breakpoint * $author-size;
+		$min-breakpoint : $min-breakpoint * $author-default-font-size;
+		$max-breakpoint : $max-breakpoint * $author-default-font-size;
 	}
 
 	$slope : math.div($max-value - $min-value, $max-breakpoint - $min-breakpoint);
