@@ -20,7 +20,8 @@
  * );
  */
 @mixin generate-classes($params...) {
-	$selector   : null;
+	$property     : null;
+	$auto-margins : false;
 
 	@if $params == (config,) {
 		$params : map-get($config, 'classes');
@@ -35,10 +36,14 @@
 	@each $param in $params {
 		$map : $param;
 
-		// Check if the map has a key 'selector'. If so add the selector value to the $selector variable and remove it from the map.
-		@if map-has-key($map, 'selector') {
-			$selector : map-get($map, 'selector');
-			$map      : map-remove($map, 'selector');
+		// Check if the map has a key 'property'. If so add the property value to the $property variable and remove it from the map.
+		@if map-has-key($map, 'property') {
+			$property : map-get($map, 'property');
+			$map      : map-remove($map, 'property');
+
+			@if $property == 'auto-margins' {
+				$auto-margins : true;
+			}
 		}
 
 		// Remove the 'shadow-color' key from the map.
@@ -51,10 +56,27 @@
 			$map : map-remove($map, 'shadow-strength');
 		}
 
-		@each $key, $value in $map {
-			@at-root .#{$key} {
-				#{$selector} : var(--#{$key});
+		@if $auto-margins == true {
+			@each $key, $property in $map {
+				@at-root .#{$key} {
+					#{$property} : auto;
+				}
+
+				@each $screen in $map-for-breakpoints {
+					@at-root .#{$key}\/#{$screen} {
+						@include breakpoint(max, $screen) {
+							#{$property} : auto;
+						}
+					}
+				}
+			}
+		} @else {
+			@each $key, $value in $map {
+				@at-root .#{$key} {
+					#{$property} : var(--#{$key});
+				}
 			}
 		}
+
 	}
 }

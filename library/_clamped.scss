@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@use "sass:math";
 @import '../utilities/convert-to-number';
 @import '../utilities/convert-to-rem';
 @import '../utilities/number-round';
@@ -14,16 +15,24 @@
  * @example
  * clamped(1rem, 3rem, 20em, 65em) => clamp(1rem, 2.78vw + 0.11rem, 3rem);
  * clamped(1rem, 3rem) => clamp(1rem, 1.88vw + 0.3rem, 3rem);
- * @overload clamped($min-value, $max-value, $min-breakpoint: map.get($map-for-breakpoints, "screen-xs"), $max-breakpoint: map.get($map-for-breakpoints, "screen-xl"))
+ * @overload clamped($min-value, $max-value, $min-breakpoint: map-get($map-for-breakpoints, "screen-xs"), $max-breakpoint: map-get($map-for-breakpoints, "screen-xl"))
  * @param $min-value {number} - Minimum value.
  * @param $max-value {number} - Maximum value.
  * @param $min-breakpoint {number} - Minimum breakpoint value.
  * @param $max-breakpoint {number} - Maximum breakpoint value.
  * @return clamp function.
  */
-@function clamped($min-value, $max-value, $min-breakpoint: map.get($map-for-breakpoints, "screen-xs"), $max-breakpoint: map.get($map-for-breakpoints, "screen-xl")) {
+@function clamped($min-value, $max-value, $min-breakpoint: map-get($map-for-breakpoints, "screen-xs"), $max-breakpoint: map-get($map-for-breakpoints, "screen-lg")) {
 	$value-unit : null;
 	$breakpoint-unit : null;
+
+	@if type-of($min-breakpoint) == string {
+		$min-breakpoint : map-get($map-for-breakpoints, $min-breakpoint);
+	}
+
+	@if type-of($max-breakpoint) == string {
+		$max-breakpoint : map-get($map-for-breakpoints, $max-breakpoint);
+	}
 
 	@if type-of($min-value) != number or type-of($max-value) != number or type-of($min-breakpoint) != number or type-of($max-breakpoint) != number {
 		@error "Invalid type: parameters $min-value, $max-value, $min-breakpoint and $max-breakpoint must be numbers.";

@@ -39,7 +39,7 @@
 				}
 			} @else if $mode == 'min' {
 				@if map-has-key($map-for-breakpoints, $value) {
-					@media (min-width : map-get($map-for-breakpoints, $value + 0.01)) {
+					@media (min-width : map-get($map-for-breakpoints, $value) + 0.01) {
 						@content;
 					}
 				} @else {

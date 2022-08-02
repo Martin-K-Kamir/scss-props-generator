@@ -34,7 +34,7 @@
 				$map-for-aspect-ratios,
 				$map-for-borders,
 				$map-for-radius,
-				$map-for-measure,
+				$map-for-content-sizes,
 				$map-for-font-weights,
 				$map-for-letter-spacings,
 				$map-for-line-heights,
@@ -46,9 +46,9 @@
 	@each $param in $params {
 		$map : $param;
 
-		// Check if the map has a key 'selector'. If so remove that key.
-		@if map-has-key($map, 'selector') {
-			$map : map-remove($map, 'selector');
+		// Check if the map has a key 'property'. If so remove that key.
+		@if map-has-key($map, 'property') {
+			$map : map-remove($map, 'property');
 		}
 
 		@each $key, $value in $map {
