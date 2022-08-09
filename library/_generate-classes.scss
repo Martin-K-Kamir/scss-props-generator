@@ -22,6 +22,7 @@
 @mixin generate-classes($params...) {
 	$property     : null;
 	$auto-margins : false;
+	$i            : 0;
 
 	@if $params == (config,) {
 		$params : map-get($config, 'classes');
@@ -62,12 +63,17 @@
 					#{$property} : auto;
 				}
 
-				@each $screen in $map-for-breakpoints {
+				@each $screen, $breakpoint in $map-for-breakpoints {
 					@at-root .#{$key}\/#{$screen} {
-						@include breakpoint(max, $screen) {
+						@include breakpoint(max, $breakpoint) {
 							#{$property} : auto;
 						}
 					}
+				}
+
+				$i : $i + 1;
+				@if $i == length($map) {
+					$auto-margins : false;
 				}
 			}
 		} @else {

@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
 $map-for-letter-spacings : (
-		'selector' : 'letter-spacing',
-		'f-letterspacing-0' : -0.05em,
-		'f-letterspacing-1' : 0.025em,
-		'f-letterspacing-2' : 0.05em,
-		'f-letterspacing-3' : 0.075em,
-		'f-letterspacing-4' : 0.15em,
-		'f-letterspacing-5' : 0.5em,
-		'f-letterspacing-6' : 0.75em,
-		'f-letterspacing-7' : 1em,
+		'property' : 'letter-spacing',
+		'letterspacing-0' : -0.05em,
+		'letterspacing-1' : 0.025em,
+		'letterspacing-2' : 0.05em,
+		'letterspacing-3' : 0.075em,
+		'letterspacing-4' : 0.15em,
+		'letterspacing-5' : 0.5em,
+		'letterspacing-6' : 0.75em,
+		'letterspacing-7' : 1em,
 ) !default

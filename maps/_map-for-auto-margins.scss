@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+$map-for-auto-margins : (
+		'property' : 'auto-margins',
+		'block-center' : 'margin-block',
+		'block-start' : 'margin-block-end',
+		'block-end' : 'margin-block-start',
+		'inline-center' : 'margin-inline',
+		'inline-start' : 'margin-inline-end',
+		'inline-end' : 'margin-inline-start',
+) !default
