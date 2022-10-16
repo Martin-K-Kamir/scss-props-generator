@@ -98,53 +98,11 @@
 
 @import 'config';
 
-$list-of-fluid-space-sizes : (
-		clamped(1.5rem, 1.6rem),
-		clamped(2.8rem, 3.2rem),
-		clamped(12rem, 17rem),
-) !default;
-
-:root {
-	@include generate-fluid-space-types($src : $list-of-fluid-space-sizes);
-
-	@include generate-classes($map-for-measure);
-}
-
-@property --surface {
-	syntax        : '<color>';
-	inherits      : false;
-	initial-value : khaki;
-}
-
-.surface {
-	--surface : darkkhaki
-}
-
-@property --space {
-	syntax        : '<length>';
-	inherits      : false;
-	initial-value : 0;
-}
-
-.space-1 {
-	--space : 5.5rem;
-}
-
-.space-2 {
-	--space : 10.5rem;
-}
-
-.box {
-	padding-top      : var(--space);
-	width            : 100vw;
-	height           : 100vh;
-	background-color : var(--surface, black)
-}
-
-.inner {
-	padding-top      : var(--space);
-	width            : 50%;
-	height           : 50%;
-	background-color : var(--surface, black);
-	border           : 3px solid crimson;
-}
+// 1) delete unused stuff
+// 2) separate generating functionality to own module
+// 3) improve configuration
+// 4) refactor
+// 5) add new features:
+//    - xxx
+//    - xxx
+//    - xxx
