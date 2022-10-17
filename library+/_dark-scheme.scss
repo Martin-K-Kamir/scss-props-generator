@@ -1,7 +1,0 @@
-@charset "UTF-8";
-
-@mixin dark-scheme() {
-  @media (prefers-color-scheme: dark) {
-    @content;
-  }
-}
