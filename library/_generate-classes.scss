@@ -30,7 +30,7 @@
 
 	// If the $params is a string 'predefined' or $predefined is true from config, generate predefined css properties.
 	@if $params == (predefined,) or $params == 'predefined' {
-		$params : ($map-for-font-weights, $map-for-letter-spacings, $map-for-line-heights, $map-for-shadows);
+		$params : ($map-for-font-weights, $map-for-letter-spacings, $map-for-lineheights, $map-for-shadows);
 	}
 
 	// Main loop to output css properties.

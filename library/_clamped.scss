@@ -1,9 +1,5 @@
 @charset "UTF-8";
 @use "sass:math";
-@import '../utilities/convert-to-number';
-@import '../utilities/convert-to-rem';
-@import '../utilities/number-round';
-@import '../maps/map-for-breakpoints';
 
 /**
  * Returns a clamp function with minimum and maximum value based on the breakpoint values.
