@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-$map-for-animations    : (
+$map-for-animations      : (
 		'animation-fade-in': fade-in 0.5s var(--ease-3),
 		'animation-fade-out': fade-out 0.5s var(--ease-3),
 		'animation-scale-up': scale-up 0.5s var(--ease-3),
@@ -27,7 +27,7 @@ $map-for-animations    : (
 		'animation-reveal-right': reveal-right 1s var(--ease-3),
 ) !default;
 
-$map-for-aspect-ratios : (
+$map-for-aspect-ratios   : (
 		'ratio-square' : 1,
 		'ratio-landscape' : math.div(5, 4),
 		'ratio-portrait' : math.div(3, 4),
@@ -36,7 +36,7 @@ $map-for-aspect-ratios : (
 		'ratio-golden' : math.div(1.618, 1),
 ) !default;
 
-$map-for-auto-margins  : (
+$map-for-auto-margins    : (
 		'property' : 'auto-margins',
 		'block-center' : 'margin-block',
 		'block-start' : 'margin-block-end',
@@ -46,7 +46,7 @@ $map-for-auto-margins  : (
 		'inline-end' : 'margin-inline-start',
 ) !default;
 
-$map-for-borders       : (
+$map-for-borders         : (
 		'border-1' : 0.1rem,
 		'border-2 ' : 0.2rem,
 		'border-3 ' : 0.5rem,
@@ -55,7 +55,7 @@ $map-for-borders       : (
 ) !default;
 
 // refactor
-$map-for-breakpoints   : (
+$map-for-breakpoints     : (
 		'width-xxl': $width-xxl,
 		'width-xl': $width-xl,
 		'width-lg': $width-lg,
@@ -65,10 +65,10 @@ $map-for-breakpoints   : (
 		'width-xxs': $width-xxs,
 ) !default;
 
-$map-for-colors        : (
+$map-for-colors          : (
 ) !default;
 
-$map-for-easing        : (
+$map-for-easing          : (
 		'ease-1' : cubic-bezier(0.25, 0, 0.5, 1),
 		'ease-2' : cubic-bezier(0.25, 0, 0.4, 1),
 		'ease-3' : cubic-bezier(0.25, 0, 0.3, 1),
@@ -106,10 +106,229 @@ $map-for-easing        : (
 		'ease-step-5' : steps(10),
 ) !default;
 
-$map-for-font-weights : (
+$map-for-font-weights    : (
 		'property' : 'font-weight',
 ) !default;
 
-$map-for-fonts : (
+$map-for-fonts           : (
 		'property' : 'font-family',
+) !default;
+
+$map-for-letter-spacings : (
+		'property' : 'letter-spacing',
+		'letterspacing-0' : -0.05em,
+		'letterspacing-1' : 0.025em,
+		'letterspacing-2' : 0.05em,
+		'letterspacing-3' : 0.075em,
+		'letterspacing-4' : 0.15em,
+		'letterspacing-5' : 0.5em,
+		'letterspacing-6' : 0.75em,
+		'letterspacing-7' : 1em,
+) !default;
+
+$map-for-line-heights    : (
+		'property' : 'line-height',
+		'lineheight-1' : 0.95,
+		'lineheight-2' : 1,
+		'lineheight-3' : 1.1,
+		'lineheight-4' : 1.25,
+		'lineheight-5' : 1.375,
+		'lineheight-6' : 1.5,
+		'lineheight-7' : 1.6,
+		'lineheight-8' : 1.7,
+		'lineheight-9' : 2,
+) !default;
+
+$map-for-measure         : (
+		'property' : '--measure',
+		'measure-1' : 10ch,
+		'measure-2' : 30ch,
+		'measure-3' : 45ch,
+		'measure-4' : 50ch,
+		'measure-5' : 60ch,
+		'measure-6' : 72ch,
+		'measure-7' : 83ch,
+		'measure-8' : 95ch,
+) !default;
+
+$map-for-radius          : (
+		'property' : 'border-radius',
+		'radius-1 ' : 0.2rem,
+		'radius-2 ' : 0.5rem,
+		'radius-3 ' : 1rem,
+		'radius-4 ' : 2rem,
+		'radius-5 ' : 4rem,
+		'radius-6 ' : 6rem,
+		'radius-7 ' : 8rem,
+		'radius-round' : 50%,
+		'radius-pill' : 100vmax,
+) !default;
+
+$map-for-ratios          : (
+		'minor-second' : 1.067,
+		'major-second': 1.125,
+		'minor-third' : 1.200,
+		'major-third' : 1.250,
+		'perfect-fourth' : 1.333,
+		'augmented fourth' : 1.414,
+		'perfect-fifth' : 1.500,
+		'golden-ratio' : 1.618
+) !default;
+
+// refactor
+$map-for-shadows         : (
+		'property' : 'box-shadow',
+		'shadow-color' : 220 3% 15%,
+		'shadow-strength' : 1%,
+		'shadow-1' : '0 1px 2px -1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%))',
+		'shadow-2' : '0 3px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 7px 14px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%))',
+		'shadow-3' : '0 -1px 3px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)), 0 1px 2px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)), 0 2px 5px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)), 0 4px 12px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)), 0 12px 15px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%))',
+		'shadow-4' : '0 -2px 5px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)), 0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)), 0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)), 0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%))',
+		'shadow-5' : '0 -1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)), 0 2px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 10px 10px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)), 0 20px 20px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)), 0 40px 40px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%))',
+		'shadow-6' : '0 -1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)), 0 3px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 7px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 12px 10px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)), 0 22px 18px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)), 0 41px 33px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%)), 0 100px 80px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%))',
+		'shadow-inner-1' : inset 0 0 0 1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
+		'shadow-inner-2' : inset 0 1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
+		'shadow-inner-3' : inset 0 1px 4px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
+		'shadow-inner-4' : inset 0 2px 8px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
+		'shadow-inner-5' : inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
+) !default;
+
+$map-for-suffixes        : (
+		'military' : (
+				'recruit', 'private', 'corporal', 'sergeant', 'captain',
+				'major', 'lieutenant', 'continent', 'street', 'colonel', 'general'
+		),
+		'planets' : (
+				'mercury', 'venus', 'earth', 'mars', 'jupitor',
+				'saturn', 'uranus', 'neptune', 'pluto'
+		),
+		'greek' : (
+				'alfa', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota',
+				'kappa', 'lambda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau',
+				'upsilon', 'phi', 'chi', 'psi', 'omega'
+		),
+		'nato' : (
+				'alfa', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india',
+				'juliett', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa', 'quebec', 'romeo',
+				'sierra', 'tango', 'uniform', 'victor', 'whiskey', 'xray', 'yankee', 'zulu'
+		),
+		'roman' : (
+				'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
+				'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX',
+				'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX',
+				'XXXI', 'XXXII', 'XXXIII', 'XXXIV', 'XXXXV', 'XXXVI', 'XXXVII', 'XXXVIII', 'XXXIX', 'XL'
+		),
+		'alphabet' : (
+				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+		),
+		'alphabet-upper' : (
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+		),
+		'primary': (
+				'primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'
+		),
+		'color-adjectives' : (
+				'darker-values' : (
+						'dark', 'darker', 'darkest'
+				),
+				'lighter-values': (
+						'light', 'lighter', 'lighest'
+				),
+		),
+		'size-minmax' : (
+				'higher-values' : (
+						'big', 'large', 'huge', 'giant', 'mega', 'max'
+				),
+				'lower-values': (
+						'medium', 'small', 'tiny', 'micro', 'atomic', 'min'
+				),
+		),
+		'size-shorted' : (
+				'higher-values' : (
+						'lg', 'xl', 'xxl',
+				),
+				'lower-values': (
+						'md', 'sm', 'xs', 'xxs'
+				),
+		),
+		'size-shorted-minmax' : (
+				'higher-values' : (
+						'lg', 'xl', 'xxl', 'max'
+				),
+				'lower-values': (
+						'md', 'sm', 'xs', 'xxs', 'min'
+				),
+		),
+		'size-x' : (
+				'higher-values' : (
+						'l', 'xl', 'xxl', 'xxxl', 'xxxxl', 'xxxxxl', 'xxxxxxl'
+				),
+				'lower-values': (
+						'm', 's', 'xs', 'xxs', 'xxxs', 'xxxxs', 'xxxxxs', 'xxxxxxs'
+				),
+		),
+		'size-x-minmax' : (
+				'higher-values' : (
+						'l', 'xl', 'xxl', 'xxxl', 'xxxxl', 'xxxxxl', 'xxxxxxl', 'max'
+				),
+				'lower-values': (
+						'm', 's', 'xs', 'xxs', 'xxxs', 'xxxxs', 'xxxxxs', 'xxxxxxs', 'min'
+				),
+		),
+		'size-adjectives' : (
+				'higher-values' : (
+						'big', 'bigger', 'biggest', 'large', 'larger', 'largest', 'huge', 'giant', 'mega'
+				),
+				'lower-values': (
+						'medium', 'small', 'smaller', 'smallest', 'tiny', 'tinier', 'tiniest', 'micro', 'atomic'
+				),
+		),
+		'size-adjectives-minmax' : (
+				'higher-values' : (
+						'big', 'bigger', 'biggest', 'large', 'larger', 'largest', 'huge', 'giant', 'mega', 'max'
+				),
+				'lower-values': (
+						'medium', 'small', 'smaller', 'smallest', 'tiny', 'tinier', 'tiniest', 'micro', 'atomic', 'min'
+				),
+		),
+		'size-and-number' : (
+				'higher-values' : (
+						'big', 'big-2', 'big-3', 'large', 'large-2', 'large-3',
+						'huge', 'huge-2', 'huge-3', 'giant', 'giant-2', 'giant-3', 'mega', 'mega-2', 'mega-3',
+				),
+				'lower-values': (
+						'medium', 'small', 'small-2', 'small-3', 'tiny', 'tiny-2', 'tiny-3',
+						'micro', 'micro-2', 'micro-3', 'atomic', 'atomic-2', 'atomic-3',
+				),
+		),
+		'size-and-number-minmax' : (
+				'higher-values' : (
+						'big', 'big-2', 'big-3', 'large', 'large-2', 'large-3',
+						'huge', 'huge-2', 'huge-3', 'giant', 'giant-2', 'giant-3', 'mega', 'mega-2', 'mega-3', 'max'
+				),
+				'lower-values': (
+						'medium', 'small', 'small-2', 'small-3', 'tiny', 'tiny-2', 'tiny-3',
+						'micro', 'micro-2', 'micro-3', 'atomic', 'atomic-2', 'atomic-3', 'min'
+				),
+		),
+		'size-and-x' : (
+				'higher-values' : (
+						'big', 'big-xl', 'big-xxl', 'large', 'large-xl', 'large-xxl',
+						'huge', 'huge-xl', 'huge-xxl', 'giant', 'giant-xl', 'giant-xxl', 'mega', 'mega-xl', 'mega-xxl',
+				),
+				'lower-values': (
+						'medium', 'small', 'small-xl', 'small-xxl', 'tiny', 'tiny-xl', 'tiny-xxl',
+						'micro', 'micro-xl', 'micro-xxl', 'atomic', 'atomic-xl', 'atomic-xxl',
+				),
+		),
+		'size-and-x-minmax' : (
+				'higher-values' : (
+						'big', 'big-xl', 'big-xxl', 'large', 'large-xl', 'large-xxl',
+						'huge', 'huge-xl', 'huge-xxl', 'giant', 'giant-xl', 'giant-xxl', 'mega', 'mega-xl', 'mega-xxl', 'max'
+				),
+				'lower-values': (
+						'medium', 'small', 'small-xl', 'small-xxl', 'tiny', 'tiny-xl', 'tiny-xxl',
+						'micro', 'micro-xl', 'micro-xxl', 'atomic', 'atomic-xl', 'atomic-xxl', 'min'
+				),
+		),
 ) !default;
