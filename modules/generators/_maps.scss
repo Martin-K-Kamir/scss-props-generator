@@ -1,0 +1,115 @@
+@charset "UTF-8";
+
+$map-for-animations    : (
+		'animation-fade-in': fade-in 0.5s var(--ease-3),
+		'animation-fade-out': fade-out 0.5s var(--ease-3),
+		'animation-scale-up': scale-up 0.5s var(--ease-3),
+		'animation-scale-down': scale-down 0.5s var(--ease-3),
+		'animation-slide-out-up': slide-out-up 0.5s var(--ease-3),
+		'animation-slide-out-down': slide-out-down 0.5s var(--ease-3),
+		'animation-slide-out-right': slide-out-right 0.5s var(--ease-3),
+		'animation-slide-out-left': slide-out-left 0.5s var(--ease-3),
+		'animation-slide-in-up': slide-in-up 0.5s var(--ease-3),
+		'animation-slide-in-down': slide-in-down 0.5s var(--ease-3),
+		'animation-slide-in-right': slide-in-right 0.5s var(--ease-3),
+		'animation-slide-in-left': slide-in-left 0.5s var(--ease-3),
+		'animation-shake-x': shake-x 0.75s var(--ease-out-5),
+		'animation-shake-y': shake-y 0.75s var(--ease-out-5),
+		'animation-spin': spin 2s linear infinite,
+		'animation-ping': ping 5s var(--ease-out-3) infinite,
+		'animation-blink': blink 1s var(--ease-out-3) infinite,
+		'animation-float': float 3s var(--ease-in-out-3) infinite,
+		'animation-bounce': bounce 2s var(--ease-squish-2) infinite,
+		'animation-pulse': pulse 2s var(--ease-out-3) infinite,
+		'animation-reveal-top': reveal-top 1s var(--ease-3),
+		'animation-reveal-left': reveal-left 1s var(--ease-3),
+		'animation-reveal-bottom': reveal-bottom 1s var(--ease-3),
+		'animation-reveal-right': reveal-right 1s var(--ease-3),
+) !default;
+
+$map-for-aspect-ratios : (
+		'ratio-square' : 1,
+		'ratio-landscape' : math.div(5, 4),
+		'ratio-portrait' : math.div(3, 4),
+		'ratio-widescreen' : math.div(16, 9),
+		'ratio-ultrawide' : math.div(18, 5),
+		'ratio-golden' : math.div(1.618, 1),
+) !default;
+
+$map-for-auto-margins  : (
+		'property' : 'auto-margins',
+		'block-center' : 'margin-block',
+		'block-start' : 'margin-block-end',
+		'block-end' : 'margin-block-start',
+		'inline-center' : 'margin-inline',
+		'inline-start' : 'margin-inline-end',
+		'inline-end' : 'margin-inline-start',
+) !default;
+
+$map-for-borders       : (
+		'border-1' : 0.1rem,
+		'border-2 ' : 0.2rem,
+		'border-3 ' : 0.5rem,
+		'border-4 ' : 1rem,
+		'border-5 ' : 2.5rem,
+) !default;
+
+// refactor
+$map-for-breakpoints   : (
+		'width-xxl': $width-xxl,
+		'width-xl': $width-xl,
+		'width-lg': $width-lg,
+		'width-md': $width-md,
+		'width-sm': $width-sm,
+		'width-xs': $width-xs,
+		'width-xxs': $width-xxs,
+) !default;
+
+$map-for-colors        : (
+) !default;
+
+$map-for-easing        : (
+		'ease-1' : cubic-bezier(0.25, 0, 0.5, 1),
+		'ease-2' : cubic-bezier(0.25, 0, 0.4, 1),
+		'ease-3' : cubic-bezier(0.25, 0, 0.3, 1),
+		'ease-4' : cubic-bezier(0.25, 0, 0.2, 1),
+		'ease-5' : cubic-bezier(0.25, 0, 0.1, 1),
+		'ease-in-1' : cubic-bezier(0.25, 0, 1, 1),
+		'ease-in-2' : cubic-bezier(0.5, 0, 1, 1),
+		'ease-in-3' : cubic-bezier(0.7, 0, 1, 1),
+		'ease-in-4' : cubic-bezier(0.9, 0, 1, 1),
+		'ease-in-5' : cubic-bezier(1, 0, 1, 1),
+		'ease-out-1' : cubic-bezier(0, 0, 0.75, 1),
+		'ease-out-2' : cubic-bezier(0, 0, 0.5, 1),
+		'ease-out-3' : cubic-bezier(0, 0, 0.3, 1),
+		'ease-out-4' : cubic-bezier(0, 0, 0.1, 1),
+		'ease-out-5' : cubic-bezier(0, 0, 0, 1),
+		'ease-in-out-1' : cubic-bezier(0.1, 0, 0.9, 1),
+		'ease-in-out-2' : cubic-bezier(0.3, 0, 0.7, 1),
+		'ease-in-out-3' : cubic-bezier(0.5, 0, 0.5, 1),
+		'ease-in-out-4' : cubic-bezier(0.7, 0, 0.3, 1),
+		'ease-in-out-5' : cubic-bezier(0.9, 0, 0.1, 1),
+		'ease-elastic-1' : cubic-bezier(0.5, 0.75, 0.75, 1.25),
+		'ease-elastic-2' : cubic-bezier(0.5, 1, 0.75, 1.25),
+		'ease-elastic-3' : cubic-bezier(0.5, 1.25, 0.75, 1.25),
+		'ease-elastic-4' : cubic-bezier(0.5, 1.5, 0.75, 1.25),
+		'ease-elastic-5' : cubic-bezier(0.5, 1.75, 0.75, 1.25),
+		'ease-squish-1' : cubic-bezier(0.5, -0.1, 0.1, 1.5),
+		'ease-squish-2' : cubic-bezier(0.5, -0.3, 0.1, 1.5),
+		'ease-squish-3' : cubic-bezier(0.5, -0.5, 0.1, 1.5),
+		'ease-squish-4' : cubic-bezier(0.5, -0.7, 0.1, 1.5),
+		'ease-squish-5' : cubic-bezier(0.5, -0.9, 0.1, 1.5),
+		'ease-step-1' : steps(2),
+		'ease-step-2' : steps(3),
+		'ease-step-3' : steps(4),
+		'ease-step-4' : steps(7),
+		'ease-step-5' : steps(10),
+) !default;
+
+$map-for-font-weights : (
+		'property' : 'font-weight',
+) !default;
+
+$map-for-fonts : (
+		'property' : 'font-family',
+) !default;

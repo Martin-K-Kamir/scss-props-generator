@@ -1,0 +1,79 @@
+@charset "UTF-8";
+@use "sass:math";
+@use "tools" as *;
+
+$agent-default-font-size  : 16 !default;
+$author-default-font-size : 10 !default;
+
+/**
+ * Returns a number based on position of given string in a $list-of-layers.
+ */
+@function layer($name) {
+	@if index($list-of-layers, $name) {
+		@return (length($list-of-layers) - index($list-of-layers, $name))+1;
+	} @else {
+		@warn 'There is no item "#{$name}" in this list; choose one of: #{$list-of-layers}';
+		@return null;
+	}
+}
+
+// refactor
+/**
+ * Returns a clamp function with minimum and maximum value based on the breakpoint values.
+ *
+ * @author - Aleksandr Hovhannisyan (https://www.aleksandrhovhannisyan.com/blog/fluid-type-scale-with-css-clamp/)
+ *
+ * I have modified the original function to work with multiple units and print out errors if function is called with invalid parameters.
+ *
+ * @example
+ * clamped(1rem, 3rem, 20em, 65em) => clamp(1rem, 2.78vw + 0.11rem, 3rem);
+ * clamped(1rem, 3rem) => clamp(1rem, 1.88vw + 0.3rem, 3rem);
+ * @overload clamped($min-value, $max-value, $min-screen: map-get($map-for-breakpoints, "screen-xs"), $max-screen: map-get($map-for-breakpoints, "screen-xl"))
+ * @param $min-value {number} - Minimum value.
+ * @param $max-value {number} - Maximum value.
+ * @param $min-screen {number} - Minimum breakpoint value.
+ * @param $max-screen {number} - Maximum breakpoint value.
+ * @return clamp function.
+ */
+@function clamped($min-value, $max-value, $min-screen: $width-xs, $max-screen: $width-xl) {
+	$value-unit : null;
+	$screen-unit : null;
+
+	@if type-of($min-value) != number or type-of($max-value) != number or type-of($min-screen) != number or type-of($max-screen) != number {
+		@error "Invalid type: parameters $min-value, $max-value, $min-screen and $max-screen must be numbers.";
+	}
+
+	@if unitless($min-value) or unitless($max-value) or unitless($min-screen) or unitless($max-screen) {
+		@error "Invalid type: parameters $min-value, $max-value, $min-screen and $max-screen must be numbers with units.";
+	}
+
+	@if unit($min-value) == unit($max-value) {
+		$value-unit : unit($min-value);
+	} @else {
+		@error "Invalid unit: parameters $min-value and $max-value must have the same unit.";
+	}
+
+	@if unit($min-screen) == unit($max-screen) {
+		$screen-unit : unit($min-screen);
+	} @else {
+		@error "Invalid unit: parameters $min-screen and $max-screen must have the same unit.";
+	}
+
+	$min-value : _convert-to-number(_string-replace($min-value, $value-unit));
+	$max-value : _convert-to-number(_string-replace($max-value, $value-unit));
+	$min-screen : _convert-to-number(_string-replace($min-screen, $screen-unit));
+	$max-screen : _convert-to-number(_string-replace($max-screen, $screen-unit));
+
+	@if $screen-unit == em {
+		$min-screen : $min-screen * $agent-default-font-size;
+		$max-screen : $max-screen * $agent-default-font-size;
+	} @else if $screen-unit == rem {
+		$min-screen : $min-screen * $author-default-font-size;
+		$max-screen : $max-screen * $author-default-font-size;
+	}
+
+	$slope : math.div($max-value - $min-value, $max-screen - $min-screen);
+	$slope-vw : _number-round($slope * 1000, 2);
+	$intercept-rems : _number-round($min-value - $slope * $min-screen, 2);
+	@return clamp(#{$min-value}#{$value-unit}, #{$slope-vw}vw + #{$intercept-rems}#{$value-unit}, #{$max-value}#{$value-unit});
+}
