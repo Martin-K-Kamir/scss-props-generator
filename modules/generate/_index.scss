@@ -16,7 +16,7 @@
  *  	),
  * );
  */
-@mixin generate-classes($params...) {
+@mixin classes($params...) {
 	$property     : null;
 	$auto-margins : false;
 	$i            : 0;
@@ -103,7 +103,7 @@
  *  	),
  * );
  */
-@mixin generate-properties($params...) {
+@mixin properties($params...) {
 	$predefined : null;
 
 	@if $params == (config,) {
@@ -159,7 +159,7 @@
  * @param $preferred-scheme {string} - Defines the preferred color scheme at media query for 'dark' and 'light'.
  *
  */
-@mixin generate-color-types(
+@mixin color-types(
 	$config: null,
 	$src: null,
 	$src-scheme: null,
@@ -216,7 +216,7 @@
  * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
  *
  */
-@mixin generate-fluid-font-types(
+@mixin fluid-font-types(
 	$config: null,
 	$base: null,
 	$ratio: null,
@@ -260,7 +260,7 @@
  * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
  *
  */
-@mixin generate-fluid-space-types(
+@mixin fluid-space-types(
 	$config: null,
 	$base: null,
 	$ratio: null,
@@ -306,7 +306,7 @@
  * @param $scale {number} - Scale the values from src. Number must use percentage unit.
  *
  */
-@mixin generate-font-types(
+@mixin font-types(
 	$config: null,
 	$base: null,
 	$ratio: null,
@@ -349,7 +349,7 @@
  * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
  * @param $scale {number} - Scale the values from src. Number must use percentage unit.
  */
-@mixin generate-space-types(
+@mixin space-types(
 	$config: null,
 	$base: null,
 	$ratio: null,
@@ -426,7 +426,7 @@
  *  	Using the same parameters as in classes.
  *  ),
  */
-@mixin generator($config) {
+@mixin all($config) {
 
 	@if map-has-key($config, 'font-types') {
 		@include generate-font-types($config);
