@@ -1,0 +1,181 @@
+@charset "UTF-8";
+$agent-default-font-size  : 16 !default;
+$author-default-font-size : 10 !default;
+
+// integer / math
+/**
+ * Returns unitless number.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _remove-unit(1rem) => 1;
+ * _remove-unit(5em, '_em') => 5;
+ * _remove-unit(15%, '%') => 15;
+ * @overload _remove-unit($number, $unit)
+ * @param $number {number} - Number to remove unit from.
+ * @param $unit {string} - Unit to remove.
+ * @return number with no unit.
+ */
+@function _remove-unit($number, $unit) {
+	$removed-unit : _string-replace($number, $unit);
+	$number : _convert-to-number($removed-unit);
+	@return $number;
+} // refactor
+
+// round / math
+/**
+ * Function returns a rounded number based on $places parameter.
+ *
+ */
+@function _number-round($number, $places: 0) {
+	$n : 1;
+	@if $places > 0 {
+		@for $i from 1 through $places {
+			$n : $n * 10;
+		}
+	}
+	@return math.div(round($number * $n), $n);
+}
+
+// scale / math
+/**
+ * Returns scaled number.
+ *
+ * @author - Martin Kamír
+ *
+ * @example
+ * _number-scale(1rem, 50%) => 0.5rem;
+ * _number-scale(1rem, 150) => 1.5rem;
+ * @overload _number-scale($number, $scale: 100%)
+ * @param $number {number} - The number that is being scaled.
+ * @param $decrease {number} - Value that is being scaled by.
+ * @return scaled number
+ */
+@function _number-scale($number, $scale: 100%) {
+	@if (type-of($scale) != number) {
+		@error 'Invalid type value: parameter $scale must be a number.';
+	}
+	@if ($scale < 0) {
+		@error 'Invalid value: parameter $scale must be a number greater than `0`.';
+	}
+
+	// refactor this to check if its css custom property
+	@if (type-of($number) == string) {
+		@return $number;
+	}
+	@if (type-of($number) == calculation) {
+		@return $number;
+	}
+
+	$scale : _remove-unit($scale, '%');
+	@return math.div($number, 100) * $scale
+} // refactor
+
+// convert to number // math
+/**
+ * Function returns number with a type of number.
+ *
+ */
+@function _convert-to-number($value) {
+	@if type-of($value) == 'number' {
+		@return $value;
+	} @else if type-of($value) != 'string' {
+		@error 'Value for `_convert-to-number` should be a number or a string.';
+	}
+
+	$result : 0;
+	$digits : 0;
+	$minus : str-slice($value, 1, 1) == '-';
+	$numbers : ('0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9);
+
+	@for $i from if($minus, 2, 1) through str-length($value) {
+		$character : str-slice($value, $i, $i);
+
+		@if (index(map-keys($numbers), $character) or $character == '.') {
+			@if $character == '.' {
+				$digits : 1;
+			} @else if $digits == 0 {
+				$result : $result * 10 + map-get($numbers, $character);
+			} @else {
+				$digits : $digits * 10;
+				$result : $result + math.div(map-get($numbers, $character), $digits);
+			}
+		}
+	}
+
+	@return if($minus, -$result, $result);
+}
+
+// refactor
+/**
+ * Returns a clamp function with minimum and maximum value based on the breakpoint values.
+ *
+ * @author - Aleksandr Hovhannisyan (https://www.aleksandrhovhannisyan.com/blog/fluid-type-scale-with-css-clamp/)
+ *
+ * I have modified the original function to work with multiple units and print out errors if function is called with invalid parameters.
+ *
+ * @example
+ * clamped(1rem, 3rem, 20em, 65em) => clamp(1rem, 2.78vw + 0.11rem, 3rem);
+ * clamped(1rem, 3rem) => clamp(1rem, 1.88vw + 0.3rem, 3rem);
+ * @overload clamped($min-value, $max-value, $min-screen: map-get($map-for-breakpoints, "screen-xs"), $max-screen: map-get($map-for-breakpoints, "screen-xl"))
+ * @param $min-value {number} - Minimum value.
+ * @param $max-value {number} - Maximum value.
+ * @param $min-screen {number} - Minimum breakpoint value.
+ * @param $max-screen {number} - Maximum breakpoint value.
+ * @return clamp function.
+ */
+@function clamp($min-value, $max-value, $min-screen: $width-xs, $max-screen: $width-xl) {
+	$value-unit : null;
+	$screen-unit : null;
+
+	@if type-of($min-value) != number or type-of($max-value) != number or type-of($min-screen) != number or type-of($max-screen) != number {
+		@error "Invalid type: parameters $min-value, $max-value, $min-screen and $max-screen must be numbers.";
+	}
+
+	@if unitless($min-value) or unitless($max-value) or unitless($min-screen) or unitless($max-screen) {
+		@error "Invalid type: parameters $min-value, $max-value, $min-screen and $max-screen must be numbers with units.";
+	}
+
+	@if unit($min-value) == unit($max-value) {
+		$value-unit : unit($min-value);
+	} @else {
+		@error "Invalid unit: parameters $min-value and $max-value must have the same unit.";
+	}
+
+	@if unit($min-screen) == unit($max-screen) {
+		$screen-unit : unit($min-screen);
+	} @else {
+		@error "Invalid unit: parameters $min-screen and $max-screen must have the same unit.";
+	}
+
+	$min-value : _convert-to-number(_string-replace($min-value, $value-unit));
+	$max-value : _convert-to-number(_string-replace($max-value, $value-unit));
+	$min-screen : _convert-to-number(_string-replace($min-screen, $screen-unit));
+	$max-screen : _convert-to-number(_string-replace($max-screen, $screen-unit));
+
+	@if $screen-unit == em {
+		$min-screen : $min-screen * $agent-default-font-size;
+		$max-screen : $max-screen * $agent-default-font-size;
+	} @else if $screen-unit == rem {
+		$min-screen : $min-screen * $author-default-font-size;
+		$max-screen : $max-screen * $author-default-font-size;
+	}
+
+	$slope : math.div($max-value - $min-value, $max-screen - $min-screen);
+	$slope-vw : _number-round($slope * 1000, 2);
+	$intercept-rems : _number-round($min-value - $slope * $min-screen, 2);
+	@return clamp(#{$min-value}#{$value-unit}, #{$slope-vw}vw + #{$intercept-rems}#{$value-unit}, #{$max-value}#{$value-unit});
+}
+
+/**
+ * Returns a number based on position of given string in a $list-of-layers.
+ */
+@function layer($name) {
+	@if index($list-of-layers, $name) {
+		@return (length($list-of-layers) - index($list-of-layers, $name))+1;
+	} @else {
+		@warn 'There is no item "#{$name}" in this list; choose one of: #{$list-of-layers}';
+		@return null;
+	}
+}

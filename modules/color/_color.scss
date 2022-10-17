@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+// better name / color
 /**
  * Returns a color with hsl format as function or plain numbers.
  *
@@ -23,4 +24,4 @@
 	} @else if $hsl == 'numbers' {
 		@return '#{$hue, $saturation, $lightness}';
 	}
-}
+} // refactor

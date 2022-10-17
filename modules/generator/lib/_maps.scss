@@ -54,7 +54,6 @@ $map-for-borders         : (
 		'border-5 ' : 2.5rem,
 ) !default;
 
-// refactor
 $map-for-breakpoints     : (
 		'width-xxl': $width-xxl,
 		'width-xl': $width-xl,
@@ -63,10 +62,9 @@ $map-for-breakpoints     : (
 		'width-sm': $width-sm,
 		'width-xs': $width-xs,
 		'width-xxs': $width-xxs,
-) !default;
+) !default; // refactor
 
-$map-for-colors          : (
-) !default;
+$map-for-colors          : () !default;
 
 $map-for-easing          : (
 		'ease-1' : cubic-bezier(0.25, 0, 0.5, 1),
@@ -175,7 +173,6 @@ $map-for-ratios          : (
 		'golden-ratio' : 1.618
 ) !default;
 
-// refactor
 $map-for-shadows         : (
 		'property' : 'box-shadow',
 		'shadow-color' : 220 3% 15%,
@@ -191,7 +188,7 @@ $map-for-shadows         : (
 		'shadow-inner-3' : inset 0 1px 4px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
 		'shadow-inner-4' : inset 0 2px 8px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
 		'shadow-inner-5' : inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
-) !default;
+) !default; // refactor
 
 $map-for-suffixes        : (
 		'military' : (

@@ -1,11 +1,5 @@
 @charset "UTF-8";
 
-/**
- * Function returns new string with replaced a substring with another string.
- *
- * @author - Kitty Giraudel - https://css-tricks.com/snippets/sass/str-replace-function/
- *
- */
 @function _string-replace($value, $search, $replace: '') {
 	$string : #{$value};
 	$index : str-index(#{$string}, $search);

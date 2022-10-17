@@ -14,11 +14,12 @@ $width-xxs      : 20.625em;
 // Lists
 $list-of-layers : ('base');
 
-// 1) delete unused stuff
-// 2) separate generating functionality to own module
-// 3) improve configuration
-// 4) refactor
-// 5) add new features:
+// - delete unused stuff ✅
+// - improve the architecture (separate everything) ✅
+// - make it work again
+// - refactor
+// - improve configuration
+// - add new features:
 //    - custom media properties
 //    - xxx
 //    - xxx
