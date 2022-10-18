@@ -1,0 +1,364 @@
+@charset "UTF-8";
+@use 'sass:map';
+@use 'functions' as function;
+
+/**
+ * Process config map or parameters into one main config map, which will be disturbed to other functions to
+ * generate scalable css properties, based on given parameters/config.
+ *
+ * NOTE: This function is a building block for the generated scalable system functionality.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin new-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix) {
+
+	// Create local private config from parameters.
+	$_config : (
+			'mixin': $mixin,
+			'property' : $property,
+			'base' : $base,
+			'ratio' : $ratio,
+			'length' : $length,
+			'preserve' : $preserve,
+			'utils' : $utils,
+			'src' : $src,
+			'prefix' : $prefix,
+			'suffix' : $suffix,
+			'break-at' : 'max', // refactor
+	);
+
+	// If config is not null, merge the config with the local private config.
+	@if $config != null {
+		$_config : map.deep-merge($_config, map.get($config, $mixin));
+	}
+
+	@include _generate-types-scale($_config)
+}
+
+/**
+ * Mixin outputs a declaration based on given parameters.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _declaration-shell($prefix, $suffix, $value, $property, $key: null) {
+	@if $property == 'none' and ($key == 'fluid-space-types' or $key == 'space-types') {
+		--space      : var(--#{$prefix}#{$suffix});
+	} @else {
+		#{$property} : var(--#{$prefix}#{$suffix});
+	}
+}
+
+/**
+ * Mixin outputs a css custom property.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _variable-shell($prefix, $suffix: null, $value) {
+	--#{$prefix}#{$suffix} : #{$value};
+}
+
+/**
+ * Mixin for processing the color parameters.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _process-colors($config) {
+	$src              : map-get($config, 'src');
+	$src-scheme       : map-get($config, 'src-scheme');
+	$preferred-scheme : map-get($config, 'preferred-scheme');
+	$dark-scheme      : false;
+	$map              : $src;
+
+	// The main loop for processing and outputting the colors.
+	@for $i from 1 through if($src-scheme == null, 1, 2) {
+
+		// Switching the map to the preferred color scheme.
+		@if length($src) == 1 {
+			@if $src-scheme != null and $i > length($map) {
+				$map         : $src-scheme;
+				$dark-scheme : true;
+			}
+		} @else {
+			@if $src-scheme != null and $i >= length($map) {
+				$map         : $src-scheme;
+				$dark-scheme : true;
+			}
+		}
+
+		// Generating the color properties to the root and at media preferred color scheme.
+		@if $dark-scheme == false {
+			@include _generate-colors($config, $map, true);
+		} @else {
+			@media (prefers-color-scheme : #{$preferred-scheme}) {
+				@include _generate-colors($config, $map, false);
+			}
+		}
+	}
+}
+
+/**
+ * Mixin outputs utility classes for color and background properties.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $suffix, $value) {
+	@if $utils {
+		@at-root .#{$prefix-text}#{$key}#{$suffix} {
+			@include _declaration-shell($key, $suffix, $value, 'color');
+		}
+		@at-root .#{$prefix-background}#{$key}#{$suffix} {
+			@include _declaration-shell($key, $suffix, $value, 'background-color');
+		}
+	}
+}
+
+/**
+ * Mixin for generating the color values.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _generate-colors($config, $map, $enabled-classes) {
+	$tints             : map-get($config, 'tints');
+	$shades            : map-get($config, 'shades');
+	$hsl-formatting    : map-get($config, 'hsl');
+	$prefix-text       : map-get($config, 'prefix-text');
+	$prefix-background : map-get($config, 'prefix-background');
+	$suffix            : map-get($config, 'suffix');
+	$suffix            : map-get($config, 'suffix');
+	$utils             : map-get($config, 'utility-classes');
+
+	// If $enabled-classes is false then the $utils will be false too, This statement is used to avoid generating the same utility classes but for a dark or light color scheme.
+	@if $enabled-classes == false {
+		$utils : false;
+	}
+
+	$_suffix           : '';
+	$colors-list       : ();
+
+	@each $key, $value in $map {
+
+		// Mechanism for generating the color properties with a suffix that relies on a number-based list of suffixes. Such as 'roman', 'nato', 'numeric', 'numeric-hundreds', custom list of suffixes, etc.
+		@if $suffix != null and $suffix != 'color-adjectives' {
+
+			// If tints are defined then based on the percentage values of tints get the value and append it to the colors-list.
+			@if $tints != null {
+				@for $x from 1 through length($tints) {
+					$_value      : _get-hsl(mix(white, $value, nth($tints, $x)), $hsl-formatting);
+					$colors-list : append($colors-list, $_value);
+				}
+			}
+
+			// Get the default value from the $src map. Append it to the colors-list in middle. So the tints will be at the start default value at the middle and the shades at the end.			// Get the default value from the $src map. Append it to the colors-list at middle. So the tints will be at start default value at the middle and the shades at the end.
+			$_value      : _get-hsl($value, $hsl-formatting);
+			$colors-list : append($colors-list, $_value);
+
+			// If shades are defined then based on the percentage values of shades get the value and append it to the colors-list.
+			@if $shades != null {
+				@for $x from 1 through length($shades) {
+					$_value      : _get-hsl(mix(black, $value, nth($shades, $x)), $hsl-formatting);
+					$colors-list : append($colors-list, $_value);
+				}
+			}
+
+			// Loop for outputting the color values from the colors-list and generating the utility classes.
+			@for $x from 1 through length($colors-list) {
+				$_suffix : '-#{function.get-suffix($suffix, length($colors-list), $x)}';
+				$value   : nth($colors-list, $x);
+
+				@include _variable-shell($key, $_suffix, $value);
+				@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
+			}
+		}
+
+		// Mechanism for generating the color properties with 'color-adjectives' suffix.
+		@if $suffix == 'color-adjectives' {
+
+			// Generate tint color properties and utility classes.
+			@if $tints != null {
+				@for $x from 1 through length($tints) {
+					$_value  : _get-hsl(mix(white, $value, nth($tints, $x)), $hsl-formatting);
+					$_suffix : '-#{function.get-suffix($suffix, length($tints), $x, 'lighter-values')}';
+
+					@include _variable-shell($key, $_suffix, $_value);
+					@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
+				}
+			}
+
+			// Generate the default color properties and utility classes.
+			$_value  : _get-hsl($value, $hsl-formatting);
+			$_suffix : '';
+
+			@include _variable-shell($key, $_suffix, $_value);
+			@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
+
+			// Generate shade color properties and utility classes.
+			@if $shades != null {
+				@for $x from 1 through length($shades) {
+					$_value  : _get-hsl(mix(black, $value, nth($shades, $x)), $hsl-formatting);
+					$_suffix : '-#{function.get-suffix($suffix, length($shades), $x, 'darker-values')}';
+
+					@include _variable-shell($key, $_suffix, $_value);
+					@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
+				}
+			}
+		}
+
+		// Mechanism for generating the color properties with no suffix. Mainly used for generating the color pallet from $src.
+		@if $suffix == null {
+			@include _variable-shell($key, $_suffix, $value);
+			@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
+		}
+
+		// At the end of the loop, clear the colors-list. To avoid generating the same color properties again.
+		$colors-list : ();
+	}
+}
+
+/**
+ * Generates css properties of given parameters in config.
+ *
+ * NOTE: This function is main building block for the generated types scale functionality, which controls generating the css properties.
+ *
+ * @author - Martin Kamír
+ *
+ */
+@mixin _generate-types-scale($config) {
+
+	// validate these variables
+	$mixin       : map-get($config, 'mixin');
+	$property    : map-get($config, 'property');
+	$base        : map-get($config, 'base');
+	$ratio       : map-get($config, 'ratio');
+	$length      : map-get($config, 'length');
+	$preserve    : map-get($config, 'preserve');
+	$utils       : map-get($config, 'utils');
+	$src         : map-get($config, 'src');
+	$prefix      : map-get($config, 'prefix');
+	$suffix      : map-get($config, 'suffix');
+    // ---
+
+	$break-at    : map-get($config, 'break-at'); // refactor
+	$breakpoints : map-get($config, 'breakpoints'); // refactor
+
+	$src-length  : length($src);
+	$src-type    : type-of($src);
+	$keys        : null;
+	$suffix-prev : null;
+	$value       : null;
+	$length      : if($length != null, $length, $src-length);
+
+	@if $base != null {
+		--#{$prefix}ratio : #{$ratio};
+		--#{$prefix}base  : #{$base};
+	}
+
+	// Convert keys and values to a list and set the values length variable.
+	@if $src-type == map {
+		$keys       : to-list($src, 'keys');
+		$src        : to-list($src, 'values');
+		$src-length : length($src);
+	}
+
+	@for $i from 1 through $length {
+		$_suffix : function.get-suffix($suffix, $length, $i);
+
+		@if $base != null {
+			$value : calc(var(--#{$prefix}base) * var(--#{$prefix}ratio)); // In first iteration output calculation of the base value multiplied by the ratio.
+
+			// In other iterations calculate the base value multiplied by the ratio and use the previous value.
+			@if $i > 1 {
+				$suffix-prev : function.get-suffix($suffix, $length, $i - 1); // Get the suffix for the previous iteration.
+				$value       : calc(var(--#{$prefix}#{$suffix-prev}) * var(--#{$prefix}ratio)); // Output the calculation of value which is based on $prefix and $suffix-prev multiplied by the ratio.
+			}
+
+			// If $preserve is used get the value by _get-value function.
+			@if $preserve > 1 {
+				$value : _get-value($base, $ratio, $preserve, $i, $prefix);
+
+				@if $i > 1 {
+					$value : _get-value($base, $ratio, $preserve, $i, $prefix, $suffix-prev);
+				}
+			}
+		}
+
+		@if $src-type == list or $src-type == map {
+			$_suffix : function.get-suffix($suffix, $src-length, $i);
+			$value   : _number-scale(nth($src, $i), $scale); // Get the value from the list at the current iteration and scale it if used.
+		}
+
+		@if $src-type == map {
+			$_prefix : nth($keys, $i); // Get the key from the list at the current iteration.
+			$_suffix : ''; // Because the map is used the suffix is empty. The key is used as the prefix and suffix.
+		}
+
+		// The actual css property which is outputted.
+		@include _variable-shell($prefix, $_suffix, $value);
+
+		@if $utils {
+			@at-root .#{$prefix}#{$_suffix} {
+				@include _declaration-shell($prefix, $_suffix, $value, $property, $mixin);
+			}
+		}
+	}
+
+	// If $break-at is used generate breakpoints with css properties.
+	@if ($breakpoints != null) {
+		@for $i from 1 through length($breakpoints) {
+			$breakpoint : nth(nth($breakpoints, $i), 1); // Get the breakpoint value.
+			$src        : nth(nth($breakpoints, $i), 2); // Get the src value.
+			$src-type   : type-of(nth(nth($breakpoints, $i), 2)); // Get the src type.
+
+			// If $src is a map convert keys and values to a list.
+			@if $src-type == map {
+				$keys : to-list($src, 'keys');
+				$src  : to-list($src, 'values');
+			}
+
+			// The actual outputted breakpoint
+			// The $break-at value must be one of the breakpoints in $map-for-breakpoints.
+			@include breakpoint($break-at, $breakpoint) {
+				$x : 1; // Second iteration of the loop.
+				$y : $src-length - length($src) + 1; // Third iteration of the loop. Which starts by getting the difference between the length of the src and the length of the main loop current iteration.
+
+				@while $y <= $src-length {
+					$_prefix : _get-name($prefix, $prefix-variable); // Get the prefix name.
+					$_suffix : function.get-suffix($suffix, $src-length, $y); // Get the suffix for the current iteration of $y.
+					$value   : _number-scale(nth($src, $x), $scale); // Get the value from the list at the current iteration of $x and scale it if used.
+
+					// If $src is a map
+					@if $src-type == map {
+						$_prefix : nth($keys, $x); // Get the key from the list at the current iteration.
+						$_suffix : ''; // Since the map is used the suffix is empty, because the key is used as the prefix and suffix.
+
+						// If the key is ratio
+						@if $_prefix == 'ratio' {
+							$_prefix : $prefix; // Use the prefix instead of the key.
+							$_suffix : 'ratio'; // Use string 'ratio' as the suffix.
+							$value   : _validate-ratio(nth($src, $x)); // Validate the ratio and get the value.
+						}
+
+						// If the key is base
+						@if $_prefix == 'base' {
+							$_prefix : $prefix; // Use the prefix instead of the key.
+							$_suffix : 'base'; // Use string 'base' as the suffix.
+						}
+					}
+
+					// The actual css property which is outputted in the breakpoint.
+					@include _variable-shell($_prefix, $_suffix, $value);
+
+					// At the end of the loop increment $x and $y.
+					$y       : $y + 1;
+					$x       : $x + 1;
+				}
+			}
+		}
+	}
+}
+
