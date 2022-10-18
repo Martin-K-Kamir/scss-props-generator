@@ -1,4 +1,12 @@
 @charset "UTF-8";
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass:math';
+@use 'maps' as map-of;
+@use '../list' as *;
+@use '../math' as *;
+
 
 /**
  * Function returns a class selector based on $prefix and $suffix.
@@ -12,48 +20,38 @@
 
 /**
  * Returns list of corresponding suffixes based on $suffix parameter.
- *
- * NOTE: This is helper function for function _get-suffix.
- *
+ * *
  * @author - Martin Kamír
  *
  * @example
- * _create-suffix-list('size-x-minmax', 5, $minmax: true) => (min, s, m, l, max);
- * _create-suffix-list('size-x', 5) => (xs, s, m, l, xl);
- * _create-suffix-list('size-minmax', 5, $minmax: true) => (min, small, medium, large, max);
- * @overload _create-suffix-list($suffix, $length, $minmax: false)
+ * _create-suffixes('size-x-minmax', 5, $minmax: true) => (min, s, m, l, max);
+ * _create-suffixes('size-x', 5) => (xs, s, m, l, xl);
+ * _create-suffixes('size-minmax', 5, $minmax: true) => (min, small, medium, large, max);
+ * @overload _create-suffixes($suffix, $length, $minmax: false)
  * @param $suffix {string} - Name of the suffix that will be used in outputting the suffix list.
  * @param $length {number} - Number of suffixes that will be used in outputting the suffix list.
  * @param $minmax {boolean} - As default set to false. If set to true, the suffix list will contain min and max.
  * @return list of suffixes
  */
-@function _create-suffix-list($suffix, $length, $minmax: false) {
-
-	// Get higher and lower suffixes list from the map.
-	$lower-values : map-get($map-for-suffixes, $suffix, lower-values);
-	$higher-values : map-get($map-for-suffixes, $suffix, higher-values);
+@function _create-suffixes($suffix, $length) {
+	$lower-values : map.get(map-of.$suffixes, $suffix, lower-values);
+	$higher-values : map.get(map-of.$suffixes, $suffix, higher-values);
 
 	// Get the minimum and maximum index by:
 	// 1. Getting the length of the list.
 	// 2. Dividing the length of the list by half.
 	// 3. For the minimum index ceil the number up to the next integer. For the maximum index floor the number down to the next integer.
-	$min-index : ceil(math.div($length, 2));
-	$max-index : floor(math.div($length, 2));
+	$min-index : math.ceil(math.div($length, 2));
+	$max-index : math.floor(math.div($length, 2));
 
 	// Slice the list to get the minimum and maximum values.
-	$lower-list : _list-slice($lower-values, $end : $min-index);
-	$higher-list : _list-slice($higher-values, $end : $max-index);
-
-	// If $minmax parameter is set to true, add min and max suffixes to the list.
-	@if ($minmax == true) {
-		$lower-list : set-nth($lower-list, -1, 'min');
-		$higher-list : set-nth($higher-list, -1, 'max');
-	}
+	$lower-list : list-slice($lower-values, $end : $min-index);
+	$higher-list : list-slice($higher-values, $end : $max-index);
 
 	// Concatenate the lower and higher list.
 	// The lower list values will be at the beginning of the outputted list. The lower list has to be reversed, because the last values, which represents the smallest values would be at middle of the outputted list if not reversed (i.g: small, smaller, smallest, medium, big, bigger, etc...).
 	// The higher list will be at the end of the list.
-	@return join(_list-reverse($lower-list), $higher-list);
+	@return list.join(list-reverse($lower-list), $higher-list);
 }
 
 /**
@@ -76,7 +74,7 @@
  * @param $p {string} - Prefix value.
  * @return calculated number or calculation method.
  */
-@function _decide-calc-method($b, $r, $pre, $i, $p) {
+@function _preservation($b, $r, $pre, $i, $p) {
 	@if ($i == 1) {
 		@if ($pre >= 1) {
 			@return $b * $r;
@@ -254,7 +252,6 @@
 	}
 }
 
-
 /**
  * Function validates a ratio string key.
  *
@@ -262,7 +259,7 @@
  *
  */
 @function _validate-ratio($ratio) {
-	@return if(map-has-key($map-for-ratios, $ratio), map-get($map-for-ratios, $ratio), $ratio);
+	@return if(map-has-key($map-for-ratios, $ratio), map.get($map-for-ratios, $ratio), $ratio);
 }
 
 /**
@@ -282,73 +279,49 @@
 /**
  * Returns string of suffix based on current $i in the loop.
  *
- * NOTE: This function is a building block for the generated scalable system functionality, which controls the outputted suffix.
- *
  * @author - Martin Kamír
  *
  * @example
  * _get-suffix(numeric, 5, 2) => 2;
- * _get-suffix(numeric-hundreds, 5, 2) => 200;
+ * _get-suffix(hundreds, 5, 2) => 200;
  * _get-suffix((a1, a2, a3, a4, a5), 5, 2) => a2;
  * _get-suffix(roman, 5, 2) => II;
- * _get-suffix(nato, 5, 2) => Bravo;
- * _get-suffix(size, 5, 2) => Small;
- * _get-suffix(size-shorted-minmax, 5, 2) => sm;
- * _get-suffix(size-x-minmax, 5, 1) => min;
- * @overload _get-suffix($suffix: 'numeric', $length,  $i)
+ * _get-suffix(size, 5, 2) => small;
+ * @overload _get-suffix($suffix, $length, $i)
  * @param $suffix {string} - As default set to numeric. Based on the suffix value, the function returns the corresponding suffix.
  * @param $length {number} - The length of the list.
  * @param $i {number} - The current index in loop.
  * @return string - The suffix.
  */
-@function get-suffix($suffix, $length, $i, $map-to-get: null) {
+@function get-suffix($suffix, $length, $i) {
 	@if ($suffix == 'numeric') {
-		@return $i; // Returns the current number based on the index.
+		@return $i;
 
-	} @else if ($suffix == 'numeric-hundreds') {
-		@return $i + '00'; // Returns the current number based on the index and adds '00' to the end.
+	} @else if ($suffix == 'hundreds') {
+		@return $i + '00';
 
-	} @else if (type-of($suffix) == 'list') {
-		@return nth($suffix, $i); // Returns value from custom list based on current $i.
+	} @else if (meta.type-of($suffix) == 'list') {
+		@return list.nth($suffix, $i);
 
-	} @else if (index(('roman', 'greek', 'military', 'planets', 'nato', 'alphabet', 'alphabet-upper', 'primary'), $suffix)) {
-		@return nth(map-get($map-for-suffixes, $suffix), $i); // Returns value from premade list based on current $i.
+	} @else if (list.index(('roman', 'nato', 'priority'), $suffix)) {
+		@return list.nth(map.get(map-of.$suffixes, $suffix), $i);
 
-	} @else if (index(('size', 'size-minmax', 'size-shorted', 'size-shorted-minmax', 'size-x', 'size-x-minmax', 'size-adjectives', 'size-adjectives-minmax', 'size-and-number', 'size-and-number-minmax', 'size-and-x', 'size-and-x-minmax'), $suffix)) {
-
-		// Map which holds corresponding suffixes of sizes.
-		//@debug $length;
+	} @else if (list.index(('size', 'size-shorted', 'size-w-number', 'size-adjectives', 'color-adjectives'), $suffix)) {
 		$map-of-suffixes : (
-				'size' : _create-suffix-list($suffix, $length),
-				'size-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
-				'size-shorted' : _create-suffix-list($suffix, $length),
-				'size-shorted-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
-				'size-x' : _create-suffix-list($suffix, $length),
-				'size-x-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
-				'size-adjectives' : _create-suffix-list($suffix, $length),
-				'size-adjectives-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
-				'size-and-number' : _create-suffix-list($suffix, $length),
-				'size-and-number-minmax' : _create-suffix-list($suffix, $length, $minmax : true),
-				'size-and-x' : _create-suffix-list($suffix, $length),
-				'size-and-x-minmax' : _create-suffix-list($suffix, $length, $minmax : true)
+				'size' : _create-suffixes($suffix, $length),
+				'size-shorted' : _create-suffixes($suffix, $length),
+				'size-w-number' : _create-suffixes($suffix, $length),
+				'size-adjectives' : _create-suffixes($suffix, $length),
+				'color-adjectives' : _create-suffixes($suffix, $length),
 		);
 
-		// Loop over the map and check if $suffix corresponding with $key
 		@each $key, $list-of-suffixes in $map-of-suffixes {
 			@if ($suffix == $key) {
-				@return nth($list-of-suffixes, $i); // Returns value from premade list based on current $i.
+				@return list.nth($list-of-suffixes, $i);
 			}
 		}
-	} @else if ($suffix == 'color-adjectives') {
-		$list-of-suffixes : _list-slice(map-get($map-for-suffixes, $suffix, $map-to-get), 1, $length);
-
-		@if $map-to-get == 'lighter-values' {
-			$list-of-suffixes : _list-reverse($list-of-suffixes);
-		}
-
-		@return nth($list-of-suffixes, $i);
 	} @else {
-		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{_map-keys($map-for-suffixes)}';
+		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{map.keys(map-of.$suffixes)}';
 	}
 }
 
@@ -371,11 +344,11 @@
  * @param $prefix {string} - Prefix value.
  * @param $suffix {string} - Suffix value.
  */
-@function _get-value($base, $ratio, $preserve, $i, $prefix: null, $suffix: null) {
+@function get-preserved-value($base, $ratio, $preserve, $prefix, $suffix, $i) {
 	@if ($preserve >= $i) {
-		@return _number-round(_decide-calc-method($base, $ratio, $preserve, $i, $prefix), 2);
+		@return math-round(_preservation($base, $ratio, $preserve, $i, $prefix), 2);
 	} @else if ($preserve + 1 == $i) {
-		@return _decide-calc-method($base, $ratio, $preserve, $i, $prefix);
+		@return _preservation($base, $ratio, $preserve, $i, $prefix);
 	} @else {
 		@return calc(var(--#{$prefix}#{$suffix}) * var(--#{$prefix}ratio));
 	}

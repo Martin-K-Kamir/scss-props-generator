@@ -1,6 +1,8 @@
 @charset "UTF-8";
+@use 'sass:math';
+@use 'variables' as *;
 
-$map-for-animations      : (
+$animations      : (
 		'animation-fade-in': fade-in 0.5s var(--ease-3),
 		'animation-fade-out': fade-out 0.5s var(--ease-3),
 		'animation-scale-up': scale-up 0.5s var(--ease-3),
@@ -27,7 +29,7 @@ $map-for-animations      : (
 		'animation-reveal-right': reveal-right 1s var(--ease-3),
 ) !default;
 
-$map-for-aspect-ratios   : (
+$aspect-ratios   : (
 		'ratio-square' : 1,
 		'ratio-landscape' : math.div(5, 4),
 		'ratio-portrait' : math.div(3, 4),
@@ -36,7 +38,7 @@ $map-for-aspect-ratios   : (
 		'ratio-golden' : math.div(1.618, 1),
 ) !default;
 
-$map-for-auto-margins    : (
+$auto-margins    : (
 		'property' : 'auto-margins',
 		'block-center' : 'margin-block',
 		'block-start' : 'margin-block-end',
@@ -44,9 +46,9 @@ $map-for-auto-margins    : (
 		'inline-center' : 'margin-inline',
 		'inline-start' : 'margin-inline-end',
 		'inline-end' : 'margin-inline-start',
-) !default;
+) !default; // refactor
 
-$map-for-borders         : (
+$borders         : (
 		'border-1' : 0.1rem,
 		'border-2 ' : 0.2rem,
 		'border-3 ' : 0.5rem,
@@ -54,7 +56,7 @@ $map-for-borders         : (
 		'border-5 ' : 2.5rem,
 ) !default;
 
-$map-for-breakpoints     : (
+$breakpoints     : (
 		'width-xxl': $width-xxl,
 		'width-xl': $width-xl,
 		'width-lg': $width-lg,
@@ -64,9 +66,9 @@ $map-for-breakpoints     : (
 		'width-xxs': $width-xxs,
 ) !default; // refactor
 
-$map-for-colors          : () !default;
+$colors          : () !default;
 
-$map-for-easing          : (
+$easings         : (
 		'ease-1' : cubic-bezier(0.25, 0, 0.5, 1),
 		'ease-2' : cubic-bezier(0.25, 0, 0.4, 1),
 		'ease-3' : cubic-bezier(0.25, 0, 0.3, 1),
@@ -104,15 +106,15 @@ $map-for-easing          : (
 		'ease-step-5' : steps(10),
 ) !default;
 
-$map-for-font-weights    : (
+$font-weights    : (
 		'property' : 'font-weight',
 ) !default;
 
-$map-for-fonts           : (
+$fonts           : (
 		'property' : 'font-family',
 ) !default;
 
-$map-for-letter-spacings : (
+$letter-spacings : (
 		'property' : 'letter-spacing',
 		'letterspacing-0' : -0.05em,
 		'letterspacing-1' : 0.025em,
@@ -124,7 +126,7 @@ $map-for-letter-spacings : (
 		'letterspacing-7' : 1em,
 ) !default;
 
-$map-for-line-heights    : (
+$line-heights    : (
 		'property' : 'line-height',
 		'lineheight-1' : 0.95,
 		'lineheight-2' : 1,
@@ -137,7 +139,7 @@ $map-for-line-heights    : (
 		'lineheight-9' : 2,
 ) !default;
 
-$map-for-measure         : (
+$measures        : (
 		'property' : '--measure',
 		'measure-1' : 10ch,
 		'measure-2' : 30ch,
@@ -149,7 +151,7 @@ $map-for-measure         : (
 		'measure-8' : 95ch,
 ) !default;
 
-$map-for-radius          : (
+$radius          : (
 		'property' : 'border-radius',
 		'radius-1 ' : 0.2rem,
 		'radius-2 ' : 0.5rem,
@@ -162,7 +164,7 @@ $map-for-radius          : (
 		'radius-pill' : 100vmax,
 ) !default;
 
-$map-for-ratios          : (
+$ratios          : (
 		'minor-second' : 1.067,
 		'major-second': 1.125,
 		'minor-third' : 1.200,
@@ -173,7 +175,7 @@ $map-for-ratios          : (
 		'golden-ratio' : 1.618
 ) !default;
 
-$map-for-shadows         : (
+$shadows         : (
 		'property' : 'box-shadow',
 		'shadow-color' : 220 3% 15%,
 		'shadow-strength' : 1%,
@@ -190,20 +192,7 @@ $map-for-shadows         : (
 		'shadow-inner-5' : inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
 ) !default; // refactor
 
-$map-for-suffixes        : (
-		'military' : (
-				'recruit', 'private', 'corporal', 'sergeant', 'captain',
-				'major', 'lieutenant', 'continent', 'street', 'colonel', 'general'
-		),
-		'planets' : (
-				'mercury', 'venus', 'earth', 'mars', 'jupitor',
-				'saturn', 'uranus', 'neptune', 'pluto'
-		),
-		'greek' : (
-				'alfa', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota',
-				'kappa', 'lambda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau',
-				'upsilon', 'phi', 'chi', 'psi', 'omega'
-		),
+$suffixes        : (
 		'nato' : (
 				'alfa', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india',
 				'juliett', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa', 'quebec', 'romeo',
@@ -212,32 +201,24 @@ $map-for-suffixes        : (
 		'roman' : (
 				'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
 				'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX',
-				'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX',
-				'XXXI', 'XXXII', 'XXXIII', 'XXXIV', 'XXXXV', 'XXXVI', 'XXXVII', 'XXXVIII', 'XXXIX', 'XL'
 		),
-		'alphabet' : (
-				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-		),
-		'alphabet-upper' : (
-				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-		),
-		'primary': (
+		'priority': (
 				'primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'
 		),
 		'color-adjectives' : (
-				'darker-values' : (
+				'higher-values' : (
 						'dark', 'darker', 'darkest'
 				),
-				'lighter-values': (
-						'light', 'lighter', 'lighest'
+				'lower-values': (
+						'light', 'lighter', 'lightest'
 				),
 		),
-		'size-minmax' : (
+		'size' : (
 				'higher-values' : (
-						'big', 'large', 'huge', 'giant', 'mega', 'max'
+						'big', 'large', 'huge', 'giant', 'mega'
 				),
 				'lower-values': (
-						'medium', 'small', 'tiny', 'micro', 'atomic', 'min'
+						'medium', 'small', 'tiny', 'micro', 'atomic'
 				),
 		),
 		'size-shorted' : (
@@ -248,30 +229,6 @@ $map-for-suffixes        : (
 						'md', 'sm', 'xs', 'xxs'
 				),
 		),
-		'size-shorted-minmax' : (
-				'higher-values' : (
-						'lg', 'xl', 'xxl', 'max'
-				),
-				'lower-values': (
-						'md', 'sm', 'xs', 'xxs', 'min'
-				),
-		),
-		'size-x' : (
-				'higher-values' : (
-						'l', 'xl', 'xxl', 'xxxl', 'xxxxl', 'xxxxxl', 'xxxxxxl'
-				),
-				'lower-values': (
-						'm', 's', 'xs', 'xxs', 'xxxs', 'xxxxs', 'xxxxxs', 'xxxxxxs'
-				),
-		),
-		'size-x-minmax' : (
-				'higher-values' : (
-						'l', 'xl', 'xxl', 'xxxl', 'xxxxl', 'xxxxxl', 'xxxxxxl', 'max'
-				),
-				'lower-values': (
-						'm', 's', 'xs', 'xxs', 'xxxs', 'xxxxs', 'xxxxxs', 'xxxxxxs', 'min'
-				),
-		),
 		'size-adjectives' : (
 				'higher-values' : (
 						'big', 'bigger', 'biggest', 'large', 'larger', 'largest', 'huge', 'giant', 'mega'
@@ -280,15 +237,7 @@ $map-for-suffixes        : (
 						'medium', 'small', 'smaller', 'smallest', 'tiny', 'tinier', 'tiniest', 'micro', 'atomic'
 				),
 		),
-		'size-adjectives-minmax' : (
-				'higher-values' : (
-						'big', 'bigger', 'biggest', 'large', 'larger', 'largest', 'huge', 'giant', 'mega', 'max'
-				),
-				'lower-values': (
-						'medium', 'small', 'smaller', 'smallest', 'tiny', 'tinier', 'tiniest', 'micro', 'atomic', 'min'
-				),
-		),
-		'size-and-number' : (
+		'size-w-number' : (
 				'higher-values' : (
 						'big', 'big-2', 'big-3', 'large', 'large-2', 'large-3',
 						'huge', 'huge-2', 'huge-3', 'giant', 'giant-2', 'giant-3', 'mega', 'mega-2', 'mega-3',
@@ -296,36 +245,6 @@ $map-for-suffixes        : (
 				'lower-values': (
 						'medium', 'small', 'small-2', 'small-3', 'tiny', 'tiny-2', 'tiny-3',
 						'micro', 'micro-2', 'micro-3', 'atomic', 'atomic-2', 'atomic-3',
-				),
-		),
-		'size-and-number-minmax' : (
-				'higher-values' : (
-						'big', 'big-2', 'big-3', 'large', 'large-2', 'large-3',
-						'huge', 'huge-2', 'huge-3', 'giant', 'giant-2', 'giant-3', 'mega', 'mega-2', 'mega-3', 'max'
-				),
-				'lower-values': (
-						'medium', 'small', 'small-2', 'small-3', 'tiny', 'tiny-2', 'tiny-3',
-						'micro', 'micro-2', 'micro-3', 'atomic', 'atomic-2', 'atomic-3', 'min'
-				),
-		),
-		'size-and-x' : (
-				'higher-values' : (
-						'big', 'big-xl', 'big-xxl', 'large', 'large-xl', 'large-xxl',
-						'huge', 'huge-xl', 'huge-xxl', 'giant', 'giant-xl', 'giant-xxl', 'mega', 'mega-xl', 'mega-xxl',
-				),
-				'lower-values': (
-						'medium', 'small', 'small-xl', 'small-xxl', 'tiny', 'tiny-xl', 'tiny-xxl',
-						'micro', 'micro-xl', 'micro-xxl', 'atomic', 'atomic-xl', 'atomic-xxl',
-				),
-		),
-		'size-and-x-minmax' : (
-				'higher-values' : (
-						'big', 'big-xl', 'big-xxl', 'large', 'large-xl', 'large-xxl',
-						'huge', 'huge-xl', 'huge-xxl', 'giant', 'giant-xl', 'giant-xxl', 'mega', 'mega-xl', 'mega-xxl', 'max'
-				),
-				'lower-values': (
-						'medium', 'small', 'small-xl', 'small-xxl', 'tiny', 'tiny-xl', 'tiny-xxl',
-						'micro', 'micro-xl', 'micro-xxl', 'atomic', 'atomic-xl', 'atomic-xxl', 'min'
 				),
 		),
 ) !default;

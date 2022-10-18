@@ -1,6 +1,8 @@
 @charset "UTF-8";
+@use 'sass:list';
 @use 'sass:map';
-@use 'functions' as function;
+@use '../list' as *;
+@use 'functions' as *;
 
 /**
  * Process config map or parameters into one main config map, which will be disturbed to other functions to
@@ -11,7 +13,7 @@
  * @author - Martin Kamír
  *
  */
-@mixin new-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix) {
+@mixin config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix) {
 
 	// Create local private config from parameters.
 	$_config : (
@@ -42,7 +44,7 @@
  * @author - Martin Kamír
  *
  */
-@mixin _declaration-shell($prefix, $suffix, $value, $property, $key: null) {
+@mixin _declaration-body($prefix, $suffix, $value, $property, $key: null) {
 	@if $property == 'none' and ($key == 'fluid-space-types' or $key == 'space-types') {
 		--space      : var(--#{$prefix}#{$suffix});
 	} @else {
@@ -56,8 +58,8 @@
  * @author - Martin Kamír
  *
  */
-@mixin _variable-shell($prefix, $suffix: null, $value) {
-	--#{$prefix}#{$suffix} : #{$value};
+@mixin _variable-body($prefix, $suffix: null, $value) {
+
 }
 
 /**
@@ -67,9 +69,9 @@
  *
  */
 @mixin _process-colors($config) {
-	$src              : map-get($config, 'src');
-	$src-scheme       : map-get($config, 'src-scheme');
-	$preferred-scheme : map-get($config, 'preferred-scheme');
+	$src              : map.get($config, 'src');
+	$src-scheme       : map.get($config, 'src-scheme');
+	$preferred-scheme : map.get($config, 'preferred-scheme');
 	$dark-scheme      : false;
 	$map              : $src;
 
@@ -109,10 +111,10 @@
 @mixin _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $suffix, $value) {
 	@if $utils {
 		@at-root .#{$prefix-text}#{$key}#{$suffix} {
-			@include _declaration-shell($key, $suffix, $value, 'color');
+			@include _declaration-body($key, $suffix, $value, 'color');
 		}
 		@at-root .#{$prefix-background}#{$key}#{$suffix} {
-			@include _declaration-shell($key, $suffix, $value, 'background-color');
+			@include _declaration-body($key, $suffix, $value, 'background-color');
 		}
 	}
 }
@@ -124,14 +126,14 @@
  *
  */
 @mixin _generate-colors($config, $map, $enabled-classes) {
-	$tints             : map-get($config, 'tints');
-	$shades            : map-get($config, 'shades');
-	$hsl-formatting    : map-get($config, 'hsl');
-	$prefix-text       : map-get($config, 'prefix-text');
-	$prefix-background : map-get($config, 'prefix-background');
-	$suffix            : map-get($config, 'suffix');
-	$suffix            : map-get($config, 'suffix');
-	$utils             : map-get($config, 'utility-classes');
+	$tints             : map.get($config, 'tints');
+	$shades            : map.get($config, 'shades');
+	$hsl-formatting    : map.get($config, 'hsl');
+	$prefix-text       : map.get($config, 'prefix-text');
+	$prefix-background : map.get($config, 'prefix-background');
+	$suffix            : map.get($config, 'suffix');
+	$suffix            : map.get($config, 'suffix');
+	$utils             : map.get($config, 'utility-classes');
 
 	// If $enabled-classes is false then the $utils will be false too, This statement is used to avoid generating the same utility classes but for a dark or light color scheme.
 	@if $enabled-classes == false {
@@ -168,10 +170,10 @@
 
 			// Loop for outputting the color values from the colors-list and generating the utility classes.
 			@for $x from 1 through length($colors-list) {
-				$_suffix : '-#{function.get-suffix($suffix, length($colors-list), $x)}';
+				$_suffix : '-#{get-suffix($suffix, length($colors-list), $x)}';
 				$value   : nth($colors-list, $x);
 
-				@include _variable-shell($key, $_suffix, $value);
+				@include _variable-body($key, $_suffix, $value);
 				@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
 			}
 		}
@@ -183,9 +185,9 @@
 			@if $tints != null {
 				@for $x from 1 through length($tints) {
 					$_value  : _get-hsl(mix(white, $value, nth($tints, $x)), $hsl-formatting);
-					$_suffix : '-#{function.get-suffix($suffix, length($tints), $x, 'lighter-values')}';
+					$_suffix : '-#{get-suffix($suffix, length($tints), $x, 'lighter-values')}';
 
-					@include _variable-shell($key, $_suffix, $_value);
+					@include _variable-body($key, $_suffix, $_value);
 					@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
 				}
 			}
@@ -194,16 +196,16 @@
 			$_value  : _get-hsl($value, $hsl-formatting);
 			$_suffix : '';
 
-			@include _variable-shell($key, $_suffix, $_value);
+			@include _variable-body($key, $_suffix, $_value);
 			@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
 
 			// Generate shade color properties and utility classes.
 			@if $shades != null {
 				@for $x from 1 through length($shades) {
 					$_value  : _get-hsl(mix(black, $value, nth($shades, $x)), $hsl-formatting);
-					$_suffix : '-#{function.get-suffix($suffix, length($shades), $x, 'darker-values')}';
+					$_suffix : '-#{get-suffix($suffix, length($shades), $x, 'darker-values')}';
 
-					@include _variable-shell($key, $_suffix, $_value);
+					@include _variable-body($key, $_suffix, $_value);
 					@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
 				}
 			}
@@ -211,7 +213,7 @@
 
 		// Mechanism for generating the color properties with no suffix. Mainly used for generating the color pallet from $src.
 		@if $suffix == null {
-			@include _variable-shell($key, $_suffix, $value);
+			@include _variable-body($key, $_suffix, $value);
 			@include _generate-color-utilities($utils, $prefix-text, $prefix-background, $key, $_suffix, $value);
 		}
 
@@ -231,21 +233,22 @@
 @mixin _generate-types-scale($config) {
 
 	// validate these variables
-	$mixin       : map-get($config, 'mixin');
-	$property    : map-get($config, 'property');
-	$base        : map-get($config, 'base');
-	$ratio       : map-get($config, 'ratio');
-	$length      : map-get($config, 'length');
-	$preserve    : map-get($config, 'preserve');
-	$utils       : map-get($config, 'utils');
-	$src         : map-get($config, 'src');
-	$prefix      : map-get($config, 'prefix');
-	$suffix      : map-get($config, 'suffix');
-    // ---
+	$mixin       : map.get($config, 'mixin');
+	$property    : map.get($config, 'property');
+	$base        : map.get($config, 'base');
+	$ratio       : map.get($config, 'ratio');
+	$length      : map.get($config, 'length');
+	$preserve    : map.get($config, 'preserve');
+	$utils       : map.get($config, 'utils');
+	$src         : map.get($config, 'src');
+	$prefix      : map.get($config, 'prefix');
+	$suffix      : map.get($config, 'suffix');
+	// ---
 
-	$break-at    : map-get($config, 'break-at'); // refactor
-	$breakpoints : map-get($config, 'breakpoints'); // refactor
+	$break-at    : map.get($config, 'break-at'); // refactor
+	$breakpoints : map.get($config, 'breakpoints'); // refactor
 
+	$_suffix     : $suffix;
 	$src-length  : length($src);
 	$src-type    : type-of($src);
 	$keys        : null;
@@ -260,49 +263,42 @@
 
 	// Convert keys and values to a list and set the values length variable.
 	@if $src-type == map {
-		$keys       : to-list($src, 'keys');
-		$src        : to-list($src, 'values');
+		$keys       : list-converted($src, 'keys');
+		$src        : list-converted($src, 'values');
 		$src-length : length($src);
 	}
 
 	@for $i from 1 through $length {
-		$_suffix : function.get-suffix($suffix, $length, $i);
+		$suffix                : get-suffix($_suffix, $length, $i);
 
 		@if $base != null {
-			$value : calc(var(--#{$prefix}base) * var(--#{$prefix}ratio)); // In first iteration output calculation of the base value multiplied by the ratio.
+			$value : calc(var(--#{$prefix}base) * var(--#{$prefix}ratio));
 
-			// In other iterations calculate the base value multiplied by the ratio and use the previous value.
 			@if $i > 1 {
-				$suffix-prev : function.get-suffix($suffix, $length, $i - 1); // Get the suffix for the previous iteration.
-				$value       : calc(var(--#{$prefix}#{$suffix-prev}) * var(--#{$prefix}ratio)); // Output the calculation of value which is based on $prefix and $suffix-prev multiplied by the ratio.
+				$suffix-prev : get-suffix($_suffix, $length, $i - 1);
+				$value       : calc(var(--#{$prefix}#{$suffix-prev}) * var(--#{$prefix}ratio));
 			}
 
-			// If $preserve is used get the value by _get-value function.
 			@if $preserve > 1 {
-				$value : _get-value($base, $ratio, $preserve, $i, $prefix);
-
-				@if $i > 1 {
-					$value : _get-value($base, $ratio, $preserve, $i, $prefix, $suffix-prev);
-				}
+				$value : get-preserved-value($base, $ratio, $preserve, $prefix, if($i > 1, $suffix-prev, $suffix), $i);
 			}
 		}
 
 		@if $src-type == list or $src-type == map {
-			$_suffix : function.get-suffix($suffix, $src-length, $i);
-			$value   : _number-scale(nth($src, $i), $scale); // Get the value from the list at the current iteration and scale it if used.
+			$suffix : get-suffix($suffix, $src-length, $i);
+			$value  : list.nth($src, $i);
+
+			@if $src-type == map {
+				$prefix : list.nth($keys, $i);
+				$suffix : '';
+			}
 		}
 
-		@if $src-type == map {
-			$_prefix : nth($keys, $i); // Get the key from the list at the current iteration.
-			$_suffix : ''; // Because the map is used the suffix is empty. The key is used as the prefix and suffix.
-		}
-
-		// The actual css property which is outputted.
-		@include _variable-shell($prefix, $_suffix, $value);
+		--#{$prefix}#{$suffix} : #{$value}; // The actual css property which is outputted.
 
 		@if $utils {
-			@at-root .#{$prefix}#{$_suffix} {
-				@include _declaration-shell($prefix, $_suffix, $value, $property, $mixin);
+			@at-root .#{$prefix}#{$suffix} {
+				@include _declaration-body($prefix, $suffix, $value, $property, $mixin);
 			}
 		}
 	}
@@ -328,7 +324,7 @@
 
 				@while $y <= $src-length {
 					$_prefix : _get-name($prefix, $prefix-variable); // Get the prefix name.
-					$_suffix : function.get-suffix($suffix, $src-length, $y); // Get the suffix for the current iteration of $y.
+					$_suffix : get-suffix($suffix, $src-length, $y); // Get the suffix for the current iteration of $y.
 					$value   : _number-scale(nth($src, $x), $scale); // Get the value from the list at the current iteration of $x and scale it if used.
 
 					// If $src is a map
@@ -351,7 +347,7 @@
 					}
 
 					// The actual css property which is outputted in the breakpoint.
-					@include _variable-shell($_prefix, $_suffix, $value);
+					@include _variable-body($_prefix, $_suffix, $value);
 
 					// At the end of the loop increment $x and $y.
 					$y       : $y + 1;

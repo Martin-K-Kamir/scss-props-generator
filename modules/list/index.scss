@@ -1,11 +1,7 @@
 @charset "UTF-8";
 
-// convert-to-list / list
-/**
- * Function converts map to list.
- *
- */
-@function to-list($value, $keep: 'both') {
+
+@function list-converted($value, $keep: 'both') {
 	$keep : if(index('keys' 'values', $keep), $keep, 'both');
 
 	@if type-of($value) == 'map' {
@@ -29,12 +25,7 @@
 	@return if(type-of($value) != 'list', ($value,), $value);
 }
 
-// reverse / list
-/**
- * Function returns reversed list.
- *
- */
-@function _list-reverse($list, $recursive: false) {
+@function list-reverse($list, $recursive: false) {
 	$result : ();
 
 	@for $i from length($list) * -1 through -1 {
@@ -48,12 +39,7 @@
 	@return $result;
 }
 
-// slice / list
-/**
- * Function returns sliced list.
- *
- */
-@function _list-slice($list, $start: 1, $end: length($list)) {
+@function list-slice($list, $start: 1, $end: length($list)) {
 	$result : null;
 
 	@if type-of($start) != number or type-of($end) != number {

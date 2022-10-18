@@ -234,7 +234,7 @@
 	$mixin    : 'fluid-font-types'; // The key for the '_validate-values' function is to identify given parameters and merge them into the main config map.
 	$property : 'font-size'; // The selector for creating the utility classes.
 
-	@include mixin.new-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -273,7 +273,7 @@
 	$mixin    : 'fluid-space-types'; // The key for the '_validate-values' function is to identify given parameters and merge them into the main config map.
 	$property : 'none'; // The selector for creating the utility classes.
 
-	@include mixin.new-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -311,7 +311,7 @@
 	$mixin    : 'font-types';
 	$property : 'font-size';
 
-	@include mixin.new-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -348,7 +348,7 @@
 	$mixin    : 'space-types'; // The key for the '_validate-values' function is to identify given parameters and merge them into the main config map.
 	$property : 'none'; // The selector for creating the utility classes. Because the value is none. Utility classes will not have declaration property only the css property.
 
-	@include mixin.new-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**

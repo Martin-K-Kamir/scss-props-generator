@@ -1,4 +1,6 @@
 @charset "UTF-8";
+@use 'sass:math';
+
 $agent-default-font-size  : 16 !default;
 $author-default-font-size : 10 !default;
 
@@ -21,14 +23,9 @@ $author-default-font-size : 10 !default;
 	$removed-unit : _string-replace($number, $unit);
 	$number : _convert-to-number($removed-unit);
 	@return $number;
-} // refactor
+}
 
-// round / math
-/**
- * Function returns a rounded number based on $places parameter.
- *
- */
-@function _number-round($number, $places: 0) {
+@function math-round($number, $places: 0) {
 	$n : 1;
 	@if $places > 0 {
 		@for $i from 1 through $places {
@@ -38,7 +35,6 @@ $author-default-font-size : 10 !default;
 	@return math.div(round($number * $n), $n);
 }
 
-// scale / math
 /**
  * Returns scaled number.
  *
@@ -52,7 +48,7 @@ $author-default-font-size : 10 !default;
  * @param $decrease {number} - Value that is being scaled by.
  * @return scaled number
  */
-@function _number-scale($number, $scale: 100%) {
+@function math-scale($number, $scale: 100%) {
 	@if (type-of($scale) != number) {
 		@error 'Invalid type value: parameter $scale must be a number.';
 	}
@@ -70,7 +66,9 @@ $author-default-font-size : 10 !default;
 
 	$scale : _remove-unit($scale, '%');
 	@return math.div($number, 100) * $scale
-} // refactor
+}
+
+// refactor
 
 // convert to number // math
 /**
@@ -125,7 +123,7 @@ $author-default-font-size : 10 !default;
  * @param $max-screen {number} - Maximum breakpoint value.
  * @return clamp function.
  */
-@function clamp($min-value, $max-value, $min-screen: $width-xs, $max-screen: $width-xl) {
+@function clamped($min-value, $max-value, $min-screen: $width-xs, $max-screen: $width-xl) {
 	$value-unit : null;
 	$screen-unit : null;
 
@@ -168,9 +166,6 @@ $author-default-font-size : 10 !default;
 	@return clamp(#{$min-value}#{$value-unit}, #{$slope-vw}vw + #{$intercept-rems}#{$value-unit}, #{$max-value}#{$value-unit});
 }
 
-/**
- * Returns a number based on position of given string in a $list-of-layers.
- */
 @function layer($name) {
 	@if index($list-of-layers, $name) {
 		@return (length($list-of-layers) - index($list-of-layers, $name))+1;
@@ -179,3 +174,4 @@ $author-default-font-size : 10 !default;
 		@return null;
 	}
 }
+
