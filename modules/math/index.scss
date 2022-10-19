@@ -1,6 +1,7 @@
 @charset "UTF-8";
 @use 'sass:math';
 
+
 $agent-default-font-size  : 16 !default;
 $author-default-font-size : 10 !default;
 
@@ -25,7 +26,7 @@ $author-default-font-size : 10 !default;
 	@return $number;
 }
 
-@function math-round($number, $places: 0) {
+@function round($number, $places: 0) {
 	$n : 1;
 	@if $places > 0 {
 		@for $i from 1 through $places {
@@ -123,47 +124,13 @@ $author-default-font-size : 10 !default;
  * @param $max-screen {number} - Maximum breakpoint value.
  * @return clamp function.
  */
-@function clamped($min-value, $max-value, $min-screen: $width-xs, $max-screen: $width-xl) {
-	$value-unit : null;
-	$screen-unit : null;
-
-	@if type-of($min-value) != number or type-of($max-value) != number or type-of($min-screen) != number or type-of($max-screen) != number {
-		@error "Invalid type: parameters $min-value, $max-value, $min-screen and $max-screen must be numbers.";
-	}
-
-	@if unitless($min-value) or unitless($max-value) or unitless($min-screen) or unitless($max-screen) {
-		@error "Invalid type: parameters $min-value, $max-value, $min-screen and $max-screen must be numbers with units.";
-	}
-
-	@if unit($min-value) == unit($max-value) {
-		$value-unit : unit($min-value);
-	} @else {
-		@error "Invalid unit: parameters $min-value and $max-value must have the same unit.";
-	}
-
-	@if unit($min-screen) == unit($max-screen) {
-		$screen-unit : unit($min-screen);
-	} @else {
-		@error "Invalid unit: parameters $min-screen and $max-screen must have the same unit.";
-	}
-
-	$min-value : _convert-to-number(_string-replace($min-value, $value-unit));
-	$max-value : _convert-to-number(_string-replace($max-value, $value-unit));
-	$min-screen : _convert-to-number(_string-replace($min-screen, $screen-unit));
-	$max-screen : _convert-to-number(_string-replace($max-screen, $screen-unit));
-
-	@if $screen-unit == em {
-		$min-screen : $min-screen * $agent-default-font-size;
-		$max-screen : $max-screen * $agent-default-font-size;
-	} @else if $screen-unit == rem {
-		$min-screen : $min-screen * $author-default-font-size;
-		$max-screen : $max-screen * $author-default-font-size;
-	}
-
-	$slope : math.div($max-value - $min-value, $max-screen - $min-screen);
-	$slope-vw : _number-round($slope * 1000, 2);
-	$intercept-rems : _number-round($min-value - $slope * $min-screen, 2);
-	@return clamp(#{$min-value}#{$value-unit}, #{$slope-vw}vw + #{$intercept-rems}#{$value-unit}, #{$max-value}#{$value-unit});
+@function clamped($min-value, $max-value, $min-width, $max-width) {
+	$slope : math.div($max-value - $min-value, $max-width - $min-width);
+	$slope-vw : round($slope * 100, 2);
+	$intercept-rems : round(to-rems($min-value - $slope * $min-width), 2);
+	$min-rems : round(to-rems($min-value), 2);
+	$max-rems : round(to-rems($max-value), 2);
+	@return clamp(#{$min-rems}, #{$slope-vw}vw + #{$intercept-rems}, #{$max-rems});
 }
 
 @function layer($name) {

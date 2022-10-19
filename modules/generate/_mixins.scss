@@ -2,6 +2,7 @@
 @use 'sass:list';
 @use 'sass:map';
 @use '../list' as *;
+@use '../math' as *;
 @use 'functions' as *;
 
 /**
@@ -266,6 +267,10 @@
 		}
 
 		--#{$prefix}#{$suffix} : #{$value}; // The css custom property generated
+
+		.foo {
+			font-size : clamped(1rem, 4rem, 360px, 1140px);
+		}
 
 		// The utility class generated
 		@if $utils {
