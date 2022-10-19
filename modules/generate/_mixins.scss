@@ -39,20 +39,6 @@
 }
 
 /**
- * Mixin outputs a declaration based on given parameters.
- *
- * @author - Martin Kamír
- *
- */
-@mixin _declaration-body($prefix, $suffix, $value, $property, $key: null) {
-	@if $property == 'none' and ($key == 'fluid-space-types' or $key == 'space-types') {
-		--space      : var(--#{$prefix}#{$suffix});
-	} @else {
-		#{$property} : var(--#{$prefix}#{$suffix});
-	}
-}
-
-/**
  * Mixin for processing the color parameters.
  *
  * @author - Martin Kamír
@@ -222,7 +208,6 @@
  */
 @mixin _generate-types-scale($config) {
 
-	// validate these variables
 	$mixin       : map-get($config, 'mixin');
 	$property    : map-get($config, 'property');
 	$base        : map-get($config, 'base');
@@ -233,17 +218,15 @@
 	$src         : map-get($config, 'src');
 	$prefix      : map-get($config, 'prefix');
 	$suffix      : map-get($config, 'suffix');
-	// ---
+	$break-at    : map-get($config, 'break-at');
+	$breakpoints : map-get($config, 'breakpoints');
 
-	$break-at    : map-get($config, 'break-at'); // refactor
-	$breakpoints : map-get($config, 'breakpoints'); // refactor
-
+	$value       : null;
+	$keys        : null;
+	$suffix-prev : null;
 	$_suffix     : $suffix;
 	$src-length  : length($src);
 	$src-type    : type-of($src);
-	$keys        : null;
-	$suffix-prev : null;
-	$value       : null;
 	$length      : if($length != null, $length, $src-length);
 
 	@if $base != null {
@@ -282,9 +265,9 @@
 			}
 		}
 
-		--#{$prefix}#{$suffix} : #{$value}; // The css custom property generated.
+		--#{$prefix}#{$suffix} : #{$value}; // The css custom property generated
 
-		// The utility class generated.
+		// The utility class generated
 		@if $utils {
 			@at-root .#{$prefix}#{$suffix} {
 				#{$property} : var(--#{$prefix}#{$suffix});
@@ -293,13 +276,12 @@
 	}
 
 	@if ($breakpoints != null) {
-		@debug type-of($breakpoints);
 		@for $i from 1 through length($breakpoints) {
 			$breakpoint : nth(nth($breakpoints, $i), 1);
-			// https://stackoverflow.com/questions/49402911/scss-sass-get-values-from-nth-nested-maps
-			//$src        : nth(nth($breakpoints, $i), 2);
-			//$src-type   : type-of(nth(nth($breakpoints, $i), 2));
-			@debug $breakpoint;
+			$base       : map-get($breakpoints, $breakpoint, 'base');
+			$ratio      : map-get($breakpoints, $breakpoint, 'ratio');
+			$src        : map-get($breakpoints, $breakpoint, 'src');
+			$src-type   : type-of($src);
 
 			@if $src-type == map {
 				$keys : list-converted($src, 'keys');
@@ -307,37 +289,33 @@
 			}
 
 			@media (#{$break-at}-width: $breakpoint) {
-				$x : 1;
-				$y : $src-length - length($src) + 1;
 
-				@while $y <= $src-length {
-					$suffix                : get-suffix($_suffix, $src-length, $y);
-					$value                 : nth($src, $x);
+				@if $base != null {
+					--#{$prefix}base : #{$base};
+				}
 
-					// If $src is a map
-					@if $src-type == map {
-						$_prefix : nth($keys, $x); // Get the key from the list at the current iteration.
-						$_suffix : ''; // Since the map is used the suffix is empty, because the key is used as the prefix and suffix.
+				@if $ratio != null {
+					--#{$prefix}ratio : #{$ratio};
+				}
 
-						// If the key is ratio
-						@if $_prefix == 'ratio' {
-							$_prefix : $prefix; // Use the prefix instead of the key.
-							$_suffix : 'ratio'; // Use string 'ratio' as the suffix.
-							$value   : _validate-ratio(nth($src, $x)); // Validate the ratio and get the value.
+				@if $src != null {
+					$x : 1;
+					$y : $src-length - length($src) + 1;
+
+					@while $y <= $src-length {
+						$suffix                : get-suffix($_suffix, $src-length, $y);
+						$value                 : nth($src, $x);
+
+						@if $src-type == map {
+							$prefix : nth($keys, $x);
+							$suffix : '';
 						}
 
-						// If the key is base
-						@if $_prefix == 'base' {
-							$_prefix : $prefix; // Use the prefix instead of the key.
-							$_suffix : 'base'; // Use string 'base' as the suffix.
-						}
+						--#{$prefix}#{$suffix} : #{$value}; // The css custom property generated
+
+						$y                     : $y + 1;
+						$x                     : $x + 1;
 					}
-
-					--#{$prefix}#{$suffix} : #{$value}; // The css custom property generated.
-
-					// At the end of the loop increment $x and $y.
-					$y                     : $y + 1;
-					$x                     : $x + 1;
 				}
 			}
 		}
