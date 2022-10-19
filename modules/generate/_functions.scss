@@ -321,7 +321,7 @@
 			}
 		}
 	} @else {
-		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{map.keys(map-of.$suffixes)}';
+		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{map-keys(map-of.$suffixes)}';
 	}
 }
 

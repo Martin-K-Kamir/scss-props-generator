@@ -270,8 +270,8 @@
 	$preserve : 0;
 	$scale    : 100%;
 
-	$mixin    : 'fluid-space-types'; // The key for the '_validate-values' function is to identify given parameters and merge them into the main config map.
-	$property : 'none'; // The selector for creating the utility classes.
+	$mixin    : 'fluid-space-types';
+	$property : '--space';
 
 	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
@@ -345,8 +345,8 @@
 	$prefix: 'space-',
 	$suffix: 'numeric') {
 
-	$mixin    : 'space-types'; // The key for the '_validate-values' function is to identify given parameters and merge them into the main config map.
-	$property : 'none'; // The selector for creating the utility classes. Because the value is none. Utility classes will not have declaration property only the css property.
+	$mixin    : 'space-types';
+	$property : '--space';
 
 	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }

@@ -32,7 +32,7 @@
 
 	// If config is not null, merge the config with the local private config.
 	@if $config != null {
-		$_config : map.deep-merge($_config, map.get($config, $mixin));
+		$_config : map.deep-merge($_config, map-get($config, $mixin));
 	}
 
 	@include _generate-types-scale($_config)
@@ -53,25 +53,15 @@
 }
 
 /**
- * Mixin outputs a css custom property.
- *
- * @author - Martin Kamír
- *
- */
-@mixin _variable-body($prefix, $suffix: null, $value) {
-
-}
-
-/**
  * Mixin for processing the color parameters.
  *
  * @author - Martin Kamír
  *
  */
 @mixin _process-colors($config) {
-	$src              : map.get($config, 'src');
-	$src-scheme       : map.get($config, 'src-scheme');
-	$preferred-scheme : map.get($config, 'preferred-scheme');
+	$src              : map-get($config, 'src');
+	$src-scheme       : map-get($config, 'src-scheme');
+	$preferred-scheme : map-get($config, 'preferred-scheme');
 	$dark-scheme      : false;
 	$map              : $src;
 
@@ -126,14 +116,14 @@
  *
  */
 @mixin _generate-colors($config, $map, $enabled-classes) {
-	$tints             : map.get($config, 'tints');
-	$shades            : map.get($config, 'shades');
-	$hsl-formatting    : map.get($config, 'hsl');
-	$prefix-text       : map.get($config, 'prefix-text');
-	$prefix-background : map.get($config, 'prefix-background');
-	$suffix            : map.get($config, 'suffix');
-	$suffix            : map.get($config, 'suffix');
-	$utils             : map.get($config, 'utility-classes');
+	$tints             : map-get($config, 'tints');
+	$shades            : map-get($config, 'shades');
+	$hsl-formatting    : map-get($config, 'hsl');
+	$prefix-text       : map-get($config, 'prefix-text');
+	$prefix-background : map-get($config, 'prefix-background');
+	$suffix            : map-get($config, 'suffix');
+	$suffix            : map-get($config, 'suffix');
+	$utils             : map-get($config, 'utility-classes');
 
 	// If $enabled-classes is false then the $utils will be false too, This statement is used to avoid generating the same utility classes but for a dark or light color scheme.
 	@if $enabled-classes == false {
@@ -233,20 +223,20 @@
 @mixin _generate-types-scale($config) {
 
 	// validate these variables
-	$mixin       : map.get($config, 'mixin');
-	$property    : map.get($config, 'property');
-	$base        : map.get($config, 'base');
-	$ratio       : map.get($config, 'ratio');
-	$length      : map.get($config, 'length');
-	$preserve    : map.get($config, 'preserve');
-	$utils       : map.get($config, 'utils');
-	$src         : map.get($config, 'src');
-	$prefix      : map.get($config, 'prefix');
-	$suffix      : map.get($config, 'suffix');
+	$mixin       : map-get($config, 'mixin');
+	$property    : map-get($config, 'property');
+	$base        : map-get($config, 'base');
+	$ratio       : map-get($config, 'ratio');
+	$length      : map-get($config, 'length');
+	$preserve    : map-get($config, 'preserve');
+	$utils       : map-get($config, 'utils');
+	$src         : map-get($config, 'src');
+	$prefix      : map-get($config, 'prefix');
+	$suffix      : map-get($config, 'suffix');
 	// ---
 
-	$break-at    : map.get($config, 'break-at'); // refactor
-	$breakpoints : map.get($config, 'breakpoints'); // refactor
+	$break-at    : map-get($config, 'break-at'); // refactor
+	$breakpoints : map-get($config, 'breakpoints'); // refactor
 
 	$_suffix     : $suffix;
 	$src-length  : length($src);
@@ -261,7 +251,6 @@
 		--#{$prefix}base  : #{$base};
 	}
 
-	// Convert keys and values to a list and set the values length variable.
 	@if $src-type == map {
 		$keys       : list-converted($src, 'keys');
 		$src        : list-converted($src, 'values');
@@ -285,47 +274,45 @@
 		}
 
 		@if $src-type == list or $src-type == map {
-			$suffix : get-suffix($suffix, $src-length, $i);
-			$value  : list.nth($src, $i);
+			$value : nth($src, $i);
 
 			@if $src-type == map {
-				$prefix : list.nth($keys, $i);
+				$prefix : nth($keys, $i);
 				$suffix : '';
 			}
 		}
 
-		--#{$prefix}#{$suffix} : #{$value}; // The actual css property which is outputted.
+		--#{$prefix}#{$suffix} : #{$value}; // The css custom property generated.
 
+		// The utility class generated.
 		@if $utils {
 			@at-root .#{$prefix}#{$suffix} {
-				@include _declaration-body($prefix, $suffix, $value, $property, $mixin);
+				#{$property} : var(--#{$prefix}#{$suffix});
 			}
 		}
 	}
 
-	// If $break-at is used generate breakpoints with css properties.
 	@if ($breakpoints != null) {
+		@debug type-of($breakpoints);
 		@for $i from 1 through length($breakpoints) {
-			$breakpoint : nth(nth($breakpoints, $i), 1); // Get the breakpoint value.
-			$src        : nth(nth($breakpoints, $i), 2); // Get the src value.
-			$src-type   : type-of(nth(nth($breakpoints, $i), 2)); // Get the src type.
+			$breakpoint : nth(nth($breakpoints, $i), 1);
+			// https://stackoverflow.com/questions/49402911/scss-sass-get-values-from-nth-nested-maps
+			//$src        : nth(nth($breakpoints, $i), 2);
+			//$src-type   : type-of(nth(nth($breakpoints, $i), 2));
+			@debug $breakpoint;
 
-			// If $src is a map convert keys and values to a list.
 			@if $src-type == map {
-				$keys : to-list($src, 'keys');
-				$src  : to-list($src, 'values');
+				$keys : list-converted($src, 'keys');
+				$src  : list-converted($src, 'values');
 			}
 
-			// The actual outputted breakpoint
-			// The $break-at value must be one of the breakpoints in $map-for-breakpoints.
-			@include breakpoint($break-at, $breakpoint) {
-				$x : 1; // Second iteration of the loop.
-				$y : $src-length - length($src) + 1; // Third iteration of the loop. Which starts by getting the difference between the length of the src and the length of the main loop current iteration.
+			@media (#{$break-at}-width: $breakpoint) {
+				$x : 1;
+				$y : $src-length - length($src) + 1;
 
 				@while $y <= $src-length {
-					$_prefix : _get-name($prefix, $prefix-variable); // Get the prefix name.
-					$_suffix : get-suffix($suffix, $src-length, $y); // Get the suffix for the current iteration of $y.
-					$value   : _number-scale(nth($src, $x), $scale); // Get the value from the list at the current iteration of $x and scale it if used.
+					$suffix                : get-suffix($_suffix, $src-length, $y);
+					$value                 : nth($src, $x);
 
 					// If $src is a map
 					@if $src-type == map {
@@ -346,12 +333,11 @@
 						}
 					}
 
-					// The actual css property which is outputted in the breakpoint.
-					@include _variable-body($_prefix, $_suffix, $value);
+					--#{$prefix}#{$suffix} : #{$value}; // The css custom property generated.
 
 					// At the end of the loop increment $x and $y.
-					$y       : $y + 1;
-					$x       : $x + 1;
+					$y                     : $y + 1;
+					$x                     : $x + 1;
 				}
 			}
 		}
