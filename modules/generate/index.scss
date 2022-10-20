@@ -1,5 +1,6 @@
 @charset "UTF-8";
-@use 'mixins' as mixin;
+@use 'sass:map' as *;
+@use 'mixins' as *;
 
 /**
  * Mixin to generate utility classes from a map.
@@ -152,7 +153,7 @@
  * @param $src-scheme {map} - The source values of colors for preferred color scheme.
  * @param $tints {list} - Defining the values for tints of colors as percentages. Based on the source values at $src/$src-scheme the color tints will be produced of given values.
  * @param $shades {list} - Same as $tints but for shades.
- * @param $hsl-formatting {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
+ * @param $format {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
  * @param $utils {boolean} - Defines if the utility classes should be generated.
  * @param $prefix-text {string} - Defines the name of utility classes for the color property.
  * @param $prefix-background {string} - Defines the name of utility classes for the background property.
@@ -166,36 +167,35 @@
 	$src-scheme: null,
 	$tints: null,
 	$shades: null,
-	$hsl-formatting: 'function',
+	$format: 'hsl()',
 	$utils: true,
-	$prefix-text: 'text-',
+	$prefix-color: 'text-',
 	$prefix-background: 'surface-',
-	$suffix: null,
+	$suffix: 'color-adjectives',
 	$preferred-scheme: 'dark') {
 
-	// Make shallow copy config map from parameters.
+	// Create local private config from parameters.
 	$_config : (
-			'key' : 'color-types',
 			'src' : $src,
 			'src-scheme' : $src-scheme,
 			'tints' : $tints,
 			'shades' : $shades,
-			'hsl-formatting' : $hsl-formatting,
+			'format' : $format,
 			'utility-classes' : $utils,
-			'prefix-text' : $prefix-text,
+			'prefix-text' : $prefix-color,
 			'prefix-background' : $prefix-background,
 			'suffix' : $suffix,
 			'preferred-scheme' : $preferred-scheme,
 	);
 
+	$mixin    : 'colors';
+
 	// If config parameter is used validate it and merge it into shallow copy config map.
 	@if $config != null {
-		$_config : map.deep-merge($_config, _validate-values-map($config, map.get($_config, 'key')));
+		$_config : deep-merge($_config, map-get($config, $mixin));
 	}
 
-	// Validate config map and after init generating the color properties.
-	@include _validate-values($_config);
-	@include _process-colors($_config);
+	@include process-colors($_config);
 }
 
 /**
@@ -227,14 +227,13 @@
 	$prefix: 'f-fluid-',
 	$suffix: 'numeric') {
 
-	// $preserve and $scale are removed from mixin's parameters because they have no meaning to be used.
 	$preserve : 0;
 	$scale    : 100%;
 
-	$mixin    : 'fluid-font-types'; // The key for the '_validate-values' function is to identify given parameters and merge them into the main config map.
-	$property : 'font-size'; // The selector for creating the utility classes.
+	$mixin    : 'fluid-font-types';
+	$property : 'font-size';
 
-	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -263,7 +262,7 @@
 	$length: null,
 	$utils: true,
 	$src: null,
-	$prefix: 'space-fluid-',
+	$prefix: 'fluid-space-types-',
 	$suffix: 'numeric') {
 
 	// $preserve and $scale are removed from mixin's parameters because they have no meaning to be used.
@@ -273,7 +272,7 @@
 	$mixin    : 'fluid-space-types';
 	$property : '--space';
 
-	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -311,7 +310,7 @@
 	$mixin    : 'font-types';
 	$property : 'font-size';
 
-	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -348,7 +347,7 @@
 	$mixin    : 'space-types';
 	$property : '--space';
 
-	@include mixin.config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -390,7 +389,7 @@
  *  	'src-scheme' {map} - The source values of colors for preferred color scheme.
  *  	'tints' {list} - Defining the values for tints of colors as percentages. Based on the source values at $src/$src-scheme the color tints will be produced of given values.
  *  	'shades' {list} - Same as $tints but for shades.
- *  	'hsl-formatting' {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
+ *  	'format' {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
  *  	'utility-classes' {boolean} - Defines if the utility classes should be generated.
  *  	'prefix-text' {string} - Defines the name of utility classes for the color property.
  *  	'prefix-background' {string} - Defines the name of utility classes for the background property.
@@ -406,7 +405,6 @@
  *  ),
  */
 @mixin all($config) {
-
 	@if map-has-key($config, 'font-types') {
 		@include font-types($config);
 	}
