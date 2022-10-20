@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+@function color-format($value, $format) {
+	@if $format == 'hsl' or $format == 'hsl()' {
+		$hue : round(hue($value));
+		$saturation : round(saturation($value));
+		$lightness : round(lightness($value));
+
+		@if $format == 'hsl' {
+			@return '#{$hue, $saturation, $lightness}';
+		} @else {
+			@return hsl($hue, $saturation, $lightness);
+		}
+	}
+
+	@if $format == 'rgb' or $format == 'rgb()' {
+		$red : round(red($value));
+		$green : round(green($value));
+		$blue : round(blue($value));
+
+		@if $format == 'rgb' {
+			@return '#{$red, $green, $blue}';
+		} @else {
+			@return rgb($red, $green, $blue);
+		}
+	}
+
+	@if $format == 'hex' {
+		$hex : ie-hex-str($value);
+		@return unquote('#' + str-slice($hex, 4));
+	}
+}

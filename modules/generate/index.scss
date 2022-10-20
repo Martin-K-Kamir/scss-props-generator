@@ -143,59 +143,24 @@
 	}
 }
 
-/**
- * Mixin for generating color types.
- *
- * @author - Martin Kamír
- *
- * @param $config {map} - Config map uses same parameters as below.
- * @param $src {map} - The source values of colors.
- * @param $src-scheme {map} - The source values of colors for preferred color scheme.
- * @param $tints {list} - Defining the values for tints of colors as percentages. Based on the source values at $src/$src-scheme the color tints will be produced of given values.
- * @param $shades {list} - Same as $tints but for shades.
- * @param $format {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
- * @param $utils {boolean} - Defines if the utility classes should be generated.
- * @param $prefix-text {string} - Defines the name of utility classes for the color property.
- * @param $prefix-background {string} - Defines the name of utility classes for the background property.
- * @param $suffix {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
- * @param $preferred-scheme {string} - Defines the preferred color scheme at media query for 'dark' and 'light'.
- *
- */
+
 @mixin colors(
 	$config: null,
 	$src: null,
-	$src-scheme: null,
 	$tints: null,
 	$shades: null,
 	$format: 'hsl()',
 	$utils: true,
-	$prefix-color: 'text-',
-	$prefix-background: 'surface-',
-	$suffix: 'color-adjectives',
-	$preferred-scheme: 'dark') {
+	$prefix: 'clr-',
+	$prefix-fc: 'fc-',
+	$prefix-bg: 'bg-',
+	$suffix: 'numeric',
+	$themes: null,
+) {
 
-	// Create local private config from parameters.
-	$_config : (
-			'src' : $src,
-			'src-scheme' : $src-scheme,
-			'tints' : $tints,
-			'shades' : $shades,
-			'format' : $format,
-			'utility-classes' : $utils,
-			'prefix-text' : $prefix-color,
-			'prefix-background' : $prefix-background,
-			'suffix' : $suffix,
-			'preferred-scheme' : $preferred-scheme,
-	);
+	$mixin : 'colors';
 
-	$mixin    : 'colors';
-
-	// If config parameter is used validate it and merge it into shallow copy config map.
-	@if $config != null {
-		$_config : deep-merge($_config, map-get($config, $mixin));
-	}
-
-	@include process-colors($_config);
+	@include compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $utils, $prefix, $prefix-fc, $prefix-bg, $suffix, $themes);
 }
 
 /**
@@ -228,12 +193,11 @@
 	$suffix: 'numeric') {
 
 	$preserve : 0;
-	$scale    : 100%;
 
 	$mixin    : 'fluid-font-types';
 	$property : 'font-size';
 
-	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -267,12 +231,11 @@
 
 	// $preserve and $scale are removed from mixin's parameters because they have no meaning to be used.
 	$preserve : 0;
-	$scale    : 100%;
 
 	$mixin    : 'fluid-space-types';
 	$property : '--space';
 
-	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -310,7 +273,7 @@
 	$mixin    : 'font-types';
 	$property : 'font-size';
 
-	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -347,7 +310,7 @@
 	$mixin    : 'space-types';
 	$property : '--space';
 
-	@include config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
 /**
@@ -392,7 +355,7 @@
  *  	'format' {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
  *  	'utility-classes' {boolean} - Defines if the utility classes should be generated.
  *  	'prefix-text' {string} - Defines the name of utility classes for the color property.
- *  	'prefix-background' {string} - Defines the name of utility classes for the background property.
+ *  	'prefix-bg' {string} - Defines the name of utility classes for the background property.
  *  	'suffix {string}' - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
  *  	'preferred-scheme' {string} - Defines the preferred color scheme at media query for 'dark' and 'light'.
  *  	),

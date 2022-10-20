@@ -4,12 +4,13 @@
 @use 'sass:math' as *;
 @use '../list' as *;
 @use '../math' as *;
+@use '../color' as *;
 @use 'functions' as *;
 @use 'variables' as *;
 @forward 'variables';
 
 
-@mixin config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix) {
+@mixin compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix) {
 
 	// Create local private config from parameters.
 	$_config : (
@@ -34,144 +35,128 @@
 	@include _generate-types-scale($_config)
 }
 
-@mixin process-colors($config) {
-	$src              : map-get($config, 'src');
-	$src-scheme       : map-get($config, 'src-scheme');
-	$preferred-scheme : map-get($config, 'preferred-scheme');
-	$dark-scheme      : false;
-	$map              : $src;
+@mixin compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $utils, $prefix, $prefix-fc, $prefix-bg, $suffix, $themes) {
 
-	@for $i from 1 through if($src-scheme == null, 1, 2) {
+	// Create local private config from parameters.
+	$_config : (
+			'src' : $src,
+			'tints' : $tints,
+			'shades' : $shades,
+			'format' : $format,
+			'utils' : $utils,
+			'prefix' : $prefix,
+			'prefix-fc' : $prefix-fc,
+			'prefix-bg' : $prefix-bg,
+			'suffix' : $suffix,
+			'themes' : $themes,
+	);
 
-		@if length($src) == 1 {
-			@if $src-scheme != null and $i > length($map) {
-				$map         : $src-scheme;
-				$dark-scheme : true;
-			}
-		} @else {
-			@if $src-scheme != null and $i >= length($map) {
-				$map         : $src-scheme;
-				$dark-scheme : true;
-			}
-		}
+	@if $config != null {
+		$_config : deep-merge($_config, map-get($config, $mixin));
+	}
 
-		@if $dark-scheme == false {
-			@include _generate-colors($config, $map, true);
-		} @else {
-			@media (prefers-color-scheme : #{$preferred-scheme}) {
-				@include _generate-colors($config, $map, false);
-			}
-		}
+	@include _pre-generate-colors($_config)
+}
+
+
+@mixin _pre-generate-colors($config) {
+	$src       : map-get($config, 'src');
+	$map       : $src;
+	$src-theme : null;
+
+	@for $i from 1 through if($src-theme == null, 1, 2) {
+
+		//@if length($src) == 1 {
+		//	@if $src-theme != null and $i > length($map) {
+		//		$map         : $src-theme;
+		//		$dark-scheme : true;
+		//	}
+		//} @else {
+		//	@if $src-theme != null and $i >= length($map) {
+		//		$map         : $src-theme;
+		//		$dark-scheme : true;
+		//	}
+		//}
+
+		@include _generate-colors($config, $map, true);
+
+		//@if $dark-scheme == false {
+		//} @else {
+		//	@media (prefers-color-scheme : #{$theme}) {
+		//		@include _generate-colors($config, $map, false);
+		//	}
+		//}
 	}
 }
 
-@mixin _generate-colors($config, $map, $allowed-utils) {
-	$tints             : map-get($config, 'tints');
-	$shades            : map-get($config, 'shades');
-	$format            : map-get($config, 'format');
-	$prefix-text       : map-get($config, 'prefix-text');
-	$prefix-background : map-get($config, 'prefix-background');
-	$suffix            : map-get($config, 'suffix');
-	$utils             : map-get($config, 'utils');
+@mixin _generate-colors($config, $src, $allowed-utils) {
+	$tints     : map-get($config, 'tints');
+	$shades    : map-get($config, 'shades');
+	$format    : map-get($config, 'format');
+	$prefix    : map-get($config, 'prefix');
+	$prefix-fc : map-get($config, 'prefix-fc');
+	$prefix-bg : map-get($config, 'prefix-bg');
+	$suffix    : map-get($config, 'suffix');
+	$utils     : map-get($config, 'utils');
 
-	$tints : list-reverse($tints);
+	$_suffix   : '';
+	$colors    : ();
 
-	@if $allowed-utils == false {
+
+	//$tints     : list-reverse($tints);
+
+	@if not $allowed-utils {
 		$utils : false;
 	}
 
-	$_suffix           : '';
-	$colors-list       : ();
+	@each $key, $value in $src {
+		@if type-of($tints) == map {
+			@each $_, $v in $tints {
+				$tints : $v;
 
-	@each $key, $value in $map {
-
-		@if $tints != null {
-			@for $x from 1 through length($tints) {
-				$_value      : _get-hsl(mix(white, $value, nth($tints, $x)), $format);
-				$colors-list : append($colors-list, $_value);
+				@debug $v;
 			}
 		}
 
-		$_value      : _get-hsl($value, $format);
-		$colors-list : append($colors-list, $_value);
-
-		@if $shades != null {
-			@for $x from 1 through length($shades) {
-				$_value      : _get-hsl(mix(black, $value, nth($shades, $x)), $format);
-				$colors-list : append($colors-list, $_value);
-			}
-		}
-
-		@for $x from 1 through length($colors-list) {
-			$_suffix             : '-#{get-suffix($suffix, length($colors-list), $x)}';
-			$value               : nth($colors-list, $x);
-
-			--#{$key}#{$_suffix} : #{$value};
-
-			@if $utils {
-				@at-root .#{$prefix-text}#{$key}#{$suffix} {
-					color : var(--#{$key}#{$suffix});
-				}
-				@at-root .#{$prefix-background}#{$key}#{$suffix} {
-					background-color : var(--#{$key}#{$suffix});
-				}
-			}
-		}
-
-		@if false {
+		@if type-of($value) == 'color' {
 			@if $tints != null {
 				@for $x from 1 through length($tints) {
-					$_value              : _get-hsl(mix(white, $value, nth($tints, $x)), $format);
-					$_suffix             : '-#{get-suffix($suffix, length($tints), $x, 'lighter-values')}';
-
-					--#{$key}#{$_suffix} : #{$_value};
-
-					@if $utils {
-						@at-root .#{$prefix-text}#{$key}#{$_suffix} {
-							color : var(--#{$key}#{$_suffix});
-						}
-						@at-root .#{$prefix-background}#{$key}#{$_suffix} {
-							background-color : var(--#{$key}#{$_suffix});
-						}
-					}
+					$_value : color-format(mix(white, $value, nth($tints, $x)), $format);
+					$colors : append($colors, $_value);
 				}
 			}
 
-			$_value              : _get-hsl($value, $format);
-			$_suffix             : '';
-
-			--#{$key}#{$_suffix} : #{$_value}; // The css custom property generated
-
-			@if $utils {
-				@at-root .#{$prefix-text}#{$key}#{$_suffix} {
-					color : var(--#{$key}#{$_suffix});
-				}
-				@at-root .#{$prefix-background}#{$key}#{$_suffix} {
-					background-color : var(--#{$key}#{$_suffix});
-				}
-			}
+			$_value : color-format($value, $format);
+			$colors : append($colors, $_value);
 
 			@if $shades != null {
 				@for $x from 1 through length($shades) {
-					$_value              : _get-hsl(mix(black, $value, nth($shades, $x)), $format);
-					$_suffix             : '-#{get-suffix($suffix, length($shades), $x, 'darker-values')}';
+					$_value : color-format(mix(black, $value, nth($shades, $x)), $format);
+					$colors : append($colors, $_value);
+				}
+			}
+		} @else {
+			$colors : $value;
+		}
 
-					--#{$key}#{$_suffix} : #{$_value}; // The css custom property generated
+		@for $x from 1 through length($colors) {
+			$_suffix                       : '-#{get-suffix($suffix, length($colors), $x)}';
+			$value                         : nth($colors, $x);
 
+			--#{$prefix}#{$key}#{$_suffix} : #{$value};
 
-					@if $utils {
-						@at-root .#{$prefix-text}#{$key}#{$_suffix} {
-							color : var(--#{$key}#{$_suffix});
-						}
-						@at-root .#{$prefix-background}#{$key}#{$_suffix} {
-							background-color : var(--#{$key}#{$_suffix});
-						}
-					}
+			@if $utils {
+				@at-root .#{$prefix-fc}#{$key}#{$_suffix} {
+					color : var(--#{$prefix}#{$key}#{$_suffix});
+				}
+				@at-root .#{$prefix-bg}#{$key}#{$_suffix} {
+					background-color : var(--#{$prefix}#{$key}#{$_suffix});
+
 				}
 			}
 		}
 
-		$colors-list : ();
+		$colors : ();
 	}
 }
 

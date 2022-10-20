@@ -7,17 +7,6 @@
 @use '../list' as *;
 @use '../math' as *;
 
-
-/**
- * Function returns a class selector based on $prefix and $suffix.
- *
- * @author - Martin Kamír
- *
- */
-@function _class-shell($prefix, $suffix) {
-	@return #{$prefix}#{$suffix};
-}
-
 /**
  * Returns list of corresponding suffixes based on $suffix parameter.
  * *
@@ -263,20 +252,6 @@
 }
 
 /**
- * Function returns more specified string.
- *
- * @author - Martin Kamír
- *
- */
-@function _get-name($name, $specified-name) {
-	@if ($specified-name != null) {
-		@return $specified-name;
-	} @else {
-		@return $name;
-	}
-}
-
-/**
  * Returns string of suffix based on current $i in the loop.
  *
  * @author - Martin Kamír
@@ -346,7 +321,7 @@
  */
 @function get-preserved-value($base, $ratio, $preserve, $prefix, $suffix, $i) {
 	@if ($preserve >= $i) {
-		@return math-round(_preservation($base, $ratio, $preserve, $i, $prefix), 2);
+		@return rounded(_preservation($base, $ratio, $preserve, $i, $prefix), 2);
 	} @else if ($preserve + 1 == $i) {
 		@return _preservation($base, $ratio, $preserve, $i, $prefix);
 	} @else {
