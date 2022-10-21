@@ -369,7 +369,7 @@
  */
 @mixin all($config) {
 	@if map-has-key($config, 'font-types') {
-		@include font-types($config);
+		@include fonty-types($config);
 	}
 
 	@if map-has-key($config, 'space-types') {

@@ -55,41 +55,11 @@
 		$_config : deep-merge($_config, map-get($config, $mixin));
 	}
 
-	@include _pre-generate-colors($_config)
+	@include _generate-colors($_config)
 }
 
-
-@mixin _pre-generate-colors($config) {
+@mixin _generate-colors($config) {
 	$src       : map-get($config, 'src');
-	$map       : $src;
-	$src-theme : null;
-
-	@for $i from 1 through if($src-theme == null, 1, 2) {
-
-		//@if length($src) == 1 {
-		//	@if $src-theme != null and $i > length($map) {
-		//		$map         : $src-theme;
-		//		$dark-scheme : true;
-		//	}
-		//} @else {
-		//	@if $src-theme != null and $i >= length($map) {
-		//		$map         : $src-theme;
-		//		$dark-scheme : true;
-		//	}
-		//}
-
-		@include _generate-colors($config, $map, true);
-
-		//@if $dark-scheme == false {
-		//} @else {
-		//	@media (prefers-color-scheme : #{$theme}) {
-		//		@include _generate-colors($config, $map, false);
-		//	}
-		//}
-	}
-}
-
-@mixin _generate-colors($config, $src, $allowed-utils) {
 	$tints     : map-get($config, 'tints');
 	$shades    : map-get($config, 'shades');
 	$format    : map-get($config, 'format');
@@ -99,29 +69,24 @@
 	$suffix    : map-get($config, 'suffix');
 	$utils     : map-get($config, 'utils');
 
+	$_shades   : $shades;
+	$_tints    : $tints;
 	$_suffix   : '';
 	$colors    : ();
 
-
-	//$tints     : list-reverse($tints);
-
-	@if not $allowed-utils {
-		$utils : false;
-	}
-
 	@each $key, $value in $src {
 		@if type-of($tints) == map {
-			@each $_, $v in $tints {
-				$tints : $v;
-
-				@debug $v;
-			}
+			$_tints : map-get($tints, $key);
 		}
 
-		@if type-of($value) == 'color' {
-			@if $tints != null {
-				@for $x from 1 through length($tints) {
-					$_value : color-format(mix(white, $value, nth($tints, $x)), $format);
+		@if type-of($shades) == map {
+			$_shades : map-get($shades, $key);
+		}
+
+		@if type-of($value) == color {
+			@if $_tints != null {
+				@for $x from 1 through length($_tints) {
+					$_value : color-format(mix(white, $value, nth(list-reverse($_tints), $x)), $format);
 					$colors : append($colors, $_value);
 				}
 			}
@@ -129,9 +94,9 @@
 			$_value : color-format($value, $format);
 			$colors : append($colors, $_value);
 
-			@if $shades != null {
-				@for $x from 1 through length($shades) {
-					$_value : color-format(mix(black, $value, nth($shades, $x)), $format);
+			@if $_shades != null {
+				@for $x from 1 through length($_shades) {
+					$_value : color-format(mix(black, $value, nth($_shades, $x)), $format);
 					$colors : append($colors, $_value);
 				}
 			}
