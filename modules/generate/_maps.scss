@@ -31,42 +31,19 @@ $animations      : (
 
 $aspect-ratios   : (
 		'ratio-square' : 1,
-		'ratio-landscape' : math.div(5, 4),
-		'ratio-portrait' : math.div(3, 4),
-		'ratio-widescreen' : math.div(16, 9),
-		'ratio-ultrawide' : math.div(18, 5),
-		'ratio-golden' : math.div(1.618, 1),
+		'ratio-landscape' : '5 / 4',
+		'ratio-portrait' : '3 / 4',
+		'ratio-widescreen' : '16 / 9',
+		'ratio-ultrawide' : '18 / 5',
+		'ratio-golden' : '1.618 / 1',
 ) !default;
-
-$auto-margins    : (
-		'property' : 'auto-margins',
-		'block-center' : 'margin-block',
-		'block-start' : 'margin-block-end',
-		'block-end' : 'margin-block-start',
-		'inline-center' : 'margin-inline',
-		'inline-start' : 'margin-inline-end',
-		'inline-end' : 'margin-inline-start',
-) !default; // refactor
 
 $borders         : (
-		'border-1' : 0.1rem,
-		'border-2 ' : 0.2rem,
-		'border-3 ' : 0.5rem,
-		'border-4 ' : 1rem,
-		'border-5 ' : 2.5rem,
+		'border-1' : 0.1em,
+		'border-2' : 0.2em,
+		'border-3' : 0.5em,
+		'border-4' : 1em,
 ) !default;
-
-$breakpoints     : (
-		'width-xxl': $width-xxl,
-		'width-xl': $width-xl,
-		'width-lg': $width-lg,
-		'width-md': $width-md,
-		'width-sm': $width-sm,
-		'width-xs': $width-xs,
-		'width-xxs': $width-xxs,
-) !default; // refactor
-
-$colors          : () !default;
 
 $easings         : (
 		'ease-1' : cubic-bezier(0.25, 0, 0.5, 1),
@@ -107,52 +84,44 @@ $easings         : (
 ) !default;
 
 $font-weights    : (
+		'utils' : true,
 		'property' : 'font-weight',
-) !default;
-
-$fonts           : (
-		'property' : 'font-family',
+		'fw-1' : 300,
+		'fw-2' : 400,
+		'fw-3' : 500,
+		'fw-4' : 700,
 ) !default;
 
 $letter-spacings : (
-		'property' : 'letter-spacing',
-		'letterspacing-0' : -0.05em,
-		'letterspacing-1' : 0.025em,
-		'letterspacing-2' : 0.05em,
-		'letterspacing-3' : 0.075em,
-		'letterspacing-4' : 0.15em,
-		'letterspacing-5' : 0.5em,
-		'letterspacing-6' : 0.75em,
-		'letterspacing-7' : 1em,
+		'letter-spacing-1' : -0.05em,
+		'letter-spacing-2' : 0.025em,
+		'letter-spacing-3' : 0.05em,
+		'letter-spacing-4' : 0.075em,
+		'letter-spacing-5' : 0.15em,
+		'letter-spacing-6' : 0.5em,
+		'letter-spacing-7' : 0.75em,
+		'letter-spacing-8' : 1em,
 ) !default;
 
 $line-heights    : (
-		'property' : 'line-height',
 		'lineheight-1' : 0.95,
-		'lineheight-2' : 1,
-		'lineheight-3' : 1.1,
-		'lineheight-4' : 1.25,
-		'lineheight-5' : 1.375,
-		'lineheight-6' : 1.5,
-		'lineheight-7' : 1.6,
-		'lineheight-8' : 1.7,
-		'lineheight-9' : 2,
+		'lineheight-2' : 1.1,
+		'lineheight-3' : 1.25,
+		'lineheight-4' : 1.5,
+		'lineheight-5' : 1.6,
 ) !default;
 
 $measures        : (
+		'utils' : true,
 		'property' : '--measure',
 		'measure-1' : 10ch,
 		'measure-2' : 30ch,
-		'measure-3' : 45ch,
 		'measure-4' : 50ch,
 		'measure-5' : 60ch,
 		'measure-6' : 72ch,
-		'measure-7' : 83ch,
-		'measure-8' : 95ch,
 ) !default;
 
 $radius          : (
-		'property' : 'border-radius',
 		'radius-1 ' : 0.2rem,
 		'radius-2 ' : 0.5rem,
 		'radius-3 ' : 1rem,
@@ -164,19 +133,7 @@ $radius          : (
 		'radius-pill' : 100vmax,
 ) !default;
 
-$ratios          : (
-		'minor-second' : 1.067,
-		'major-second': 1.125,
-		'minor-third' : 1.200,
-		'major-third' : 1.250,
-		'perfect-fourth' : 1.333,
-		'augmented fourth' : 1.414,
-		'perfect-fifth' : 1.500,
-		'golden-ratio' : 1.618
-) !default;
-
 $shadows         : (
-		'property' : 'box-shadow',
 		'shadow-color' : 220 3% 15%,
 		'shadow-strength' : 1%,
 		'shadow-1' : '0 1px 2px -1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%))',
@@ -190,7 +147,31 @@ $shadows         : (
 		'shadow-inner-3' : inset 0 1px 4px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
 		'shadow-inner-4' : inset 0 2px 8px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
 		'shadow-inner-5' : inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
-) !default; // refactor
+) !default;
+
+//////////////////////
+//// Private maps ////
+//////////////////////
+$breakpoints     : (
+		'width-xxl': $width-xxl,
+		'width-xl': $width-xl,
+		'width-lg': $width-lg,
+		'width-md': $width-md,
+		'width-sm': $width-sm,
+		'width-xs': $width-xs,
+		'width-xxs': $width-xxs,
+);
+
+$ratios          : (
+		'minor-second' : 1.067,
+		'major-second': 1.125,
+		'minor-third' : 1.200,
+		'major-third' : 1.250,
+		'perfect-fourth' : 1.333,
+		'augmented fourth' : 1.414,
+		'perfect-fifth' : 1.500,
+		'golden-ratio' : 1.618
+);
 
 $suffixes        : (
 		'nato' : (
@@ -247,4 +228,4 @@ $suffixes        : (
 						'micro', 'micro-2', 'micro-3', 'atomic', 'atomic-2', 'atomic-3',
 				),
 		),
-) !default;
+);

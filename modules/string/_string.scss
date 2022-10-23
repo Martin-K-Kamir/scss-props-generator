@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+/*
+/// Replace a string with another string.
+/// @access public
+/// @param $value {string} - String to be used.
+/// @param $search {string} - Search a part of the string to be replaced.
+/// @param $replace {string} - String to be used instead of the replaced string. As default is an empty string, which will remove the replaced string.
+/// @return {string} - New string.
+ */
 @function string-replace($value, $search, $replace: '') {
 	$string : #{$value};
 	$index : str-index(#{$string}, $search);

@@ -1,148 +1,18 @@
 @charset "UTF-8";
 @use 'sass:map' as *;
 @use 'mixins' as *;
+@forward 'maps' hide $breakpoints, $ratios, $suffixes;
 
-/**
- * Mixin to generate utility classes from a map.
- *
- * @author - Martin Kamír
- *
- * @param $params {map/string} - Parameter accepts multiple maps to generate classes from or a string such as 'predefined'
- * to generate predefined classes or accepts 'config' to generate classes from the config map.
- *
- * Example of config:
- * $config : ( - Name of the map must be always 'config'
- *  	'classes' : ( - Important key from this key the 'generator' mixin will know call this mixin.
- *  		'predefined' : {boolean} - If true, predefined css properties will be generated.
- *  		'src' : {list} - List of maps to generate css properties from.
- *  	),
- * );
- */
-@mixin classes($params...) {
-	$property     : null;
-	$auto-margins : false;
-	$i            : 0;
+@mixin utilities(
+	$config: null,
+	$auto: false,
+	$src: null,
+) {
 
-	@if $params == (config,) {
-		$params : map-get($config, 'classes');
-	}
+	$mixin : 'utilities';
 
-	// If the $params is a string 'predefined' or $predefined is true from config, generate predefined css properties.
-	@if $params == (predefined,) or $params == 'predefined' {
-		$params : ($map-for-font-weights, $map-for-letter-spacings, $map-for-lineheights, $map-for-shadows);
-	}
-
-	// Main loop to output css properties.
-	@each $param in $params {
-		$map : $param;
-
-		// Check if the map has a key 'property'. If so add the property value to the $property variable and remove it from the map.
-		@if map-has-key($map, 'property') {
-			$property : map-get($map, 'property');
-			$map      : map-remove($map, 'property');
-
-			@if $property == 'auto-margins' {
-				$auto-margins : true;
-			}
-		}
-
-		// Remove the 'shadow-color' key from the map.
-		@if map-has-key($map, 'shadow-color') {
-			$map : map-remove($map, 'shadow-color');
-		}
-
-		// Remove the 'shadow-strength' key from the map.
-		@if map-has-key($map, 'shadow-strength') {
-			$map : map-remove($map, 'shadow-strength');
-		}
-
-		@if $auto-margins == true {
-			@each $key, $property in $map {
-				@at-root .#{$key} {
-					#{$property} : auto;
-				}
-
-				@each $screen, $breakpoint in $map-for-breakpoints {
-					@at-root .#{$key}\/#{$screen} {
-						@include breakpoint(max, $breakpoint) {
-							#{$property} : auto;
-						}
-					}
-				}
-
-				$i : $i + 1;
-				@if $i == length($map) {
-					$auto-margins : false;
-				}
-			}
-		} @else {
-			@each $key, $value in $map {
-				@at-root .#{$key} {
-					#{$property} : var(--#{$key});
-				}
-			}
-		}
-
-	}
+	@include compile-utilities-config($config, $mixin, $auto, $src);
 }
-
-/**
- * Mixin to generate css properties(variables) from a map.
- *
- * NOTE: This mixin is also used in the 'generator' mixin.
- * NOTE: This mixin is similar to the 'generate-classes' mixin, but it generates utility classes instead of css properties.
- *
- * @author - Martin Kamír
- *
- * @param $params {map/string} - Parameter accepts multiple maps to generate css properties from or a string such as 'predefined'
- * to generate predefined css properties or accepts 'config' to generate css properties from the config map.
- *
- * Example of config:
- * $config : ( - Name of the map must be always 'config'
- *  	'properties' : ( - Important key from this key the 'generator' mixin will know call this mixin.
- *  		'predefined' : {boolean} - If true, predefined css properties will be generated.
- *  		'src' : {list} - List of maps to generate css properties from.
- *  	),
- * );
- */
-@mixin properties($params...) {
-	$predefined : null;
-
-	@if $params == (config,) {
-		$params : map-get($config, 'properties');
-	}
-
-	// If the $params is a string 'predefined' or $predefined is true from config, generate predefined css properties.
-	@if $params == (predefined,) or $params == 'predefined' {
-		$params : (
-				$map-for-easing,
-				$map-for-animations,
-				$map-for-aspect-ratios,
-				$map-for-borders,
-				$map-for-radius,
-				$map-for-content-sizes,
-				$map-for-font-weights,
-				$map-for-letter-spacings,
-				$map-for-lineheights,
-				$map-for-shadows
-		);
-	}
-
-	// Main loop to output css properties.
-	@each $param in $params {
-		$map : $param;
-
-		// Check if the map has a key 'property'. If so remove that key.
-		@if map-has-key($map, 'property') {
-			$map : map-remove($map, 'property');
-		}
-
-		@each $key, $value in $map {
-			--#{$key} : #{$value};
-		}
-	}
-}
-
 
 @mixin colors(
 	$config: null,
@@ -152,36 +22,16 @@
 	$format: 'hsl()',
 	$utils: true,
 	$prefix: 'clr-',
-	$prefix-fc: 'fc-',
+	$prefix-color: 'fc-',
 	$prefix-bg: 'bg-',
 	$suffix: 'numeric',
-	$themes: null,
 ) {
 
 	$mixin : 'colors';
 
-	@include compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $utils, $prefix, $prefix-fc, $prefix-bg, $suffix, $themes);
+	@include compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $utils, $prefix, $prefix-color, $prefix-bg, $suffix);
 }
 
-/**
- * Mixin for generating fluid font-size types scale.
- *
- * @author - Martin Kamír
- *
- * @param $config {map} - Config map uses same parameters as below, but can be defined 'breakpoints' and 'break-at' keys to generate breakpoints.
- * @param $base {calculation} - The base value. Calculation must be clamp().
- * @param $ratio {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
- * @param $length {number} - The length of the scale. Number must be with unit.
- * @param $utils {boolean} - Defines if the utility classes should be generated.
- * @param $prefix {string} - Defines the name of css property and utility classes.
- * @param $prefix-class {string} - Defines the name of utility classes.
- * @param $prefix-variable {string} - Defines the name of css property.
- * @param $suffix {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
- * @param $suffix-class {string} - Defines the name of utility classes.
- * @param $suffix-variable {string} - Defines the name of css property.
- * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
- *
- */
 @mixin fluid-font-types(
 	$config: null,
 	$base: null,
@@ -189,10 +39,10 @@
 	$length: null,
 	$utils: true,
 	$src: null,
-	$prefix: 'f-fluid-',
+	$prefix: 'fs-fluid-',
 	$suffix: 'numeric') {
 
-	$preserve : 0;
+	$preserve : 0; // Removed from the config
 
 	$mixin    : 'fluid-font-types';
 	$property : 'font-size';
@@ -200,25 +50,6 @@
 	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
-/**
- * Mixin for generating fluid space types scale.
- *
- * @author - Martin Kamír
- *
- * @param $config {map} - Config map uses same parameters as below, but can be defined 'breakpoints' and 'break-at' keys to generate breakpoints.
- * @param $base {calculation} - The base value. Calculation must be clamp().
- * @param $ratio {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
- * @param $length {number} - The length of the scale. Number must be with unit.
- * @param $utils {boolean} - Defines if the utility classes should be generated.
- * @param $prefix {string} - Defines the name of css property and utility classes.
- * @param $prefix-class {string} - Defines the name of utility classes.
- * @param $prefix-variable {string} - Defines the name of css property.
- * @param $suffix {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
- * @param $suffix-class {string} - Defines the name of utility classes.
- * @param $suffix-variable {string} - Defines the name of css property.
- * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
- *
- */
 @mixin fluid-space-types(
 	$config: null,
 	$base: null,
@@ -226,11 +57,10 @@
 	$length: null,
 	$utils: true,
 	$src: null,
-	$prefix: 'fluid-space-types-',
+	$prefix: 'space-fluid-',
 	$suffix: 'numeric') {
 
-	// $preserve and $scale are removed from mixin's parameters because they have no meaning to be used.
-	$preserve : 0;
+	$preserve : 0; // Removed from the config
 
 	$mixin    : 'fluid-space-types';
 	$property : '--space';
@@ -238,27 +68,6 @@
 	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
-/**
- * Mixin for generating font-size types scale.
- *
- * @author - Martin Kamír
- *
- * @param $config {map} - Config map uses same parameters as below, but can be defined 'breakpoints' and 'break-at' keys to generate breakpoints.
- * @param $base {number} - The base value. Number must be with unit.
- * @param $ratio {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
- * @param $length {number} - The length of the scale. Number must be with unit.
- * @param $preserve {number} - The number of how many css properties will be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
- * @param $utils {boolean} - Defines if the utility classes should be generated.
- * @param $prefix {string} - Defines the name of css property and utility classes.
- * @param $prefix-class {string} - Defines the name of utility classes.
- * @param $prefix-variable {string} - Defines the name of css property.
- * @param $suffix {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
- * @param $suffix-class {string} - Defines the name of utility classes.
- * @param $suffix-variable {string} - Defines the name of css property.
- * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
- * @param $scale {number} - Scale the values from src. Number must use percentage unit.
- *
- */
 @mixin font-types(
 	$config: null,
 	$base: null,
@@ -276,26 +85,6 @@
 	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
-/**
- * Mixin for generating space types scale.
- *
- * @author - Martin Kamír
- *
- * @param $config {map} - Config map uses same parameters as below, but can be defined 'breakpoints' and 'break-at' keys to generate breakpoints.
- * @param $base {number} - The base value. Number must be with unit.
- * @param $ratio {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
- * @param $length {number} - The length of the scale. Number must be with unit.
- * @param $preserve {number} - The number of how many css properties will be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
- * @param $utils {boolean} - Defines if the utility classes should be generated.
- * @param $prefix {string} - Defines the name of css property and utility classes.
- * @param $prefix-class {string} - Defines the name of utility classes.
- * @param $prefix-variable {string} - Defines the name of css property.
- * @param $suffix {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
- * @param $suffix-class {string} - Defines the name of utility classes.
- * @param $suffix-variable {string} - Defines the name of css property.
- * @param $src {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
- * @param $scale {number} - Scale the values from src. Number must use percentage unit.
- */
 @mixin space-types(
 	$config: null,
 	$base: null,
@@ -313,63 +102,48 @@
 	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
 }
 
-/**
- * Main generator mixin, which can call other mixins and output various types of css properties based on the config.
- *
- * @author - Martin Kamír
- *
- * Example of config:
- * $config: (
- *  font-types' : ( - From this key the generate-font-types mixin will be called with given values from config map.
- *  	'base' {number} - The base value. Number must be with unit.
- *  	'ratio' {number/string} - The ratio value. Number must be with no unit. Using string from $map-for-ratios.
- *  	'length' {number} - The length of the generated css properties. Number must be with no unit.
- *  	'preserve' {number} - The number of how many css properties will be preserved. Means if we change the base or ratio value, the preserved css properties will not be changed. Number must be with no unit.
- *  	'utility-classes' {boolean} - Defines if the utility classes should be generated.
- *  	'prefix' {string} - Defines the name of css property and utility classes.
- *  	'prefix-class' {string} - Defines the name of utility classes.
- *  	'prefix-variable' {string} - Defines the name of css property.
- *  	'suffix' {string} - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
- *  	'suffix-class' {string} - Defines the name of utility classes.
- *  	'suffix-variable' {string} - Defines the name of css property.
- *  	'src' {list, map} - Defining the source of custom values from list or map. src can't be use with ratio, base, length, preserve. Using map prevents having prefix and suffix, because the keys will be used as the css property names.
- *  	'scale' {number} - Scale the values from src. Number must use percentage unit.
- *  	'break-at' {string} - Defines the min-width or max-width of the breakpoint by calling 'min' or 'max'.
- *  	'breakpoints' {map}  - Defines the breakpoints and their values. Key is the breakpoint value from $map-for-breakpoints and value is the value in that breakpoint. The value can be a list of values, map of values or (ratio: number) or (base: number).
- *  	),
- *  'space-types' : ( - From this key the generate-space-types mixin will be called with given values from config map.
- *  	Using the same parameters as in font-types.
- *  	),
- *  fluid-font-types' : ( - From this key the generate-color-types mixin will be called with given values from config map.
- *  	Using the same parameters as in font-types, but parameters 'scale' and 'preserve' are not allowed.
- *  	),
- *  'fluid-space-types' : ( - From this key the generate-space-types mixin will be called with given values from config map.
- *  	Using the same parameters as in font-types, but parameters 'scale' and 'preserve' are not allowed.
- *  	),
- *  color-types' : ( - From this key the generate-color-types mixin will be called with given values from config map.
- *  	'config' {map} - Config map uses same parameters as below.
- *  	'src' {map} - The source values of colors.
- *  	'src-scheme' {map} - The source values of colors for preferred color scheme.
- *  	'tints' {list} - Defining the values for tints of colors as percentages. Based on the source values at $src/$src-scheme the color tints will be produced of given values.
- *  	'shades' {list} - Same as $tints but for shades.
- *  	'format' {string} - Defines if the colors should be generated in HSL format as hsl 'function'(hsl(350deg, 100%, 100%)) or plain 'numbers' (350deg, 100%, 100%).
- *  	'utility-classes' {boolean} - Defines if the utility classes should be generated.
- *  	'prefix-text' {string} - Defines the name of utility classes for the color property.
- *  	'prefix-bg' {string} - Defines the name of utility classes for the background property.
- *  	'suffix {string}' - Defines the order of the css properties and utility classes. Suffix has many options from $map-for-suffixes, or using numeric, numeric-hundreds suffixes. Also custom suffixes can be used.
- *  	'preferred-scheme' {string} - Defines the preferred color scheme at media query for 'dark' and 'light'.
- *  	),
- *  'classes' : ( - From this key the generate-classes mixin will be called with given values from config map.
- *  	'predefined' : {boolean} - If true, predefined css properties will be generated.
- *  	'src' : {list} - List of maps to generate css properties from.
- *  ),
- *  'properties' : ( - From this key the generate-properties mixin will be called with given values from config map.
- *  	Using the same parameters as in classes.
- *  ),
+/*
+/// Main generator mixin, which can call other mixins and output various types of css properties based on the config.
+/// @author - Martin Kamír
+/// @access public
+/// @example: $config: (
+/// font-types' / 'space-types' : (
+/// 	'base' {number} - Accepts a number with unit.
+/// 	'ratio' {number/string} - Accepts a integer or string from $ratios map.
+/// 	'length' {number} - The length of the generated css properties. Number must be with no unit.
+/// 	'preserve' {number} - The number of how many css properties will be preserved. Means the values will ignore any future changes of $base and $ratio.
+/// 	'utils' {boolean} - Enables or disables the generation of utility classes.
+/// 	'prefix' {string} - The name of css property and utility classes.
+/// 	'suffix' {string} - Defines the order of the css properties and utility classes. Suffix has many options from $suffixes map, or using numeric, numeric-hundreds. Also custom suffixes can be used as list.
+/// 	'src' {list, map} - Source of custom values from list or map.
+/// 	'break-at' {string} - Defines the min-width or max-width of the breakpoint by calling 'min' or 'max'.
+/// 	'breakpoints' {map}  - Defines the breakpoints and values to be changed.
+/// 	),
+/// fluid-font-types' / 'fluid-space-types' : (
+/// 	'base' {number/map} - Accepts a number with unit or map for fluid scaling with keys 'min' and 'max' with values of numbers with units.
+/// 	'ratio' {number/string/map} - Accepts a integer or string from $ratios map or map for fluid scaling with keys 'min' and 'max' with values of integers or strings from $ratios map.
+///     THE REST IS SAME as 'font-types' / 'space-types' configuration
+/// 	),
+/// colors' : (
+/// 	'src' {map} - The source values of colors.
+/// 	'tints' {list} - Defining the values for tints of colors as percentages.
+/// 	'shades' {list} - Same as $tints but for shades.
+/// 	'format' {string} - Defines the output color format.
+/// 	'utils' {boolean} - Enables or disables the generation of utility classes.
+/// 	'prefix' {string} - Defines the prefix for generated css variable.
+/// 	'prefix-text' {string} - Defines the name of utility classes for the color property.
+/// 	'prefix-bg' {string} - Defines the name of utility classes for the background property.
+/// 	'suffix' {string} - Defines the order of the css properties and utility classes. Suffix has many options from $suffixes map, or using numeric, numeric-hundreds. Also custom suffixes can be used as list.
+/// 	),
+/// 'utilities' : (
+/// 	'auto' {boolean} - Enables if all predefined maps should be generated.
+/// 	'src' {map} - The source maps to generate.
+/// 	),
+/// The utilities generator also gives ability for source maps to be able generate utility classes with key 'utils' to true and key 'property' to be used.
  */
 @mixin all($config) {
 	@if map-has-key($config, 'font-types') {
-		@include fonty-types($config);
+		@include font-types($config);
 	}
 
 	@if map-has-key($config, 'space-types') {
@@ -388,11 +162,7 @@
 		@include colors($config);
 	}
 
-	@if map-has-key($config, 'classes') {
-		@include classes(config);
-	}
-
-	@if map-has-key($config, 'properties') {
-		@include properties(config);
+	@if map-has-key($config, 'utilities') {
+		@include utilities($config);
 	}
 }

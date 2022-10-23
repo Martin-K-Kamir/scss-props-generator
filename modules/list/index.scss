@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+/*
+/// Converts map to list.
+/// @access public
+/// @param $value {map} - Map to be converted.
+/// @param $keep {string} - The key/values to be kept. Available options: 'keys', 'values' , 'both'.
+/// @return {list} - Converted list.
+ */
 @function list-converted($value, $keep: 'both') {
 	$keep : if(index('keys' 'values', $keep), $keep, 'both');
 
@@ -24,12 +31,19 @@
 	@return if(type-of($value) != 'list', ($value,), $value);
 }
 
+/*
+/// Reverse order of values in list.
+/// @access public
+/// @param $list {list} - List to be reversed.
+/// @param $recursive {boolean}
+/// @return {list} - Reversed list.
+ */
 @function list-reverse($list, $recursive: false) {
 	$result : ();
 
 	@for $i from length($list) * -1 through -1 {
 		@if type-of(nth($list, abs($i))) == list and $recursive {
-			$result : append($result, _list-reverse(nth($list, abs($i)), $recursive));
+			$result : append($result, list-reverse(nth($list, abs($i)), $recursive));
 		} @else {
 			$result : append($result, nth($list, abs($i)));
 		}
@@ -38,6 +52,14 @@
 	@return $result;
 }
 
+/*
+/// Slice values from list.
+/// @access public
+/// @param $list {list} - List to be sliced.
+/// @param $start {number} - Start index.
+/// @param $end {number} - End index. As default is the length of the list.
+/// @return {list} - Sliced list.
+ */
 @function list-slice($list, $start: 1, $end: length($list)) {
 	$result : null;
 

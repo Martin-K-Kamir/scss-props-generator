@@ -1,37 +1,54 @@
 @charset "UTF-8";
-@use 'sass:math';
+@use 'sass:math' as *;
 
-// Unit Functions
+/*
+/// Functions to check if a number has a corresponding unit.
+/// @access public
+/// @author - Martin Kamír
+/// @param $value {number} - The value.
+*/
 @function is-number($value) {
 	@return type-of($value) == 'number';
 }
+
 @function is-px($value) {
 	@return is-number($value) and unit($value) == "px";
 }
+
 @function is-em($value) {
 	@return is-number($value) and unit($value) == "em";
 }
+
 @function is-rem($value) {
 	@return is-number($value) and unit($value) == "rem";
 }
+
 @function is-percentage($value) {
 	@return is-number($value) and unit($value) == "%";
 }
+
 @function is-vw($value) {
 	@return is-number($value) and unit($value) == "vw";
 }
+
 @function is-vh($value) {
 	@return is-number($value) and unit($value) == "vh";
 }
+
 @function is-vmin($value) {
 	@return is-number($value) and unit($value) == "vmin";
 }
+
 @function is-vmax($value) {
 	@return is-number($value) and unit($value) == "vmax";
 }
 
-
-// Convert Functions
+/*
+/// Functions to convert a number to a corresponding unit.
+/// @access public
+/// @author - Martin Kamír
+/// @param $value {number} - The value.
+*/
 @function to-number($value) {
 	@if type-of($value) == 'number' {
 		@return $value;
@@ -52,46 +69,65 @@
 				$result : $result * 10 + map-get($numbers, $character);
 			} @else {
 				$digits : $digits * 10;
-				$result : $result + math.div(map-get($numbers, $character), $digits);
+				$result : $result + div(map-get($numbers, $character), $digits);
 			}
 		}
 	}
 
 	@return if($minus, -$result, $result);
 }
+
 @function px-to-rem($px) {
-	$rems : math.div($px, 16px) * 1rem;
+	$rems : div($px, 16px) * 1rem;
 	@return $rems;
 }
+
 @function px-to-em($px) {
-	$ems : math.div($px, 16px) * 1em;
+	$ems : div($px, 16px) * 1em;
 	@return $ems;
 }
+
 @function em-to-px($em) {
-	$pxs : math.div($em, 1em) * 16px;
+	$pxs : div($em, 1em) * 16px;
 	@return $pxs;
 }
+
 @function em-to-rem($em) {
-	$rems : math.div($em, 1em) * 1rem;
+	$rems : div($em, 1em) * 1rem;
 	@return $rems;
 }
+
 @function rem-to-px($rem) {
-	$pxs : math.div($rem, 1rem) * 16px;
+	$pxs : div($rem, 1rem) * 16px;
 	@return $pxs;
 }
+
 @function rem-to-em($rem) {
-	$ems : math.div($rem, 1rem) * 1em;
+	$ems : div($rem, 1rem) * 1em;
 	@return $ems;
 }
 
+/*
+/// Stripe unit from a number.
+/// @access public
+/// @param $number {number}
+/// @return {number} - Unitless number.
+*/
 @function strip-unit($number) {
-  @if type-of($number) == 'number' and not unitless($number) {
-    @return $number / ($number * 0 + 1);
-  }
+	@if type-of($number) == 'number' and not unitless($number) {
+		@return $number / ($number * 0 + 1);
+	}
 
-  @return $number;
+	@return $number;
 }
 
+/*
+/// Round a number to a given precision.
+/// @access public
+/// @param $number {number}
+/// @param $places {number} - The number of decimal places to round to.
+/// @return {number} - Rounded number.
+*/
 @function rounded($number, $places: 0) {
 	$n : 1;
 	@if $places > 0 {
@@ -99,10 +135,16 @@
 			$n : $n * 10;
 		}
 	}
-	@return math.div(math.round($number * $n), $n);
+	@return div(round($number * $n), $n);
 }
 
-// refactor
+/*
+/// Round a number to a given precision.
+/// @access public
+/// @param $number {number}
+/// @param $places {number} - The number of decimal places to round to.
+/// @return {number} - Rounded number.
+ */
 @function scale($number, $scale: 100%) {
 	@if (type-of($scale) != number) {
 		@error 'Invalid type value: parameter $scale must be a number.';
@@ -120,10 +162,21 @@
 	}
 
 	$scale : strip-unit($scale);
-	@return math.div($number, 100) * $scale
+	@return div($number, 100) * $scale
 }
 
-@function clamped($min-value, $max-value, $min-width, $max-width) {
+/*
+/// Clamp a number between a minimum and maximum value based on the screen width.
+/// @author - Aleksandr Hovhannisyan (https://www.aleksandrhovhannisyan.com/blog/fluid-type-scale-with-css-clamp/)
+/// I have modified the original function to work with multiple units and print out errors if function is called with invalid parameters.
+/// @access public
+/// @param $min-value {number} - Minimum value.
+/// @param $max-value {number} - Maximum value.
+/// @param $min-width {number} - Minimum breakpoint value.
+/// @param $max-width {number} - Maximum breakpoint value.
+/// @return {number} - Clamp function.
+ */
+@function clamped($min-value, $max-value, $min-width : 22.5em, $max-width : 90em) {
 	$value-unit : null;
 	$width-unit : null;
 	$params : ($min-value, $max-value, $min-width, $max-width);
@@ -168,7 +221,7 @@
 		$max-width : em-to-px($max-width);
 	}
 
-	$slope : math.div($max-value - $min-value, $max-width - $min-width);
+	$slope : div($max-value - $min-value, $max-width - $min-width);
 	$slope-vw : rounded($slope * 100, 2);
 	$intercept-rems : rounded(px-to-rem($min-value - $slope * $min-width), 2);
 
@@ -183,11 +236,20 @@
 	@return clamp(#{$min-value}, #{$slope-vw}vw + #{$intercept-rems}, #{$max-value});
 }
 
-@function layer($name) {
-	@if index($list-of-layers, $name) {
-		@return (length($list-of-layers) - index($list-of-layers, $name))+1;
+/*
+/// Keeps track of layer's index.
+/// @access public
+/// @param $layer-name {string} - Name of the layer.
+/// @param $index {number} - The base index from which to calculate the layer index.
+/// @return {number} - Index number of layer.
+ */
+$list-of-layers : ('base') !default;
+$start-index    : 1 !default;
+@function layer($layer-name, $index: $start-index) {
+	@if index($list-of-layers, $layer-name) {
+		@return (length($list-of-layers) - index($list-of-layers, $layer-name))+$index;
 	} @else {
-		@warn 'There is no item "#{$name}" in this list; choose one of: #{$list-of-layers}';
+		@warn 'There is no item "#{$layer-name}" in this list; choose one of: #{$list-of-layers}';
 		@return null;
 	}
 }
