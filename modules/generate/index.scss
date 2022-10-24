@@ -1,7 +1,9 @@
 @charset "UTF-8";
+@forward 'variables';
+@forward 'maps' hide $breakpoints, $ratios, $suffixes;
 @use 'sass:map' as *;
 @use 'mixins' as *;
-@forward 'maps' hide $breakpoints, $ratios, $suffixes;
+@use 'variables' as *;
 
 @mixin utilities(
 	$config: null,
@@ -19,87 +21,87 @@
 	$src: null,
 	$tints: null,
 	$shades: null,
-	$format: 'hsl()',
-	$utils: true,
-	$prefix: 'clr-',
-	$prefix-color: 'fc-',
-	$prefix-bg: 'bg-',
-	$suffix: 'numeric',
+	$format: $colors-format,
+	$prefix: $colors-prefix,
+	$suffix: $colors-suffix,
+	$utils: $colors-utils,
+	$utils-property-color: $colors-utils-property-color,
+	$utils-property-bg: $colors-utils-property-bg,
+	$utils-prefix-color: $colors-utils-prefix-color,
+	$utils-prefix-bg: $colors-utils-prefix-bg,
 ) {
 
 	$mixin : 'colors';
 
-	@include compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $utils, $prefix, $prefix-color, $prefix-bg, $suffix);
+	@include compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $prefix, $suffix, $utils, $utils-property-color, $utils-property-bg, $utils-prefix-color, $utils-prefix-bg);
 }
 
 @mixin fluid-font-types(
 	$config: null,
+	$src: null,
 	$base: null,
 	$ratio: null,
 	$length: null,
-	$utils: true,
-	$src: null,
-	$prefix: 'fs-fluid-',
-	$suffix: 'numeric') {
-
-	$preserve : 0; // Removed from the config
+	$clamp: null,
+	$prefix: $fluid-font-types-prefix,
+	$suffix: $fluid-font-types-suffix,
+	$utils: $fluid-font-types-utils,
+	$utils-property: $fluid-font-types-utils-property) {
 
 	$mixin    : 'fluid-font-types';
-	$property : 'font-size';
-
-	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	$preserve : 0;
+	@include compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp, $preserve, $prefix, $suffix, $utils, $utils-property);
 }
 
 @mixin fluid-space-types(
 	$config: null,
+	$src: null,
 	$base: null,
 	$ratio: null,
 	$length: null,
-	$utils: true,
-	$src: null,
-	$prefix: 'space-fluid-',
-	$suffix: 'numeric') {
-
-	$preserve : 0; // Removed from the config
+	$clamp: null,
+	$prefix: $fluid-space-types-prefix,
+	$suffix: $fluid-space-types-suffix,
+	$utils: $fluid-space-types-utils,
+	$utils-property: $fluid-space-types-utils-property) {
 
 	$mixin    : 'fluid-space-types';
-	$property : '--space';
-
-	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	$preserve : 0;
+	@include compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp, $preserve, $prefix, $suffix, $utils, $utils-property);
 }
 
 @mixin font-types(
 	$config: null,
+	$src: null,
 	$base: null,
 	$ratio: null,
 	$length: null,
 	$preserve: 0,
-	$utils: true,
-	$src: null,
-	$prefix: 'fs-',
-	$suffix: 'numeric') {
+	$prefix: $font-types-prefix,
+	$suffix: $font-types-suffix,
+	$utils: $font-types-utils,
+	$utils-property: $font-types-utils-property) {
 
-	$mixin    : 'font-types';
-	$property : 'font-size';
-
-	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	$mixin : 'font-types';
+	$clamp : null;
+	@include compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp, $preserve, $prefix, $suffix, $utils, $utils-property);
 }
 
 @mixin space-types(
 	$config: null,
+	$src: null,
 	$base: null,
 	$ratio: null,
 	$length: null,
 	$preserve: 0,
-	$utils: true,
-	$src: null,
-	$prefix: 'space-',
-	$suffix: 'numeric') {
+	$prefix: $space-types-prefix,
+	$suffix: $space-types-suffix,
+	$utils: $space-types-utils,
+	$utils-property: $space-types-utils-property) {
 
-	$mixin    : 'space-types';
-	$property : '--space';
-
-	@include compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix);
+	$mixin : 'space-types';
+	$clamp : null;
+	@include compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp, $preserve, $prefix, $suffix, $utils, $utils-property);
 }
 
 /*

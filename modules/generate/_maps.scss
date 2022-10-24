@@ -1,6 +1,5 @@
 @charset "UTF-8";
 @use 'sass:math';
-@use 'variables' as *;
 
 $animations      : (
 		'animation-fade-in': fade-in 0.5s var(--ease-3),
@@ -85,7 +84,7 @@ $easings         : (
 
 $font-weights    : (
 		'utils' : true,
-		'property' : 'font-weight',
+		'utils-property' : 'font-weight',
 		'fw-1' : 300,
 		'fw-2' : 400,
 		'fw-3' : 500,
@@ -153,13 +152,13 @@ $shadows         : (
 //// Private maps ////
 //////////////////////
 $breakpoints     : (
-		'width-xxl': $width-xxl,
-		'width-xl': $width-xl,
-		'width-lg': $width-lg,
-		'width-md': $width-md,
-		'width-sm': $width-sm,
-		'width-xs': $width-xs,
-		'width-xxs': $width-xxs,
+		'width-xxl': 120em,
+		'width-xl': 90em,
+		'width-lg': 64em,
+		'width-md': 48em,
+		'width-sm': 30em,
+		'width-xs': 22.5em,
+		'width-xxs': 20.625em,
 );
 
 $ratios          : (

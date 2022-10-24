@@ -7,27 +7,26 @@
 @use '../color' as *;
 @use 'functions' as *;
 @use 'maps' as map-of;
-@use 'variables' as *;
-@forward 'variables';
 
 /*
 /// Compiles the configuration maps
 /// @access private
 /// @author - Martin Kamír
 */
-@mixin compile-types-config($config, $mixin, $property, $base, $ratio, $length, $preserve, $utils, $src, $prefix, $suffix) {
+@mixin compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp, $preserve, $prefix, $suffix, $utils, $utils-property) {
 
 	$_config : (
 			'mixin': $mixin,
-			'property' : $property,
+			'src' : $src,
 			'base' : $base,
 			'ratio' : $ratio,
 			'length' : $length,
+			'clamp' : $clamp,
 			'preserve' : $preserve,
-			'utils' : $utils,
-			'src' : $src,
 			'prefix' : $prefix,
 			'suffix' : $suffix,
+			'utils' : $utils,
+			'utils-property' : $utils-property,
 	);
 
 	@if $config != null {
@@ -38,18 +37,21 @@
 	@include _generate-types-scale($_config)
 }
 
-@mixin compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $utils, $prefix, $prefix-color, $prefix-bg, $suffix) {
+@mixin compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $prefix, $suffix, $utils, $utils-property-color, $utils-property-bg, $utils-prefix-color, $utils-prefix-bg) {
 
 	$_config : (
+			'mixin': $mixin,
 			'src' : $src,
 			'tints' : $tints,
 			'shades' : $shades,
 			'format' : $format,
-			'utils' : $utils,
 			'prefix' : $prefix,
-			'prefix-text' : $prefix-color,
-			'prefix-bg' : $prefix-bg,
 			'suffix' : $suffix,
+			'utils' : $utils,
+			'utils-property-color' : $utils-property-color,
+			'utils-property-bg' : $utils-property-bg,
+			'utils-prefix-text' : $utils-prefix-color,
+			'utils-prefix-bg' : $utils-prefix-bg,
 	);
 
 	@if $config != null {
@@ -63,6 +65,7 @@
 @mixin compile-utilities-config($config, $mixin, $auto, $src) {
 
 	$_config : (
+			'mixin' : $mixin,
 			'auto' : $auto,
 			'src' : $src,
 	);
@@ -71,6 +74,7 @@
 		$_config : deep-merge($_config, map-get($config, $mixin));
 	}
 
+	@include _validate-utilities-config($_config);
 	@include _generate-utilities($_config)
 }
 
@@ -80,17 +84,19 @@
 /// @author - Martin Kamír
 */
 @mixin _validate-types-config($config) {
-	$mixin       : map-get($config, 'mixin');
-	$src         : map-get($config, 'src');
-	$base        : map-get($config, 'base');
-	$ratio       : map-get($config, 'ratio');
-	$length      : map-get($config, 'length');
-	$prefix      : map-get($config, 'prefix');
-	$suffix      : map-get($config, 'suffix');
-	$preserve    : map-get($config, 'preserve');
-	$utils       : map-get($config, 'utils');
-	$break-at    : map-get($config, 'break-at');
-	$breakpoints : map-get($config, 'breakpoints');
+	$mixin          : map-get($config, 'mixin');
+	$src            : map-get($config, 'src');
+	$base           : map-get($config, 'base');
+	$ratio          : map-get($config, 'ratio');
+	$length         : map-get($config, 'length');
+	$clamp         : map-get($config, 'clamp');
+	$preserve       : map-get($config, 'preserve');
+	$prefix         : map-get($config, 'prefix');
+	$suffix         : map-get($config, 'suffix');
+	$utils          : map-get($config, 'utils');
+	$utils-property : map-get($config, 'utils-property');
+	$break-at       : map-get($config, 'break-at');
+	$breakpoints    : map-get($config, 'breakpoints');
 
 	@if $src == null and $base == null {
 		@warn 'at #{$mixin} mixin. Requires either a `src` or `base` value.';
@@ -208,6 +214,24 @@
 		}
 	}
 
+	@if $clamp != null {
+		@if type-of($clamp) != map {
+			@error 'at #{$mixin} mixin. Invalid `clamp` type. Expects map not #{type-of($clamp)}.';
+		}
+
+		@if not map-has-key($clamp, 'min-width') or not map-has-key($clamp, 'max-width') {
+			@error 'at #{$mixin} mixin. Invalid `clamp` map. Expects `min-width` and `max-width` keys.';
+		}
+
+		@if type-of(map-get($clamp, 'min-width')) != number or type-of(map-get($clamp, 'max-width')) != number {
+			@error 'at #{$mixin} mixin. Invalid `clamp` type. Expects `min-width` and `max-width` keys with number values.';
+		}
+
+		@if unitless(map-get($clamp, 'min-width')) or unitless(map-get($clamp, 'max-width')) {
+			@error 'at #{$mixin} mixin. Invalid `clamp` type. Expects `min-width` and `max-width` keys with number values with units.';
+		}
+	}
+
 	@if $suffix != null {
 		@if type-of($suffix) != string and type-of($suffix) != list {
 			@error 'at #{$mixin} mixin. Invalid `suffix` type. Expects string or list not #{type-of($suffix)}.';
@@ -228,6 +252,10 @@
 		@error 'at #{$mixin} mixin. Invalid `utils` type. Expects boolean not #{type-of($utils)}.';
 	}
 
+	@if type-of($utils-property) != string {
+		@error 'at #{$mixin} mixin. Invalid `utils-property` type. Expects string not #{type-of($utils-property)}.';
+	}
+
 	@if type-of($prefix) != string {
 		@error 'at #{$mixin} mixin. Invalid `prefix` type. Expects string not #{type-of($prefix)}.';
 	}
@@ -246,21 +274,39 @@
 }
 
 @mixin _validate-colors-config($config) {
-	$mixin        : map-get($config, 'mixin');
-	$src          : map-get($config, 'src');
-	$tints        : map-get($config, 'tints');
-	$shades       : map-get($config, 'shades');
-	$format       : map-get($config, 'format');
-	$prefix       : map-get($config, 'prefix');
-	$prefix-color : map-get($config, 'prefix-color');
-	$prefix-bg    : map-get($config, 'prefix-bg');
-	$suffix       : map-get($config, 'suffix');
-	$utils        : map-get($config, 'utils');
+	$mixin                : map-get($config, 'mixin');
+	$src                  : map-get($config, 'src');
+	$tints                : map-get($config, 'tints');
+	$shades               : map-get($config, 'shades');
+	$format               : map-get($config, 'format');
+	$prefix               : map-get($config, 'prefix');
+	$suffix               : map-get($config, 'suffix');
+	$utils                : map-get($config, 'utils');
+	$utils-property-color : map-get($config, 'utils-property-color');
+	$utils-property-bg    : map-get($config, 'utils-property-bg');
+	$utils-prefix-color   : map-get($config, 'utils-prefix-color');
+	$utils-prefix-bg      : map-get($config, 'utils-prefix-bg');
 
 	@if $src != null {
 		@if type-of($src) != map {
 			@error 'at #{$mixin} mixin. Invalid `src` type. Expected map not #{type-of($src)}.';
 		}
+	}
+
+	@if $tints != null {
+		@if type-of($tints) != list and type-of($tints) != number {
+			@error 'at #{$mixin} mixin. Invalid `tints` type. Expects list or number not #{type-of($tints)}.';
+		}
+	}
+
+	@if $shades != null {
+		@if type-of($shades) != list and type-of($shades) != number {
+			@error 'at #{$mixin} mixin. Invalid `shades` type. Expects list or number not #{type-of($shades)}.';
+		}
+	}
+
+	@if type-of($format) != string {
+		@error 'at #{$mixin} mixin. Invalid `format` type. Expects string not #{type-of($format)}.';
 	}
 
 	@if $suffix != null {
@@ -269,27 +315,54 @@
 		}
 	}
 
+	@if type-of($prefix) != string {
+		@error 'at #{$mixin} mixin. Invalid `prefix` type. Expects string not #{type-of($prefix)}.';
+	}
+
 	@if type-of($utils) != bool {
 		@error 'at #{$mixin} mixin. Invalid `utils` type. Expects boolean not #{type-of($utils)}.';
 	}
 
-	@if type-of($prefix) != string {
-		@error 'at #{$mixin} mixin. Invalid `prefix` type. Expects string not #{type-of($prefix)}.';
+	@if type-of($utils-property-color) != string {
+		@error 'at #{$mixin} mixin. Invalid `utils-property-color` type. Expects string not #{type-of($utils-property-color)}.';
 	}
 
-	@if type-of($prefix-color) != string {
-		@error 'at #{$mixin} mixin. Invalid `prefix-color` type. Expects string not #{type-of($prefix-color)}.';
+	@if type-of($utils-property-color) != string {
+		@error 'at #{$mixin} mixin. Invalid `utils-property-color` type. Expects string not #{type-of($utils-property-color)}.';
 	}
 
-	@if type-of($prefix-bg) != string {
-		@error 'at #{$mixin} mixin. Invalid `prefix-bg` type. Expects string not #{type-of($prefix-bg)}.';
+	@if type-of($utils-property-bg) != string {
+		@error 'at #{$mixin} mixin. Invalid `utils-property-bg` type. Expects string not #{type-of($utils-property-bg)}.';
 	}
 
-	@if type-of($prefix) != string {
-		@error 'at #{$mixin} mixin. Invalid `prefix` type. Expects string not #{type-of($prefix)}.';
+	@if $utils-prefix-color != null {
+		@if type-of($utils-prefix-color) != string {
+			@error 'at #{$mixin} mixin. Invalid `utils-prefix-color` type. Expects string not #{type-of($utils-prefix-color)}.';
+		}
 	}
 
+	@if $utils-prefix-bg != null {
+		@if type-of($utils-prefix-bg) != string {
+			@error 'at #{$mixin} mixin. Invalid `utils-prefix-bg` type. Expects string not #{type-of($utils-prefix-bg)}.';
+		}
+	}
 
+}
+
+@mixin _validate-utilities-config($config) {
+	$mixin : map-get($config, 'mixin');
+	$auto  : map-get($config, 'auto');
+	$src   : map-get($config, 'src');
+
+	@if type-of($auto) != bool {
+		@error 'at #{$mixin} mixin. Invalid `auto` type. Expects boolean not #{type-of($auto)}.';
+	}
+
+	@if $src != null {
+		@if type-of($src) != list and type-of($src) != map {
+			@error 'at #{$mixin} mixin. Invalid `src` type. Expected list not #{type-of($src)}.';
+		}
+	}
 }
 
 /*
@@ -298,35 +371,39 @@
 /// @author - Martin Kamír
 */
 @mixin _generate-types-scale($config) {
-	$mixin       : map-get($config, 'mixin');
-	$property    : map-get($config, 'property');
-	$base        : map-get($config, 'base');
-	$ratio       : map-get($config, 'ratio');
-	$length      : map-get($config, 'length');
-	$preserve    : map-get($config, 'preserve');
-	$utils       : map-get($config, 'utils');
-	$src         : map-get($config, 'src');
-	$prefix      : map-get($config, 'prefix');
-	$suffix      : map-get($config, 'suffix');
-	$break-at    : map-get($config, 'break-at');
-	$breakpoints : map-get($config, 'breakpoints');
+	$mixin          : map-get($config, 'mixin');
+	$src            : map-get($config, 'src');
+	$base           : map-get($config, 'base');
+	$ratio          : map-get($config, 'ratio');
+	$length         : map-get($config, 'length');
+	$preserve       : map-get($config, 'preserve');
+	$prefix         : map-get($config, 'prefix');
+	$suffix         : map-get($config, 'suffix');
+	$utils          : map-get($config, 'utils');
+	$utils-property : map-get($config, 'utils-property');
+	$break-at       : map-get($config, 'break-at');
+	$breakpoints    : map-get($config, 'breakpoints');
 
-	$base-min    : null;
-	$base-max    : null;
-	$ratio-min   : null;
-	$ratio-max   : null;
-	$value       : null;
-	$keys        : null;
-	$suffix-prev : null;
-	$_suffix     : $suffix;
-	$src-length  : length($src);
-	$src-type    : type-of($src);
-	$length      : if($length != null, $length, $src-length);
-	$is-fluid    : if($mixin == 'fluid-space-types' or $mixin == 'fluid-font-types', true, false);
+	$base-min       : null;
+	$base-max       : null;
+	$ratio-min      : null;
+	$ratio-max      : null;
+	$value          : null;
+	$keys           : null;
+	$suffix-prev    : null;
+	$_suffix        : $suffix;
+	$src-length     : length($src);
+	$src-type       : type-of($src);
+	$length         : if($length != null, $length, $src-length);
+	$is-fluid       : if($mixin == 'fluid-space-types' or $mixin == 'fluid-font-types', true, false);
 
 	@if not $is-fluid and $base != null {
 		--#{$prefix}ratio : #{get-ratio($ratio)};
 		--#{$prefix}base  : #{$base};
+	}
+
+	@if $mixin == 'space-types' or $mixin == 'fluid-space-types' {
+		--#{$prefix}-0 : 0;
 	}
 
 	@if $is-fluid and $base != null {
@@ -378,7 +455,7 @@
 		// The utility class generated
 		@if $utils {
 			@at-root .#{$prefix}#{$suffix} {
-				#{$property} : var(--#{$prefix}#{$suffix});
+				#{$utils-property} : var(--#{$prefix}#{$suffix});
 			}
 		}
 	}
@@ -431,20 +508,23 @@
 }
 
 @mixin _generate-colors($config) {
-	$src          : map-get($config, 'src');
-	$tints        : map-get($config, 'tints');
-	$shades       : map-get($config, 'shades');
-	$format       : map-get($config, 'format');
-	$prefix       : map-get($config, 'prefix');
-	$prefix-color : map-get($config, 'prefix-text');
-	$prefix-bg    : map-get($config, 'prefix-bg');
-	$suffix       : map-get($config, 'suffix');
-	$utils        : map-get($config, 'utils');
+	$src                  : map-get($config, 'src');
+	$tints                : map-get($config, 'tints');
+	$shades               : map-get($config, 'shades');
+	$format               : map-get($config, 'format');
+	$prefix               : map-get($config, 'prefix');
+	$suffix               : map-get($config, 'suffix');
+	$utils                : map-get($config, 'utils');
+	$utils                : map-get($config, 'utils');
+	$utils-property-color : map-get($config, 'utils-property-color');
+	$utils-property-bg    : map-get($config, 'utils-property-bg');
+	$utils-prefix-color   : map-get($config, 'utils-prefix-color');
+	$utils-prefix-bg      : map-get($config, 'utils-prefix-bg');
 
-	$_shades      : $shades;
-	$_tints       : $tints;
-	$_suffix      : '';
-	$colors       : ();
+	$_shades              : $shades;
+	$_tints               : $tints;
+	$_suffix              : '';
+	$colors               : ();
 
 	@each $key, $value in $src {
 		@if type-of($tints) == map {
@@ -483,11 +563,11 @@
 			--#{$prefix}#{$key}#{$_suffix} : #{$value};
 
 			@if $utils {
-				@at-root .#{$prefix-color}#{$key}#{$_suffix} {
-					color : var(--#{$prefix}#{$key}#{$_suffix});
+				@at-root .#{$utils-prefix-color}#{$key}#{$_suffix} {
+					#{$utils-property-color} : var(--#{$prefix}#{$key}#{$_suffix});
 				}
-				@at-root .#{$prefix-bg}#{$key}#{$_suffix} {
-					background-color : var(--#{$prefix}#{$key}#{$_suffix});
+				@at-root .#{$utils-prefix-bg}#{$key}#{$_suffix} {
+					#{$utils-property-bg} : var(--#{$prefix}#{$key}#{$_suffix});
 				}
 			}
 		}
@@ -497,12 +577,12 @@
 }
 
 @mixin _generate-utilities($config) {
-	$auto         : map-get($config, 'auto');
-	$src          : map-get($config, 'src');
+	$auto           : map-get($config, 'auto');
+	$src            : map-get($config, 'src');
 
-	$utils        : false;
-	$utils-ignore : ('utils-ignore', 'shadow-color', 'shadow-strength');
-	$property     : null;
+	$utils          : false;
+	$utils-ignore   : ('utils-ignore', 'shadow-color', 'shadow-strength');
+	$utils-property : null;
 
 	// Fix the issues when the src has only one list.
 	@if type-of($src) == 'map' {
@@ -541,8 +621,8 @@
 		}
 
 		@if map-has-key($map, 'property') {
-			$property : map-get($map, 'property');
-			$map      : map-remove($map, 'property');
+			$utils-property : map-get($map, 'property');
+			$map            : map-remove($map, 'property');
 		}
 
 		@if map-has-key($map, 'utils-ignore') {
@@ -555,7 +635,7 @@
 
 			@if $utils and not index($utils-ignore, $key) {
 				@at-root .#{$key} {
-					#{$property} : var(--#{$key});
+					#{$utils-property} : var(--#{$key});
 				}
 			}
 		}
