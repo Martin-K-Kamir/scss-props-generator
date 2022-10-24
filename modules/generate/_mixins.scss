@@ -13,7 +13,7 @@
 /// @access private
 /// @author - Martin Kamír
 */
-@mixin compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp, $preserve, $prefix, $suffix, $utils, $utils-property) {
+@mixin compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp-width, $preserve, $prefix, $suffix, $utils, $utils-property) {
 
 	$_config : (
 			'mixin': $mixin,
@@ -21,7 +21,7 @@
 			'base' : $base,
 			'ratio' : $ratio,
 			'length' : $length,
-			'clamp' : $clamp,
+			'clamp-width' : $clamp-width,
 			'preserve' : $preserve,
 			'prefix' : $prefix,
 			'suffix' : $suffix,
@@ -30,7 +30,11 @@
 	);
 
 	@if $config != null {
-		$_config : deep-merge($_config, map-get($config, $mixin));
+		@if map-get($config, $mixin) != null {
+			$_config : deep-merge($_config, map-get($config, $mixin));
+		} @else {
+			$_config : deep-merge($_config, $config);
+		}
 	}
 
 	@include _validate-types-config($_config);
@@ -55,7 +59,11 @@
 	);
 
 	@if $config != null {
-		$_config : deep-merge($_config, map-get($config, $mixin));
+		@if map-get($config, $mixin) != null {
+			$_config : deep-merge($_config, map-get($config, $mixin));
+		} @else {
+			$_config : deep-merge($_config, $config);
+		}
 	}
 
 	@include _validate-colors-config($_config);
@@ -71,7 +79,11 @@
 	);
 
 	@if $config != null {
-		$_config : deep-merge($_config, map-get($config, $mixin));
+		@if map-get($config, $mixin) != null {
+			$_config : deep-merge($_config, map-get($config, $mixin));
+		} @else {
+			$_config : deep-merge($_config, $config);
+		}
 	}
 
 	@include _validate-utilities-config($_config);
@@ -89,7 +101,7 @@
 	$base           : map-get($config, 'base');
 	$ratio          : map-get($config, 'ratio');
 	$length         : map-get($config, 'length');
-	$clamp         : map-get($config, 'clamp');
+	$clamp-width    : map-get($config, 'clamp-width');
 	$preserve       : map-get($config, 'preserve');
 	$prefix         : map-get($config, 'prefix');
 	$suffix         : map-get($config, 'suffix');
@@ -102,7 +114,7 @@
 		@warn 'at #{$mixin} mixin. Requires either a `src` or `base` value.';
 	}
 
-	@if $src != null and ($base != null or $ratio != null or $length != null or $preserve != null) {
+	@if $src != null and ($base != null or $ratio != null or $length != null or $preserve != 0) {
 		@error 'at #{$mixin} mixin. Requires either a `src` or `base, ratio, length, preserve` value, not both.';
 	}
 
@@ -214,21 +226,21 @@
 		}
 	}
 
-	@if $clamp != null {
-		@if type-of($clamp) != map {
-			@error 'at #{$mixin} mixin. Invalid `clamp` type. Expects map not #{type-of($clamp)}.';
+	@if $clamp-width != null {
+		@if type-of($clamp-width) != map {
+			@error 'at #{$mixin} mixin. Invalid `clamp-width` type. Expects map not #{type-of($clamp-width)}.';
 		}
 
-		@if not map-has-key($clamp, 'min-width') or not map-has-key($clamp, 'max-width') {
-			@error 'at #{$mixin} mixin. Invalid `clamp` map. Expects `min-width` and `max-width` keys.';
+		@if not map-has-key($clamp-width, 'min-width') or not map-has-key($clamp-width, 'max-width') {
+			@error 'at #{$mixin} mixin. Invalid `clamp-width` map. Expects `min-width` and `max-width` keys.';
 		}
 
-		@if type-of(map-get($clamp, 'min-width')) != number or type-of(map-get($clamp, 'max-width')) != number {
-			@error 'at #{$mixin} mixin. Invalid `clamp` type. Expects `min-width` and `max-width` keys with number values.';
+		@if type-of(map-get($clamp-width, 'min-width')) != number or type-of(map-get($clamp-width, 'max-width')) != number {
+			@error 'at #{$mixin} mixin. Invalid `clamp-width` type. Expects `min-width` and `max-width` keys with number values.';
 		}
 
-		@if unitless(map-get($clamp, 'min-width')) or unitless(map-get($clamp, 'max-width')) {
-			@error 'at #{$mixin} mixin. Invalid `clamp` type. Expects `min-width` and `max-width` keys with number values with units.';
+		@if unitless(map-get($clamp-width, 'min-width')) or unitless(map-get($clamp-width, 'max-width')) {
+			@error 'at #{$mixin} mixin. Invalid `clamp-width` type. Expects `min-width` and `max-width` keys with number values with units.';
 		}
 	}
 
@@ -383,6 +395,8 @@
 	$utils-property : map-get($config, 'utils-property');
 	$break-at       : map-get($config, 'break-at');
 	$breakpoints    : map-get($config, 'breakpoints');
+	$screen-min     : map-get($config, 'clamp-width', 'min-width');
+	$screen-max     : map-get($config, 'clamp-width', 'max-width');
 
 	$base-min       : null;
 	$base-max       : null;
@@ -425,7 +439,7 @@
 		@if $is-fluid and $base != null {
 			$min   : $base-min * pow($ratio-min, $i - 1);
 			$max   : $base-max * pow($ratio-max, $i - 1);
-			$value : #{clamped($min, $max, $width-xs, $width-xl)};
+			$value : #{clamped($min, $max, $screen-min, $screen-max)};
 		}
 
 		@if not $is-fluid and $base != null {
