@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @use 'sass:math';
+@use 'variables' as *;
 
 $animations      : (
 		'animation-fade-in': fade-in 0.5s var(--ease-3),
@@ -83,12 +84,23 @@ $easings         : (
 ) !default;
 
 $font-weights    : (
-		'utils' : true,
+		'utils' : 'both',
 		'utils-property' : 'font-weight',
+		'breakpoints' : 'auto',
+		'break-at' : 'both',
 		'fw-1' : 300,
 		'fw-2' : 400,
 		'fw-3' : 500,
 		'fw-4' : 700,
+) !default;
+
+$flex-direction    : (
+		'utils' : 'class',
+		'utils-property' : 'flex-direction',
+		'breakpoints' : auto,
+		'break-at' : 'both',
+		'direction-column' : 'column',
+		'direction-row' : 'row',
 ) !default;
 
 $letter-spacings : (
@@ -103,11 +115,15 @@ $letter-spacings : (
 ) !default;
 
 $line-heights    : (
+		'utils' : true,
+		'utils-property' : 'line-height',
+		'breakpoints' : 'auto',
+		'break-at' : 'min',
 		'lineheight-1' : 0.95,
 		'lineheight-2' : 1.1,
 		'lineheight-3' : 1.25,
-		'lineheight-4' : 1.5,
-		'lineheight-5' : 1.6,
+		'lineheight-4' : 2,
+		'lineheight-5' : 3,
 ) !default;
 
 $measures        : (
@@ -148,19 +164,19 @@ $shadows         : (
 		'shadow-inner-5' : inset 0 2px 14px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%)),
 ) !default;
 
+$breakpoints     : (
+		'xxs': $width-xxs,
+		'xs': $width-xs,
+		'sm': $width-sm,
+		'md': $width-md,
+		'lg': $width-lg,
+		'xl': $width-xl,
+		'xxl': $width-xxl,
+) !default;
+
 //////////////////////
 //// Private maps ////
 //////////////////////
-$breakpoints     : (
-		'width-xxl': 120em,
-		'width-xl': 90em,
-		'width-lg': 64em,
-		'width-md': 48em,
-		'width-sm': 30em,
-		'width-xs': 22.5em,
-		'width-xxs': 20.625em,
-);
-
 $ratios          : (
 		'minor-second' : 1.067,
 		'major-second': 1.125,

@@ -54,7 +54,7 @@
 			'utils' : $utils,
 			'utils-property-color' : $utils-property-color,
 			'utils-property-bg' : $utils-property-bg,
-			'utils-prefix-text' : $utils-prefix-color,
+			'utils-prefix-color' : $utils-prefix-color,
 			'utils-prefix-bg' : $utils-prefix-bg,
 	);
 
@@ -577,11 +577,21 @@
 			--#{$prefix}#{$key}#{$_suffix} : #{$value};
 
 			@if $utils {
+				$utils-value : null;
+
+				@if $format == 'rgb' {
+					$utils-value : rgb(var(--#{$prefix}#{$key}#{$_suffix}));
+				} @else if $format == 'hsl' {
+					$utils-value : hsl(var(--#{$prefix}#{$key}#{$_suffix}));
+				} @else {
+					$utils-value : var(--#{$prefix}#{$key}#{$_suffix});
+				}
+
 				@at-root .#{$utils-prefix-color}#{$key}#{$_suffix} {
-					#{$utils-property-color} : var(--#{$prefix}#{$key}#{$_suffix});
+					#{$utils-property-color} : $utils-value;
 				}
 				@at-root .#{$utils-prefix-bg}#{$key}#{$_suffix} {
-					#{$utils-property-bg} : var(--#{$prefix}#{$key}#{$_suffix});
+					#{$utils-property-bg} : $utils-value;
 				}
 			}
 		}
@@ -591,12 +601,15 @@
 }
 
 @mixin _generate-utilities($config) {
-	$auto           : map-get($config, 'auto');
-	$src            : map-get($config, 'src');
+	$auto              : map-get($config, 'auto');
+	$src               : map-get($config, 'src');
 
-	$utils          : false;
-	$utils-ignore   : ('utils-ignore', 'shadow-color', 'shadow-strength');
-	$utils-property : null;
+	$utils             : 'variable';
+	$utils-ignore      : ('utils-ignore', 'shadow-color', 'shadow-strength');
+	$utils-property    : null;
+	$breakpoint-values : null;
+	$breakpoint-keys   : null;
+	$break-at          : null;
 
 	// Fix the issues when the src has only one list.
 	@if type-of($src) == 'map' {
@@ -624,19 +637,27 @@
 		}
 	}
 
+
 	@each $map in $src {
 		@if map-has-key($map, 'null') {
 			$map : map-remove($map, 'null');
 		}
 
+		@if map-has-key($map, 'variable') {
+			$variable : map-get($map, 'variable');
+			$map      : map-remove($map, 'variable');
+		}
+
 		@if map-has-key($map, 'utils') {
 			$utils : map-get($map, 'utils');
 			$map   : map-remove($map, 'utils');
+		} @else {
+			$utils : 'variable';
 		}
 
-		@if map-has-key($map, 'property') {
-			$utils-property : map-get($map, 'property');
-			$map            : map-remove($map, 'property');
+		@if map-has-key($map, 'utils-property') {
+			$utils-property : map-get($map, 'utils-property');
+			$map            : map-remove($map, 'utils-property');
 		}
 
 		@if map-has-key($map, 'utils-ignore') {
@@ -644,12 +665,61 @@
 			@debug $utils-ignore;
 		}
 
-		@each $key, $value in $map {
-			--#{$key} : #{$value};
+		@if map-has-key($map, 'breakpoints') {
+			$breakpoints : map-get($map, 'breakpoints');
+			$map         : map-remove($map, 'breakpoints');
 
-			@if $utils and not index($utils-ignore, $key) {
+			@if $breakpoints == 'auto' {
+				$breakpoint-values : list-converted(map-of.$breakpoints, 'values');
+				$breakpoint-keys   : list-converted(map-of.$breakpoints, 'keys');
+			} @else {
+				$breakpoint-values : list-converted($breakpoints, 'values');
+				$breakpoint-keys   : list-converted($breakpoints, 'keys');
+			}
+		}
+
+		@if map-has-key($map, 'break-at') {
+			$break-at : map-get($map, 'break-at');
+			$map      : map-remove($map, 'break-at');
+		}
+
+		@each $key, $value in $map {
+
+
+			@if $utils == 'both' or $utils == 'variable' {
+				--#{$key} : #{$value};
+				$value    : var(--#{$key});
+			}
+
+			@if $utils == 'both' or $utils == 'class' {
+				$value : #{$value};
+			}
+
+			@if type-of($utils) != null and $utils == 'both' or $utils == 'class' and not index($utils-ignore, $key) {
 				@at-root .#{$key} {
-					#{$utils-property} : var(--#{$key});
+					#{$utils-property} : $value;
+				}
+
+				@if type-of($breakpoint-values) != null and type-of($break-at) != null {
+					@if $break-at == 'min' or $break-at == 'both' {
+						@for $i from 1 through length($breakpoint-values) {
+							@at-root .#{$key}\/\/#{'above-'}#{nth($breakpoint-keys, $i)} {
+								@media (width >= nth($breakpoint-values, $i)) {
+									#{$utils-property} : $value;
+								}
+							}
+						}
+					}
+
+					@if $break-at == 'max' or $break-at == 'both' {
+						@for $i from 1 through length($breakpoint-values) {
+							@at-root .#{$key}\/\/#{'below-'}#{nth($breakpoint-keys, $i)} {
+								@media (width < nth($breakpoint-values, $i)) {
+									#{$utils-property} : $value;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
