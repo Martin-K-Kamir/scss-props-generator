@@ -1,0 +1,9 @@
+@use 'sass:map';
+@use 'src/config' as *;
+@use 'src/mixins/generate-colors' as *;
+
+@mixin colors($config) {
+    $config: map.merge($config-colors, $config);
+    @debug  $config;
+    @include generate-colors($config);
+}

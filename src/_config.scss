@@ -1,0 +1,74 @@
+
+//TODO Make this config to work
+$TODO-config-colors : (
+        "pallete" : (
+                "primary" : "#000000",
+                "secondary" : "#000000",
+                "accent" : "#000000",
+                "shades" : (10, 20, 50),
+                "tints" : (10, 20, 50),
+        ),
+        "pallete2" : (
+                "primary" : (
+                        "base" : "#000000",
+                        "tints" : ("#000000", "#000000", "#000000"),
+                        "shades" : ("#000000", "#000000", "#000000"),
+                ),
+                "secondary" : (
+                        "base" : "#000000",
+                        "tints" : ("#000000", "#000000", "#000000"),
+                        "shades" : ("#000000", "#000000", "#000000"),
+                ),
+                "accent" : "#000000",
+        ),
+        "format" : "hsl",
+        "prefix" : "clr-",
+        "suffix" : "numeric",
+        "utils" : (
+                (
+                        "prefix" : "clr",
+                        "property": "color",
+                        "custom-property" : null
+                ),
+                (
+                        "prefix" : "bg",
+                        "property": "background-color",
+                        "custom-property" : null
+                ),
+        ),
+);
+
+$config-colors      : (
+        'mixin' : 'colors',
+        'src' : null,
+        'tints' : null,
+        'shades' : null,
+        'format' : 'hsl()',
+        'prefix' : 'clr-',
+        'suffix' : 'numeric',
+        "utils" : (
+                (
+                        "prefix" : "clr",
+                        "property": "color",
+                        "custom-property" : null
+                ),
+                (
+                        "prefix" : "bg",
+                        "property": "background-color",
+                        "custom-property" : null
+                ),
+        ),
+);
+
+
+//$src: null,
+//$tints: null,
+//$shades: null,
+//$format: $colors-format,
+//$prefix: $colors-prefix,
+//$suffix: $colors-suffix,
+//$utils: $colors-utils,
+//$utils-property-color: $colors-utils-property-color,
+//$utils-property-bg: $colors-utils-property-bg,
+//$utils-prefix-color: $colors-utils-prefix-color,
+//$utils-prefix-bg: $colors-utils-prefix-bg,

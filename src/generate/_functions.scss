@@ -238,46 +238,7 @@
 	@return if(map-has-key(map-of.$ratios, $ratio), get(map-of.$ratios, $ratio), $ratio);
 }
 
-/*
-/// Returns string of suffix based on current $i in the loop.
-/// @author - Martin Kamír
-/// @access private
-/// @param $suffix {string} - Suffix type to get.
-/// @param $length {number} - The length of the list.
-/// @param $i {number} - The current index in loop.
-/// @return {string} - The current suffix.
- */
-@function get-suffix($suffix, $length, $i) {
-	@if ($suffix == 'numeric') {
-		@return $i;
 
-	} @else if ($suffix == 'hundreds') {
-		@return $i + '00';
-
-	} @else if (type-of($suffix) == 'list') {
-		@return nth($suffix, $i);
-
-	} @else if (index(('roman', 'nato', 'priority'), $suffix)) {
-		@return nth(get(map-of.$suffixes, $suffix), $i);
-
-	} @else if (index(('size', 'size-shorted', 'size-w-number', 'size-adjectives', 'color-adjectives'), $suffix)) {
-		$map-of-suffixes : (
-				'size' : _create-suffixes($suffix, $length),
-				'size-shorted' : _create-suffixes($suffix, $length),
-				'size-w-number' : _create-suffixes($suffix, $length),
-				'size-adjectives' : _create-suffixes($suffix, $length),
-				'color-adjectives' : _create-suffixes($suffix, $length),
-		);
-
-		@each $key, $list-of-suffixes in $map-of-suffixes {
-			@if ($suffix == $key) {
-				@return nth($list-of-suffixes, $i);
-			}
-		}
-	} @else {
-		@error 'Invalid suffix type of #{$suffix}. Valid types are: #{map-keys(map-of.$suffixes)}';
-	}
-}
 
 /*
 /// Returns either 1. calculated number or 2. calculation method with scaled ratio affected by current index($i) 2. calculation method.

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @forward 'variables';
 @forward 'maps' hide $ratios, $suffixes;
-@use 'sass:map' as *;
+@use 'sass:map';
 @use 'mixins' as *;
 @use 'variables' as *;
 
@@ -14,26 +14,6 @@
 	$mixin : 'utilities';
 
 	@include compile-utilities-config($config, $mixin, $auto, $src);
-}
-
-@mixin colors(
-	$config: null,
-	$src: null,
-	$tints: null,
-	$shades: null,
-	$format: $colors-format,
-	$prefix: $colors-prefix,
-	$suffix: $colors-suffix,
-	$utils: $colors-utils,
-	$utils-property-color: $colors-utils-property-color,
-	$utils-property-bg: $colors-utils-property-bg,
-	$utils-prefix-color: $colors-utils-prefix-color,
-	$utils-prefix-bg: $colors-utils-prefix-bg,
-) {
-
-	$mixin : 'colors';
-
-	@include compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $prefix, $suffix, $utils, $utils-property-color, $utils-property-bg, $utils-prefix-color, $utils-prefix-bg);
 }
 
 @mixin fluid-font-types(

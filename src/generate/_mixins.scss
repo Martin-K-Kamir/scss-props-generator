@@ -9,9 +9,8 @@
 @use 'maps' as map-of;
 
 /*
-/// Compiles the configuration maps
-/// @access private
-/// @author - Martin Kamír
+ * Compiles the configuration maps
+ * @access private
 */
 @mixin compile-types-config($config, $mixin, $src, $base, $ratio, $length, $clamp-width, $preserve, $prefix, $suffix, $utils, $utils-property) {
 
@@ -41,35 +40,6 @@
 	@include _generate-types-scale($_config)
 }
 
-@mixin compile-colors-config($config, $mixin, $src, $tints, $shades, $format, $prefix, $suffix, $utils, $utils-property-color, $utils-property-bg, $utils-prefix-color, $utils-prefix-bg) {
-
-	$_config : (
-			'mixin': $mixin,
-			'src' : $src,
-			'tints' : $tints,
-			'shades' : $shades,
-			'format' : $format,
-			'prefix' : $prefix,
-			'suffix' : $suffix,
-			'utils' : $utils,
-			'utils-property-color' : $utils-property-color,
-			'utils-property-bg' : $utils-property-bg,
-			'utils-prefix-color' : $utils-prefix-color,
-			'utils-prefix-bg' : $utils-prefix-bg,
-	);
-
-	@if $config != null {
-		@if map-get($config, $mixin) != null {
-			$_config : deep-merge($_config, map-get($config, $mixin));
-		} @else {
-			$_config : deep-merge($_config, $config);
-		}
-	}
-
-	@include _validate-colors-config($_config);
-	@include _generate-colors($_config)
-}
-
 @mixin compile-utilities-config($config, $mixin, $auto, $src) {
 
 	$_config : (
@@ -93,9 +63,8 @@
 /*
 /// Validates the configuration values
 /// @access private
-/// @author - Martin Kamír
 */
-@mixin _validate-types-config($config) {
+@mixin validate-types-config($config) {
 	$mixin          : map-get($config, 'mixin');
 	$src            : map-get($config, 'src');
 	$base           : map-get($config, 'base');
@@ -285,7 +254,7 @@
 	}
 }
 
-@mixin _validate-colors-config($config) {
+@mixin validate-colors-config($config) {
 	$mixin                : map-get($config, 'mixin');
 	$src                  : map-get($config, 'src');
 	$tints                : map-get($config, 'tints');
@@ -294,8 +263,6 @@
 	$prefix               : map-get($config, 'prefix');
 	$suffix               : map-get($config, 'suffix');
 	$utils                : map-get($config, 'utils');
-	$utils-property-color : map-get($config, 'utils-property-color');
-	$utils-property-bg    : map-get($config, 'utils-property-bg');
 	$utils-prefix-color   : map-get($config, 'utils-prefix-color');
 	$utils-prefix-bg      : map-get($config, 'utils-prefix-bg');
 
@@ -335,18 +302,6 @@
 		@error 'at #{$mixin} mixin. Invalid `utils` type. Expects boolean not #{type-of($utils)}.';
 	}
 
-	@if type-of($utils-property-color) != string {
-		@error 'at #{$mixin} mixin. Invalid `utils-property-color` type. Expects string not #{type-of($utils-property-color)}.';
-	}
-
-	@if type-of($utils-property-color) != string {
-		@error 'at #{$mixin} mixin. Invalid `utils-property-color` type. Expects string not #{type-of($utils-property-color)}.';
-	}
-
-	@if type-of($utils-property-bg) != string {
-		@error 'at #{$mixin} mixin. Invalid `utils-property-bg` type. Expects string not #{type-of($utils-property-bg)}.';
-	}
-
 	@if $utils-prefix-color != null {
 		@if type-of($utils-prefix-color) != string {
 			@error 'at #{$mixin} mixin. Invalid `utils-prefix-color` type. Expects string not #{type-of($utils-prefix-color)}.';
@@ -358,10 +313,9 @@
 			@error 'at #{$mixin} mixin. Invalid `utils-prefix-bg` type. Expects string not #{type-of($utils-prefix-bg)}.';
 		}
 	}
-
 }
 
-@mixin _validate-utilities-config($config) {
+@mixin validate-utilities-config($config) {
 	$mixin : map-get($config, 'mixin');
 	$auto  : map-get($config, 'auto');
 	$src   : map-get($config, 'src');
@@ -380,9 +334,8 @@
 /*
 /// Generators to output the CSS
 /// @access private
-/// @author - Martin Kamír
 */
-@mixin _generate-types-scale($config) {
+@mixin generate-types-scale($config) {
 	$mixin          : map-get($config, 'mixin');
 	$src            : map-get($config, 'src');
 	$base           : map-get($config, 'base');
@@ -521,86 +474,9 @@
 	}
 }
 
-@mixin _generate-colors($config) {
-	$src                  : map-get($config, 'src');
-	$tints                : map-get($config, 'tints');
-	$shades               : map-get($config, 'shades');
-	$format               : map-get($config, 'format');
-	$prefix               : map-get($config, 'prefix');
-	$suffix               : map-get($config, 'suffix');
-	$utils                : map-get($config, 'utils');
-	$utils                : map-get($config, 'utils');
-	$utils-property-color : map-get($config, 'utils-property-color');
-	$utils-property-bg    : map-get($config, 'utils-property-bg');
-	$utils-prefix-color   : map-get($config, 'utils-prefix-color');
-	$utils-prefix-bg      : map-get($config, 'utils-prefix-bg');
 
-	$_shades              : $shades;
-	$_tints               : $tints;
-	$_suffix              : '';
-	$colors               : ();
 
-	@each $key, $value in $src {
-		@if type-of($tints) == map {
-			$_tints : map-get($tints, $key);
-		}
-
-		@if type-of($shades) == map {
-			$_shades : map-get($shades, $key);
-		}
-
-		@if type-of($value) == color {
-			@if $_tints != null {
-				@for $x from 1 through length($_tints) {
-					$_value : color-format(mix(white, $value, nth(list-reverse($_tints), $x)), $format);
-					$colors : append($colors, $_value);
-				}
-			}
-
-			$_value : color-format($value, $format);
-			$colors : append($colors, $_value);
-
-			@if $_shades != null {
-				@for $x from 1 through length($_shades) {
-					$_value : color-format(mix(black, $value, nth($_shades, $x)), $format);
-					$colors : append($colors, $_value);
-				}
-			}
-		} @else {
-			$colors : $value;
-		}
-
-		@for $x from 1 through length($colors) {
-			$_suffix                       : '-#{get-suffix($suffix, length($colors), $x)}';
-			$value                         : nth($colors, $x);
-
-			--#{$prefix}#{$key}#{$_suffix} : #{$value};
-
-			@if $utils {
-				$utils-value : null;
-
-				@if $format == 'rgb' {
-					$utils-value : rgb(var(--#{$prefix}#{$key}#{$_suffix}));
-				} @else if $format == 'hsl' {
-					$utils-value : hsl(var(--#{$prefix}#{$key}#{$_suffix}));
-				} @else {
-					$utils-value : var(--#{$prefix}#{$key}#{$_suffix});
-				}
-
-				@at-root .#{$utils-prefix-color}#{$key}#{$_suffix} {
-					#{$utils-property-color} : $utils-value;
-				}
-				@at-root .#{$utils-prefix-bg}#{$key}#{$_suffix} {
-					#{$utils-property-bg} : $utils-value;
-				}
-			}
-		}
-
-		$colors : ();
-	}
-}
-
-@mixin _generate-utilities($config) {
+@mixin generate-utilities($config) {
 	$auto              : map-get($config, 'auto');
 	$src               : map-get($config, 'src');
 

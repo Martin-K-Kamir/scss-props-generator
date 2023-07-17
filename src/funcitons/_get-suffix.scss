@@ -1,0 +1,44 @@
+@use 'sass:map' as *;
+@use '../maps' as map-of;
+@use 'create-suffix-list' as *;
+
+/*
+/// Returns string of suffix based on current $i in the loop.
+/// @author - Martin Kamír
+/// @access private
+/// @param $suffix {string} - Suffix type to get.
+/// @param $length {number} - The length of the list.
+/// @param $i {number} - The current index in loop.
+/// @return {string} - The current suffix.
+ */
+@function get-suffix($suffix, $length, $i) {
+    @if ($suffix == 'numeric') {
+        @return $i;
+
+    } @else if ($suffix == 'hundreds') {
+        @return $i + '00';
+
+    } @else if (type-of($suffix) == 'list') {
+        @return nth($suffix, $i);
+
+    } @else if (index(('roman', 'nato', 'priority'), $suffix)) {
+        @return nth(get(map-of.$suffixes, $suffix), $i);
+
+    } @else if (index(('size', 'size-shorted', 'size-w-number', 'size-adjectives', 'color-adjectives'), $suffix)) {
+        $map-of-suffixes : (
+                'size' : create-suffix-list($suffix, $length),
+                'size-shorted' : create-suffix-list($suffix, $length),
+                'size-w-number' : create-suffix-list($suffix, $length),
+                'size-adjectives' : create-suffix-list($suffix, $length),
+                'color-adjectives' : create-suffix-list($suffix, $length),
+        );
+
+        @each $key, $list-of-suffixes in $map-of-suffixes {
+            @if ($suffix == $key) {
+                @return nth($list-of-suffixes, $i);
+            }
+        }
+    } @else {
+        @error 'Invalid suffix type of #{$suffix}. Valid types are: #{map-keys(map-of.$suffixes)}'; //TODO missing numeric
+    }
+}

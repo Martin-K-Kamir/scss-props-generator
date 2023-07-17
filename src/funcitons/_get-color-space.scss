@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+/*
+/// Formats a color value.
+/// @author - Martin Kamír
+/// @access public
+/// @param $color {color} - Color value.
+/// @param $type {string} - The format which will be used. Available formats: 'hsl', 'hsl()', 'rgb', 'rgba()', 'hex'.
+/// @return {color} - Formatted color value.
+ */
+@function get-color-space($color, $type) {
+
+    @if $type == 'hsl' or $type == 'hsl()' {
+        $hue : round(hue($color));
+        $saturation : round(saturation($color));
+        $lightness : round(lightness($color));
+
+        @if $type == 'hsl' {
+            @return '#{$hue, $saturation, $lightness}';
+        } @else {
+            @return hsl($hue, $saturation, $lightness);
+        }
+    }
+
+    @if $type == 'rgb' or $type == 'rgb()' {
+        $red : round(red($color));
+        $green : round(green($color));
+        $blue : round(blue($color));
+
+        @if $type == 'rgb' {
+            @return '#{$red, $green, $blue}';
+        } @else {
+            @return rgb($red, $green, $blue);
+        }
+    }
+
+    @if $type == 'hex' {
+        $hex : ie-hex-str($color);
+        @return unquote('#' + str-slice($hex, 4));
+    }
+}

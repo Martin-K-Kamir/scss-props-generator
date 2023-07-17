@@ -1,0 +1,34 @@
+@use 'sass:map' as *;
+@use 'sass:math' as *;
+@use '../maps' as map-of;
+@use 'list-reverse' as *;
+@use 'list-slice' as *;
+
+/*
+/// Returns list of corresponding suffixes based on $suffix parameter.
+/// @author - Martin Kamír
+/// @access private
+/// @param $suffix {string} - Name of the suffix that will be used in outputting the suffix list.
+/// @param $length {number} - The length of the suffix list.
+/// @return {list} - list of suffixes.
+ */
+@function create-suffix-list($suffix, $length) {
+    $lower-values : get(map-of.$suffixes, $suffix, lower-values);
+    $higher-values : get(map-of.$suffixes, $suffix, higher-values);
+
+    // Get the minimum and maximum index by:
+    // 1. Getting the length of the list.
+    // 2. Dividing the length of the list by half.
+    // 3. For the minimum index ceil the number up to the next integer. For the maximum index floor the number down to the next integer.
+    $min-index : ceil(div($length, 2));
+    $max-index : floor(div($length, 2));
+
+    // Slice the list to get the minimum and maximum values.
+    $lower-list : list-slice($lower-values, $end : $min-index);
+    $higher-list : list-slice($higher-values, $end : $max-index);
+
+    // Concatenate the lower and higher list.
+    // The lower list values will be at the beginning of the outputted list. The lower list has to be reversed, because the last values, which represents the smallest values would be at middle of the outputted list if not reversed (i.g: small, smaller, smallest, medium, big, bigger, etc...).
+    // The higher list will be at the end of the list.
+    @return join(list-reverse($lower-list), $higher-list);
+}

@@ -1,0 +1,93 @@
+@use 'sass:list';
+@use '../funcitons/get-color-space' as *;
+@use '../funcitons/list-reverse' as *;
+@use '../funcitons/get-suffix' as *;
+
+
+@mixin generate-colors($config) {
+    $src     : map-get($config, 'src');
+    $tints   : map-get($config, 'tints');
+    $shades  : map-get($config, 'shades');
+    $format  : map-get($config, 'format');
+    $prefix  : map-get($config, 'prefix');
+    $suffix  : map-get($config, 'suffix');
+    $utils   : map-get($config, 'utils');
+
+    $_shades : $shades;
+    $_tints  : $tints;
+    $_suffix : '';
+    $colors  : ();
+
+    @each $key, $value in $src {
+        @if type-of($tints) == map {
+            $_tints : map-get($tints, $key);
+        }
+
+        @if type-of($shades) == map {
+            $_shades : map-get($shades, $key);
+        }
+
+        @if type-of($value) == color {
+            @if $_tints != null {
+                @for $x from 1 through length($_tints) {
+                    $_value : get-color-space(mix(white, $value, nth(list-reverse($_tints), $x)), $format);
+                    $colors : append($colors, $_value);
+                }
+            }
+
+            $_value : get-color-space($value, $format);
+            $colors : append($colors, $_value);
+
+            @if $_shades != null {
+                @for $x from 1 through length($_shades) {
+                    $_value : get-color-space(mix(black, $value, nth($_shades, $x)), $format);
+                    $colors : append($colors, $_value);
+                }
+            }
+        } @else {
+            $colors : $value;
+        }
+
+        @for $x from 1 through length($colors) {
+            $_suffix                 : '#{get-suffix($suffix, length($colors), $x)}';
+            $custom-property-value   : nth($colors, $x);
+            $custom-property-name    : --#{$prefix}#{$key}-#{$_suffix};
+
+            #{$custom-property-name} : #{$custom-property-value};
+
+            // Generate utility classes
+            @if $utils {
+                // Loop through the utils and generate the classes for each item in the list.
+                @for $util-index from 1 through length($utils) {
+                    $utils-current-list          : list.nth($utils, $util-index);
+                    $utils-prefix                : map-get($utils-current-list, 'prefix');
+                    $utils-property              : map-get($utils-current-list, 'property');
+                    $utils-custom-property       : map-get($utils-current-list, 'custom-property');
+                    $utils-custom-property-value : null;
+
+                    // Set custom property value based on the format.
+                    // If the format is hsl or rgb without the parentheses, we need to wrap it in that format with parentheses. To display the color.
+                    // Otherwise, we just need to wrap it in var().
+                    @if $format == 'hsl' or $format == 'rgb' {
+                        $utils-custom-property-value : #{$format}(var(#{$custom-property-name}));
+                    } @else {
+                        $utils-custom-property-value : var(#{$custom-property-name});
+                    }
+
+                    // The actual utility class, which will be generated.
+                    @at-root .#{$utils-prefix}-#{$key}-#{$_suffix} {
+                        @if $utils-property {
+                            #{$utils-property} : #{$utils-custom-property-value}; // Generated property and value.
+                        }
+
+                        @if $utils-custom-property {
+                            --#{$utils-custom-property} : var(#{$custom-property-name}); // Generated custom property and value.
+                        }
+                    }
+                }
+            }
+        }
+
+        $colors : ();
+    }
+}
